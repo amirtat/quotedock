@@ -299,21 +299,29 @@ export function QuoteBuilder({
             )}
 
             {/* VAT toggle */}
-            <div className="flex items-center justify-between">
-              <span className="text-white/40 text-sm">מע"מ {vatRate}%</span>
-              <button
-                onClick={() => setIncludeVat(!includeVat)}
-                className={`w-9 h-5 rounded-full transition-colors relative ${includeVat ? 'bg-saffron' : 'bg-obsidian-700'}`}
-              >
-                <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${includeVat ? 'right-0.5' : 'left-0.5'}`} />
-              </button>
-            </div>
-
-            {includeVat && (
-              <div className="flex justify-between text-sm">
-                <span className="text-white/40">מע"מ</span>
-                <span className="text-white/60 font-amount">{formatCurrency(vatAmount, currency)}</span>
+            {vatRate === 0 ? (
+              <div className="flex items-center justify-between">
+                <span className="text-white/40 text-sm">פטור ממע"מ</span>
+                <span className="text-white/30 text-xs">עוסק זעיר</span>
               </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between">
+                  <span className="text-white/40 text-sm">מע"מ {vatRate}%</span>
+                  <button
+                    onClick={() => setIncludeVat(!includeVat)}
+                    className={`w-9 h-5 rounded-full transition-colors relative ${includeVat ? 'bg-saffron' : 'bg-obsidian-700'}`}
+                  >
+                    <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${includeVat ? 'right-0.5' : 'left-0.5'}`} />
+                  </button>
+                </div>
+                {includeVat && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-white/40">מע"מ</span>
+                    <span className="text-white/60 font-amount">{formatCurrency(vatAmount, currency)}</span>
+                  </div>
+                )}
+              </>
             )}
           </div>
 

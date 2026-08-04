@@ -28,6 +28,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
   const [logoUploading, setLogoUploading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {

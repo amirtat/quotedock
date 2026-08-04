@@ -174,7 +174,10 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
 
         {/* Footer */}
         <p className="text-center text-xs text-muted/40 mt-6">
-          Powered by <span className="font-medium text-muted/60">TripleA.I</span>
+          Powered by{' '}
+          <a href="http://www.tripleai.co.il" target="_blank" rel="noopener noreferrer" className="font-medium text-muted/60 hover:text-muted/80 transition-colors">
+            TripleA.I
+          </a>
         </p>
       </div>
     </div>

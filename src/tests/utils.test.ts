@@ -56,6 +56,18 @@ describe('calcTotal', () => {
     const result = calcTotal([makeItem(5, 0)], 0, 17, true)
     expect(result.total).toBe(0)
   })
+
+  it('vatRate 0 (עוסק זעיר) — no VAT even when include_vat is true', () => {
+    const result = calcTotal([makeItem(1, 1000)], 0, 0, true)
+    expect(result.vatAmount).toBe(0)
+    expect(result.total).toBe(1000)
+  })
+
+  it('default VAT rate is 18%', () => {
+    const result = calcTotal([makeItem(1, 1000)], 0, 18, true)
+    expect(result.vatAmount).toBe(180)
+    expect(result.total).toBe(1180)
+  })
 })
 
 // --- formatCurrency ---

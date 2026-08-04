@@ -12,14 +12,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={type}
           className={cn(
-            'flex h-9 w-full rounded-lg border border-gray-300 bg-white px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50',
-            error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+            'flex h-9 w-full rounded-lg border border-border bg-white px-3 py-1 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-saffron focus:outline-none focus:ring-2 focus:ring-saffron/15 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-surface',
+            error && 'border-danger focus:border-danger focus:ring-danger/15',
             className
           )}
           ref={ref}
           {...props}
         />
-        {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
+        {error && <p className="mt-1 text-xs text-danger">{error}</p>}
       </div>
     )
   }

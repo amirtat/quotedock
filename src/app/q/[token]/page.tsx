@@ -165,9 +165,8 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
         )}
 
         {/* Footer */}
-        <p className="text-center text-xs text-gray-400 mt-6">
-          הצעה זו נוצרה עם{' '}
-          <span className="font-medium text-indigo-400">QuoteDock</span>
+        <p className="text-center text-xs text-muted/40 mt-6">
+          Powered by <span className="font-medium text-muted/60">TripleA.I</span>
         </p>
       </div>
     </div>

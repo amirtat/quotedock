@@ -195,6 +195,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
         <div className="flex items-center gap-3">
           <Button type="submit" loading={saving}>שמור הגדרות</Button>
           {saved && <span className="text-sm text-green-600 font-medium">נשמר בהצלחה ✓</span>}
+          {saveError && <span className="text-sm text-red-600">{saveError}</span>}
         </div>
       </form>
     </div>

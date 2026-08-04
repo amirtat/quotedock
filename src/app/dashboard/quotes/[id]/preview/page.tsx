@@ -63,7 +63,10 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
               </p>
             )}
           </div>
-          <div className="text-left">
+          <div className="text-left flex flex-col items-end gap-1">
+            {profile?.logo_url && (
+              <img src={profile.logo_url} alt={profile.business_name || ''} className="h-12 max-w-[140px] object-contain mb-1" />
+            )}
             <p className="font-bold text-gray-900">{profile?.business_name}</p>
             {profile?.email && <p className="text-sm text-gray-500">{profile.email}</p>}
             {profile?.phone && <p className="text-sm text-gray-500">{profile.phone}</p>}

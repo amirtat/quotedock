@@ -96,8 +96,20 @@ export function Sidebar({ businessName, email }: SidebarProps) {
         })}
       </nav>
 
+      {/* FAQ */}
+      <div className="px-3 mb-2">
+        <Link
+          href="/faq"
+          target="_blank"
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/30 hover:text-white/70 hover:bg-obsidian-800 transition-colors"
+        >
+          <HelpCircle className="h-4 w-4 shrink-0" />
+          עזרה ו-FAQ
+        </Link>
+      </div>
+
       {/* User */}
-      <div className="px-3 pb-4 mt-4">
+      <div className="px-3 pb-4 mt-2">
         <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg">
           <div className="w-7 h-7 rounded-lg bg-saffron/20 flex items-center justify-center shrink-0">
             <span className="text-saffron text-xs font-bold">{initials}</span>

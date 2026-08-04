@@ -135,6 +135,30 @@ CREATE TRIGGER quotes_updated_at
   BEFORE UPDATE ON quotes
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
+-- FAQ items (publicly readable, admin-managed via Supabase dashboard)
+CREATE TABLE faqs (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  sort_order INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "FAQs are publicly readable" ON faqs FOR SELECT USING (true);
+
+INSERT INTO faqs (question, answer, sort_order) VALUES
+  ('איך שולחים הצעת מחיר ללקוח?', 'לוחצים על "תצוגה מקדימה" בהצעה ואז על "העתק קישור". שולחים את הקישור ללקוח — הוא רואה עמוד נקי ללא צורך בהרשמה.', 1),
+  ('מה ההבדל בין סטטוס "נשלחה" ל"נצפתה"?', '"נצפתה" אומר שהלקוח פתח את הקישור. השינוי קורה אוטומטית בפעם הראשונה שהלקוח פותח את ההצעה.', 2),
+  ('האם הלקוח יכול לחתום דיגיטלית?', 'כן. בתחתית עמוד ההצעה הלקוח יכול לאשר, לדחות, ולחתום חתימה דיגיטלית. אתה מקבל עדכון בזמן אמת.', 3),
+  ('אני עוסק זעיר — האם יש תמיכה בפטור ממע"מ?', 'כן. בהגדרות → "הגדרות מחירים" → סמנו "עוסק זעיר (פטור ממע"מ)". ההצעות יציגו אוטומטית "פטור ממע"מ" ללא שורת מע"מ.', 4),
+  ('איך מוסיפים לוגו להצעות?', 'בהגדרות → "פרטי העסק" → "העלה לוגו". הלוגו יופיע אוטומטית בכל ההצעות שתשלחו.', 5),
+  ('האם ניתן לשלוח הצעה שוב לאחר שנשלחה?', 'כן, הקישור קבוע ותמיד פעיל. ניתן לשנות את תוכן ההצעה ואז לשלוח את אותו קישור מחדש.', 6),
+  ('האם הנתונים שלי מאובטחים?', 'כן. הנתונים מאוחסנים ב-Supabase עם Row Level Security — אך ורק אתה רואה את ההצעות והלקוחות שלך.', 7),
+  ('האם יש מגבלה על מספר ההצעות?', 'בשלב הנוכחי אין מגבלה על מספר ההצעות, הלקוחות, או השירותים.', 8),
+  ('מה עושה "שירותים" בתפריט?', 'שירותים הם פריטים שמורים שאפשר להוסיף להצעה בלחיצה — חוסך הקלדה חוזרת של שמות ומחירים שגרתיים.', 9),
+  ('האם ניתן לשנות את המטבע?', 'כן, בהגדרות → "הגדרות מחירים" → שדה מטבע. ניתן לבחור בין ₪ שקל, $ דולר, ו-€ אירו.', 10);
+
 -- Helper: get next quote number for a user
 CREATE OR REPLACE FUNCTION get_next_quote_number(p_user_id UUID)
 RETURNS TEXT AS $$

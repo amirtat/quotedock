@@ -1,47 +1,12 @@
-const faqs = [
-  {
-    q: 'איך שולחים הצעת מחיר ללקוח?',
-    a: 'לוחצים על "תצוגה מקדימה" בהצעה ואז על "העתק קישור". שולחים את הקישור ללקוח — הוא רואה עמוד נקי ללא צורך בהרשמה.',
-  },
-  {
-    q: 'מה ההבדל בין סטטוס "נשלחה" ל"נצפתה"?',
-    a: '"נצפתה" אומר שהלקוח פתח את הקישור. השינוי קורה אוטומטית בפעם הראשונה שהלקוח פותח את ההצעה.',
-  },
-  {
-    q: 'האם הלקוח יכול לחתום דיגיטלית?',
-    a: 'כן. בתחתית עמוד ההצעה הלקוח יכול לאשר, לדחות, ולחתום חתימה דיגיטלית. אתה מקבל עדכון בזמן אמת.',
-  },
-  {
-    q: 'אני עוסק זעיר — האם יש תמיכה בפטור ממע"מ?',
-    a: 'כן. בהגדרות → "הגדרות מחירים" → סמנו "עוסק זעיר (פטור ממע"מ)". ההצעות יציגו אוטומטית "פטור ממע"מ" ללא שורת מע"מ.',
-  },
-  {
-    q: 'איך מוסיפים לוגו להצעות?',
-    a: 'בהגדרות → "פרטי העסק" → "העלה לוגו". הלוגו יופיע אוטומטית בכל ההצעות שתשלחו.',
-  },
-  {
-    q: 'האם ניתן לשלוח הצעה שוב לאחר שנשלחה?',
-    a: 'כן, הקישור קבוע ותמיד פעיל. ניתן לשנות את תוכן ההצעה ואז לשלוח את אותו קישור מחדש.',
-  },
-  {
-    q: 'האם הנתונים שלי מאובטחים?',
-    a: 'כן. הנתונים מאוחסנים ב-Supabase עם Row Level Security — אך ורק אתה רואה את ההצעות והלקוחות שלך.',
-  },
-  {
-    q: 'האם יש מגבלה על מספר ההצעות?',
-    a: 'בשלב הנוכחי אין מגבלה על מספר ההצעות, הלקוחות, או השירותים.',
-  },
-  {
-    q: 'מה עושה "שירותים" בתפריט?',
-    a: 'שירותים הם פריטים שמורים שאפשר להוסיף להצעה בלחיצה — חוסך הקלדה חוזרת של שמות ומחירים שגרתיים.',
-  },
-  {
-    q: 'האם ניתן לשנות את המטבע?',
-    a: 'כן, בהגדרות → "הגדרות מחירים" → שדה מטבע. ניתן לבחור בין ₪ שקל, $ דולר, ו-€ אירו.',
-  },
-]
+import { createClient } from '@/lib/supabase/server'
 
-export default function FaqPage() {
+export default async function FaqPage() {
+  const supabase = await createClient()
+  const { data: faqs } = await supabase
+    .from('faqs')
+    .select('question, answer')
+    .order('sort_order')
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30 py-12 px-4">
       <div className="max-w-2xl mx-auto">
@@ -51,16 +16,19 @@ export default function FaqPage() {
         </div>
 
         <div className="flex flex-col gap-3">
-          {faqs.map((item, i) => (
+          {(faqs || []).map((item, i) => (
             <div key={i} className="bg-white rounded-2xl border border-gray-200 p-6">
-              <p className="font-semibold text-gray-900 mb-2">{item.q}</p>
-              <p className="text-gray-600 text-sm leading-relaxed">{item.a}</p>
+              <p className="font-semibold text-gray-900 mb-2">{item.question}</p>
+              <p className="text-gray-600 text-sm leading-relaxed">{item.answer}</p>
             </div>
           ))}
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-10">
-          Powered by <span className="font-medium text-gray-500">TripleA.I</span>
+          Powered by{' '}
+          <a href="http://www.tripleai.co.il" target="_blank" rel="noopener noreferrer" className="font-medium text-gray-500 hover:text-gray-700 transition-colors">
+            TripleA.I
+          </a>
         </p>
       </div>
     </div>

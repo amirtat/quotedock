@@ -10,7 +10,7 @@ CREATE TABLE profiles (
   logo_url TEXT,
   currency TEXT DEFAULT 'ILS',
   language TEXT DEFAULT 'he',
-  vat_rate DECIMAL(5,2) DEFAULT 17,
+  vat_rate DECIMAL(5,2) DEFAULT 18,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

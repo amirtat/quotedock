@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 
 interface SettingsFormProps {
   profile: Profile | null
@@ -19,7 +20,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     email: profile?.email || '',
     phone: profile?.phone || '',
     address: profile?.address || '',
-    vat_rate: profile?.vat_rate || 17,
+    vat_rate: profile?.vat_rate ?? 18,
     currency: profile?.currency || 'ILS',
   })
   const [saving, setSaving] = useState(false)
@@ -74,10 +75,30 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
             <CardTitle>הגדרות מחירים</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="osek-zair"
+                checked={form.vat_rate === 0}
+                onCheckedChange={(checked) => setForm({ ...form, vat_rate: checked ? 0 : 18 })}
+              />
+              <Label htmlFor="osek-zair" className="cursor-pointer font-normal">
+                עוסק זעיר (פטור ממע&quot;מ)
+              </Label>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label>שיעור מע&quot;מ (%)</Label>
-                <Input type="number" min="0" max="100" step="0.1" value={form.vat_rate} onChange={(e) => setForm({ ...form, vat_rate: Number(e.target.value) })} dir="ltr" />
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={form.vat_rate}
+                  onChange={(e) => setForm({ ...form, vat_rate: Number(e.target.value) })}
+                  dir="ltr"
+                  disabled={form.vat_rate === 0}
+                  className={form.vat_rate === 0 ? 'opacity-40' : ''}
+                />
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label>מטבע</Label>

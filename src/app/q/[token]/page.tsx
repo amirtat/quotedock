@@ -35,7 +35,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   const items = itemsResult.data || []
   const profile = profileResult.data
   const signature = signatureResult.data
-  const vatRate = profile?.vat_rate || 17
+  const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat)
   const isPending = ['sent', 'viewed'].includes(quote.status)
@@ -129,10 +129,15 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                   <span>-{formatCurrency(discountAmount, currency)}</span>
                 </div>
               )}
-              {quote.include_vat && (
+              {quote.include_vat && vatRate > 0 && (
                 <div className="flex justify-between text-gray-600">
                   <span>מע&quot;מ ({vatRate}%)</span>
                   <span>{formatCurrency(vatAmount, currency)}</span>
+                </div>
+              )}
+              {vatRate === 0 && (
+                <div className="flex justify-between text-gray-500 text-xs">
+                  <span>פטור ממע&quot;מ (עוסק זעיר)</span>
                 </div>
               )}
               <div className="flex justify-between border-t-2 border-gray-200 pt-3 font-bold text-lg">

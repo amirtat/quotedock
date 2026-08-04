@@ -26,7 +26,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
   const quote = quoteResult.data
   const items = itemsResult.data || []
   const profile = profileResult.data
-  const vatRate = profile?.vat_rate || 17
+  const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const statusInfo = STATUS_LABELS[quote.status as QuoteStatus]
   const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat)
@@ -118,10 +118,15 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                 <span>-{formatCurrency(discountAmount, currency)}</span>
               </div>
             )}
-            {quote.include_vat && (
+            {quote.include_vat && vatRate > 0 && (
               <div className="flex justify-between text-gray-600">
                 <span>מע&quot;מ ({vatRate}%)</span>
                 <span>{formatCurrency(vatAmount, currency)}</span>
+              </div>
+            )}
+            {vatRate === 0 && (
+              <div className="flex justify-between text-gray-500 text-xs">
+                <span>פטור ממע&quot;מ (עוסק זעיר)</span>
               </div>
             )}
             <div className="flex justify-between border-t-2 border-gray-200 pt-2 font-bold text-base">

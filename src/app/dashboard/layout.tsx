@@ -22,8 +22,11 @@ export default async function DashboardLayout({ children }: LayoutProps<'/dashbo
         businessName={profile?.business_name}
         email={profile?.email || user.email}
       />
-      <main className="flex-1 overflow-auto">
-        {children}
+      <main className="flex-1 overflow-auto flex flex-col">
+        <div className="flex-1">{children}</div>
+        <footer className="px-6 py-3 border-t border-border text-center">
+          <p className="text-xs text-muted/50">Powered by <span className="font-medium text-muted/70">TripleA.I</span></p>
+        </footer>
       </main>
     </div>
   )

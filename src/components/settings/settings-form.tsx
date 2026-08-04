@@ -58,11 +58,16 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
+    setSaveError(null)
     const supabase = createClient()
-    await supabase.from('profiles').update(form).eq('id', userId)
+    const { error } = await supabase.from('profiles').upsert({ id: userId, ...form })
     setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 3000)
+    if (error) {
+      setSaveError(error.message)
+    } else {
+      setSaved(true)
+      setTimeout(() => setSaved(false), 3000)
+    }
   }
 
   return (

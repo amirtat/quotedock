@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Profile } from '@/lib/types'
 import { Button } from '@/components/ui/button'
@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Upload, X } from 'lucide-react'
 
 interface SettingsFormProps {
   profile: Profile | null
@@ -23,8 +24,35 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     vat_rate: profile?.vat_rate ?? 18,
     currency: profile?.currency || 'ILS',
   })
+  const [logoUrl, setLogoUrl] = useState<string | null>(profile?.logo_url || null)
+  const [logoUploading, setLogoUploading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setLogoUploading(true)
+    const supabase = createClient()
+    const ext = file.name.split('.').pop()
+    const path = `${userId}/logo.${ext}`
+    const { error } = await supabase.storage.from('logos').upload(path, file, { upsert: true })
+    if (!error) {
+      const { data } = supabase.storage.from('logos').getPublicUrl(path)
+      const url = data.publicUrl
+      await supabase.from('profiles').update({ logo_url: url }).eq('id', userId)
+      setLogoUrl(url)
+    }
+    setLogoUploading(false)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  async function handleLogoRemove() {
+    const supabase = createClient()
+    await supabase.from('profiles').update({ logo_url: null }).eq('id', userId)
+    setLogoUrl(null)
+  }
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()

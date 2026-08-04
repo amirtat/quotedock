@@ -73,7 +73,10 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                 </p>
               )}
             </div>
-            <div className="text-left">
+            <div className="text-left flex flex-col items-end gap-1">
+              {profile?.logo_url && (
+                <img src={profile.logo_url} alt={profile?.business_name || ''} className="h-14 max-w-[160px] object-contain mb-1" />
+              )}
               <p className="font-bold text-gray-900 text-lg">{profile?.business_name}</p>
               {profile?.email && <p className="text-sm text-gray-500">{profile.email}</p>}
               {profile?.phone && <p className="text-sm text-gray-500">{profile.phone}</p>}

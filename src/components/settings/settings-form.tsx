@@ -77,6 +77,48 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
             <CardTitle>פרטי העסק</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
+            {/* Logo upload */}
+            <div className="flex flex-col gap-1.5">
+              <Label>לוגו העסק</Label>
+              <div className="flex items-center gap-4">
+                {logoUrl ? (
+                  <div className="relative w-20 h-20 rounded-xl border border-gray-200 overflow-hidden bg-gray-50 shrink-0">
+                    <img src={logoUrl} alt="לוגו" className="w-full h-full object-contain p-1" />
+                    <button
+                      type="button"
+                      onClick={handleLogoRemove}
+                      className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-20 h-20 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center shrink-0 text-gray-300">
+                    <Upload className="w-6 h-6" />
+                  </div>
+                )}
+                <div className="flex flex-col gap-1.5">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                    onChange={handleLogoUpload}
+                    className="hidden"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    loading={logoUploading}
+                    className="text-sm"
+                  >
+                    {logoUrl ? 'החלף לוגו' : 'העלה לוגו'}
+                  </Button>
+                  <p className="text-xs text-gray-400">PNG, JPG, SVG עד 2MB</p>
+                </div>
+              </div>
+            </div>
+
             <div className="flex flex-col gap-1.5">
               <Label>שם העסק</Label>
               <Input value={form.business_name} onChange={(e) => setForm({ ...form, business_name: e.target.value })} placeholder="הסטודיו שלי" />

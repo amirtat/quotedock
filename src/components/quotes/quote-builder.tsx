@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatCurrency, calcTotal } from '@/lib/utils'
 import { Client, QuoteItem, Quote, Service } from '@/lib/types'
-import { Plus, Trash2, Save, Send, Eye, ArrowRight } from 'lucide-react'
+import { Plus, Trash2, Save, Send, Eye, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
 interface QuoteBuilderProps {
@@ -143,7 +143,7 @@ export function QuoteBuilder({
       <div className="flex items-center justify-between px-6 py-3.5 border-b border-border bg-white shrink-0">
         <div className="flex items-center gap-4">
           <Link href="/dashboard/quotes" className="flex items-center gap-1.5 text-sm text-muted hover:text-ink transition-colors">
-            <ArrowRight className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4" />
             הצעות
           </Link>
           <div className="h-4 w-px bg-border" />

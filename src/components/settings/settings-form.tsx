@@ -37,6 +37,11 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
   async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
+    if (file.size > 2 * 1024 * 1024) {
+      setLogoError('הקובץ גדול מ-2MB')
+      if (fileInputRef.current) fileInputRef.current.value = ''
+      return
+    }
     setLogoUploading(true)
     setLogoError(null)
     const supabase = createClient()

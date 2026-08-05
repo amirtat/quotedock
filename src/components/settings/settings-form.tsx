@@ -128,6 +128,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                     {logoUrl ? 'החלף לוגו' : 'העלה לוגו'}
                   </Button>
                   <p className="text-xs text-gray-400">PNG, JPG, SVG עד 2MB</p>
+                  {logoError && <p className="text-xs text-red-500">{logoError}</p>}
                 </div>
               </div>
             </div>

@@ -23,6 +23,7 @@ export function ClientsManager({ initialClients, userId }: ClientsManagerProps) 
   const [editing, setEditing] = useState<Client | null>(null)
   const [form, setForm] = useState(emptyForm)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   function openNew() {
     setEditing(null)

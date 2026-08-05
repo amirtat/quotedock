@@ -104,7 +104,7 @@ export function Sidebar({ businessName, email }: SidebarProps) {
           className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/30 hover:text-white/70 hover:bg-obsidian-800 transition-colors"
         >
           <HelpCircle className="h-4 w-4 shrink-0" />
-          עזרה ו-FAQ
+          שאלות נפוצות
         </Link>
       </div>
 

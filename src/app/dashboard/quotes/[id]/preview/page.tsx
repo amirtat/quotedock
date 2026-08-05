@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { STATUS_LABELS, formatCurrency, calcTotal } from '@/lib/utils'
 import { QuoteStatus } from '@/lib/types'
-import { ArrowRight, Edit, Copy } from 'lucide-react'
+import { ArrowLeft, Edit, Copy } from 'lucide-react'
 import { format } from 'date-fns'
 import CopyLinkButton from '@/components/quotes/copy-link-button'
 
@@ -38,7 +38,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
       {/* Actions bar */}
       <div className="flex items-center justify-between mb-6">
         <Link href={`/dashboard/quotes/${id}`} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
-          <ArrowRight className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" />
           חזרה לעריכה
         </Link>
         <div className="flex items-center gap-2">

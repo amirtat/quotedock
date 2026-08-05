@@ -28,6 +28,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
   })
   const [logoUrl, setLogoUrl] = useState<string | null>(profile?.logo_url || null)
   const [logoUploading, setLogoUploading] = useState(false)
+  const [logoError, setLogoError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)

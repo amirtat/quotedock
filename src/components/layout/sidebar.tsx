@@ -29,7 +29,7 @@ interface SidebarProps {
   logoUrl?: string | null
 }
 
-export function Sidebar({ businessName, email }: SidebarProps) {
+export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
 

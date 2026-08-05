@@ -26,6 +26,7 @@ const navItems = [
 interface SidebarProps {
   businessName?: string | null
   email?: string | null
+  logoUrl?: string | null
 }
 
 export function Sidebar({ businessName, email }: SidebarProps) {

@@ -21,6 +21,7 @@ export default async function DashboardLayout({ children }: LayoutProps<'/dashbo
       <Sidebar
         businessName={profile?.business_name}
         email={profile?.email || user.email}
+        logoUrl={profile?.logo_url}
       />
       <main className="flex-1 overflow-auto flex flex-col">
         <div className="flex-1">{children}</div>

@@ -69,6 +69,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     } else {
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
+      router.refresh()
     }
   }
 

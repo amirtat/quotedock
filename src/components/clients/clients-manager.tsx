@@ -40,13 +40,16 @@ export function ClientsManager({ initialClients, userId }: ClientsManagerProps) 
   async function handleSave() {
     if (!form.name.trim()) return
     setSaving(true)
+    setError(null)
     const supabase = createClient()
 
     if (editing) {
-      const { data } = await supabase.from('clients').update(form).eq('id', editing.id).select().single()
+      const { data, error: err } = await supabase.from('clients').update(form).eq('id', editing.id).select().single()
+      if (err) { setError(err.message); setSaving(false); return }
       if (data) setClients((prev) => prev.map((c) => (c.id === editing.id ? data : c)))
     } else {
-      const { data } = await supabase.from('clients').insert({ ...form, user_id: userId }).select().single()
+      const { data, error: err } = await supabase.from('clients').insert({ ...form, user_id: userId }).select().single()
+      if (err) { setError(err.message); setSaving(false); return }
       if (data) setClients((prev) => [...prev, data])
     }
 

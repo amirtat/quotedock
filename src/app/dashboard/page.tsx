@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { formatCurrency, STATUS_LABELS } from '@/lib/utils'
 import { Quote, QuoteStatus } from '@/lib/types'
-import { Plus, ArrowLeft, TrendingUp, FileText, Clock, CheckCircle } from 'lucide-react'
+import { Plus, ArrowRight, TrendingUp, FileText, Clock, CheckCircle } from 'lucide-react'
 import { format } from 'date-fns'
 
 export default async function DashboardPage() {
@@ -76,7 +76,7 @@ export default async function DashboardPage() {
           <h2 className="text-sm font-semibold text-ink uppercase tracking-wide">הצעות אחרונות</h2>
           <Link href="/dashboard/quotes" className="flex items-center gap-1 text-sm text-saffron hover:underline">
             הכל
-            <ArrowLeft className="h-3.5 w-3.5" />
+            <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 

@@ -139,6 +139,7 @@ export function ClientsManager({ initialClients, userId }: ClientsManagerProps) 
               <Label>כתובת</Label>
               <Input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="רחוב, עיר" />
             </div>
+            {error && <p className="text-sm text-red-600">{error}</p>}
             <div className="flex justify-end gap-2 mt-2">
               <Button variant="outline" onClick={() => setOpen(false)}>ביטול</Button>
               <Button onClick={handleSave} loading={saving}>שמור</Button>

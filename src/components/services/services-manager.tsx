@@ -158,6 +158,7 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
                 </select>
               </div>
             </div>
+            {error && <p className="text-sm text-red-600">{error}</p>}
             <div className="flex justify-end gap-2 mt-2">
               <Button variant="outline" onClick={() => setOpen(false)}>ביטול</Button>
               <Button onClick={handleSave} loading={saving}>שמור</Button>

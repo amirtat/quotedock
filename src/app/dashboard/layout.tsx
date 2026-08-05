@@ -12,7 +12,7 @@ export default async function DashboardLayout({ children }: LayoutProps<'/dashbo
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('business_name, email')
+    .select('business_name, email, logo_url')
     .eq('id', user.id)
     .single()
 

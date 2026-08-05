@@ -17,6 +17,7 @@ interface SettingsFormProps {
 }
 
 export function SettingsForm({ profile, userId }: SettingsFormProps) {
+  const router = useRouter()
   const [form, setForm] = useState({
     business_name: profile?.business_name || '',
     email: profile?.email || '',

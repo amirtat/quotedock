@@ -112,8 +112,12 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
       {/* User */}
       <div className="px-3 pb-4 mt-2">
         <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg">
-          <div className="w-7 h-7 rounded-lg bg-saffron/20 flex items-center justify-center shrink-0">
-            <span className="text-saffron text-xs font-bold">{initials}</span>
+          <div className="w-7 h-7 rounded-lg overflow-hidden shrink-0 flex items-center justify-center bg-saffron/20">
+            {logoUrl ? (
+              <img src={logoUrl} alt={businessName || ''} className="w-full h-full object-contain" />
+            ) : (
+              <span className="text-saffron text-xs font-bold">{initials}</span>
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-white text-xs font-medium truncate">{businessName || 'העסק שלי'}</p>

@@ -38,11 +38,14 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     const file = e.target.files?.[0]
     if (!file) return
     setLogoUploading(true)
+    setLogoError(null)
     const supabase = createClient()
     const ext = file.name.split('.').pop()
     const path = `${userId}/logo.${ext}`
     const { error } = await supabase.storage.from('logos').upload(path, file, { upsert: true })
-    if (!error) {
+    if (error) {
+      setLogoError(error.message)
+    } else {
       const { data } = supabase.storage.from('logos').getPublicUrl(path)
       const url = data.publicUrl
       await supabase.from('profiles').update({ logo_url: url }).eq('id', userId)

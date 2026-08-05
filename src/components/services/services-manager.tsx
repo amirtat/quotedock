@@ -51,13 +51,16 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
   async function handleSave() {
     if (!form.name.trim()) return
     setSaving(true)
+    setError(null)
     const supabase = createClient()
 
     if (editing) {
-      const { data } = await supabase.from('services').update(form).eq('id', editing.id).select().single()
+      const { data, error: err } = await supabase.from('services').update(form).eq('id', editing.id).select().single()
+      if (err) { setError(err.message); setSaving(false); return }
       if (data) setServices((prev) => prev.map((s) => (s.id === editing.id ? data : s)))
     } else {
-      const { data } = await supabase.from('services').insert({ ...form, user_id: userId }).select().single()
+      const { data, error: err } = await supabase.from('services').insert({ ...form, user_id: userId }).select().single()
+      if (err) { setError(err.message); setSaving(false); return }
       if (data) setServices((prev) => [...prev, data])
     }
 

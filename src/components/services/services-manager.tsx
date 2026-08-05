@@ -34,6 +34,7 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
   const [editing, setEditing] = useState<Service | null>(null)
   const [form, setForm] = useState(emptyForm)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   function openNew() {
     setEditing(null)

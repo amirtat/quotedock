@@ -146,6 +146,21 @@ export function QuoteBuilder({
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
+      {/* Sent quote warning banner */}
+      {editingLocked && (
+        <div className="shrink-0 bg-amber-50 border-b border-amber-200 px-6 py-2.5 flex items-center justify-between">
+          <p className="text-sm text-amber-800">
+            ⚠️ הצעה זו כבר נשלחה — שינויים ישפיעו על הגרסה שהלקוח רואה
+          </p>
+          <button
+            onClick={() => setEditingLocked(false)}
+            className="text-sm font-medium text-amber-700 hover:text-amber-900 underline underline-offset-2 transition-colors"
+          >
+            ערוך בכל זאת
+          </button>
+        </div>
+      )}
+
       {/* Toast */}
       {toast && (
         <div className={`fixed top-4 right-1/2 translate-x-1/2 z-50 px-4 py-2 rounded-lg text-sm font-medium shadow-lg transition-all ${toast.type === 'ok' ? 'bg-obsidian text-white' : 'bg-danger text-white'}`}>

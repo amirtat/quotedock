@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { QuoteBuilder } from '@/components/quotes/quote-builder'
 import { notFound } from 'next/navigation'
+import { FALLBACK_VAT_RATE } from '@/lib/utils'
 
 export default async function EditQuotePage({ params }: PageProps<'/dashboard/quotes/[id]'>) {
   const { id } = await params

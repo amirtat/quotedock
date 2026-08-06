@@ -63,7 +63,14 @@ body {
 
 /* Print / PDF export */
 @media print {
-  /* Hide everything, then reveal only the quote document */
+  /* Step 1: Remove layout chrome from the page entirely */
+  aside,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Step 2: Hide everything else, then show only the quote doc */
   body * {
     visibility: hidden !important;
   }
@@ -73,15 +80,17 @@ body {
     visibility: visible !important;
   }
 
+  /* Step 3: Pull print-doc out of the flex layout without repeating it */
   .print-doc {
-    position: fixed !important;
-    inset: 0 !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     width: 100% !important;
     box-shadow: none !important;
     border: none !important;
     border-radius: 0 !important;
     background: white !important;
-    overflow: visible !important;
   }
 
   body {

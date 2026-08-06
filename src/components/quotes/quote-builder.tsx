@@ -110,16 +110,21 @@ export function QuoteBuilder({
           client_id: clientId || null, notes: notes || null,
           valid_until: validUntil || null, discount, discount_type: discountType,
           discount_reason: discountReason || null, include_vat: includeVat, status,
+          ...(status === 'sent' ? { public_token: crypto.randomUUID(), sent_at: new Date().toISOString() } : {}),
         }).select('id').single()
         if (error) throw error
         currentQuoteId = data.id
         setQuoteId(currentQuoteId)
       } else {
+        const existingToken = (initialData as any)?.public_token
         const { error } = await supabase.from('quotes').update({
           title, client_id: clientId || null, notes: notes || null,
           valid_until: validUntil || null, discount, discount_type: discountType,
           discount_reason: discountReason || null, include_vat: includeVat, status,
-          ...(status === 'sent' ? { sent_at: new Date().toISOString() } : {}),
+          ...(status === 'sent' ? {
+            sent_at: new Date().toISOString(),
+            public_token: existingToken || crypto.randomUUID(),
+          } : {}),
         }).eq('id', currentQuoteId)
         if (error) throw error
       }

@@ -38,4 +38,5 @@ export default async function DashboardLayout({ children }: LayoutProps<'/dashbo
       </main>
     </div>
   )
+
 }

@@ -33,9 +33,15 @@ export async function duplicateQuote(quoteId: string) {
 
   if (quoteErr || !original) throw new Error('Quote not found')
 
-  // Fetch items
+  // Fetch items and milestones
   const { data: items } = await supabase
     .from('quote_items')
+    .select('*')
+    .eq('quote_id', quoteId)
+    .order('sort_order')
+
+  const { data: sourceMilestones } = await supabase
+    .from('payment_milestones')
     .select('*')
     .eq('quote_id', quoteId)
     .order('sort_order')

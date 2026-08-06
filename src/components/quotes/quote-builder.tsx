@@ -23,6 +23,7 @@ interface QuoteBuilderProps {
   vatRate: number
   currency: string
   nextNumber: string
+  defaultValidUntil?: string
 }
 
 function emptyItem(sortOrder: number): Omit<QuoteItem, 'id' | 'quote_id'> {

@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatCurrency, calcTotal } from '@/lib/utils'
-import { Client, QuoteItem, Quote, Service } from '@/lib/types'
+import { Client, QuoteItem, Quote, Service, NoteTemplate } from '@/lib/types'
 import { Plus, Trash2, Save, Send, Eye, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 

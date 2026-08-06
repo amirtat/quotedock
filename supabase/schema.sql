@@ -181,6 +181,11 @@ INSERT INTO app_config (key, value) VALUES
   ('quote_number_prefix', 'QD'),
   ('default_quote_validity_days', '30');
 
+-- Migration: add discount_type and discount_reason (run if upgrading from earlier schema)
+-- ALTER TABLE quotes ADD COLUMN IF NOT EXISTS discount_type TEXT DEFAULT 'percent';
+-- ALTER TABLE quotes ADD COLUMN IF NOT EXISTS discount_reason TEXT;
+-- INSERT INTO app_config (key, value) VALUES ('quote_number_prefix', 'QD'), ('default_quote_validity_days', '30') ON CONFLICT (key) DO NOTHING;
+
 -- Helper: get next quote number for a user
 CREATE OR REPLACE FUNCTION get_next_quote_number(p_user_id UUID)
 RETURNS TEXT AS $$

@@ -19,6 +19,7 @@ export default async function EditQuotePage({ params }: PageProps<'/dashboard/qu
   ])
 
   if (!quoteResult.data) notFound()
+  const systemDefaultVat = Number(configResult.data?.value ?? FALLBACK_VAT_RATE)
 
   const year = new Date().getFullYear()
   const { data: countData } = await supabase

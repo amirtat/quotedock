@@ -255,3 +255,57 @@ describe('Quote duplication', () => {
     expect(quote.status).toBe('draft')
   })
 })
+
+// ─── 6. One-time vs. recurring items ─────────────────────────────────────────
+
+describe('One-time vs. recurring items', () => {
+  const oneTime = (price: number): QuoteItem => ({
+    id: '1', quote_id: 'q', service_id: null, name: 'חד-פעמי', description: null,
+    quantity: 1, unit_price: price, sort_order: 0,
+    item_type: 'one_time', recurring_interval: null,
+  })
+  const recurring = (price: number, interval: 'monthly' | 'quarterly' | 'yearly' = 'monthly'): QuoteItem => ({
+    id: '2', quote_id: 'q', service_id: null, name: 'חוזר', description: null,
+    quantity: 1, unit_price: price, sort_order: 1,
+    item_type: 'recurring', recurring_interval: interval,
+  })
+
+  it('subtotal counts only one_time items', () => {
+    const { subtotal } = calcTotal([oneTime(5000), recurring(2000)], 0, 18, false)
+    expect(subtotal).toBe(5000)
+  })
+
+  it('recurringSubtotal counts only recurring items', () => {
+    const { recurringSubtotal } = calcTotal([oneTime(5000), recurring(2000)], 0, 18, false)
+    expect(recurringSubtotal).toBe(2000)
+  })
+
+  it('total does not include recurring items', () => {
+    const { total } = calcTotal([oneTime(5000), recurring(2000)], 0, 0, false)
+    expect(total).toBe(5000)
+  })
+
+  it('discount applies only to one_time subtotal', () => {
+    const { discountAmount, total } = calcTotal([oneTime(1000), recurring(500)], 10, 0, false)
+    expect(discountAmount).toBe(100)  // 10% of 1000, not 1500
+    expect(total).toBe(900)
+  })
+
+  it('VAT applies only after one_time discount', () => {
+    const { vatAmount } = calcTotal([oneTime(1000), recurring(500)], 0, 18, true)
+    expect(vatAmount).toBeCloseTo(180)  // 18% of 1000 only
+  })
+
+  it('all recurring items are excluded from total', () => {
+    const { subtotal, recurringSubtotal } = calcTotal([recurring(1000), recurring(500, 'yearly')], 0, 18, false)
+    expect(subtotal).toBe(0)
+    expect(recurringSubtotal).toBe(1500)
+  })
+
+  it('intervalLabel returns correct Hebrew labels', () => {
+    expect(intervalLabel('monthly')).toBe('חודשי')
+    expect(intervalLabel('quarterly')).toBe('רבעוני')
+    expect(intervalLabel('yearly')).toBe('שנתי')
+    expect(intervalLabel(null)).toBe('חודשי')  // default
+  })
+})

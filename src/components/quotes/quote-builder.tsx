@@ -269,7 +269,25 @@ export function QuoteBuilder({
 
             {/* Notes */}
             <div className="bg-white rounded-xl border border-border p-5">
-              <h2 className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">הערות</h2>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">הערות</h2>
+                {noteTemplates.length > 0 && (
+                  <select
+                    defaultValue=""
+                    onChange={(e) => {
+                      const tpl = noteTemplates.find(t => t.id === e.target.value)
+                      if (tpl) setNotes(prev => prev ? `${prev}\n\n${tpl.content}` : tpl.content)
+                      e.target.value = ''
+                    }}
+                    className="text-xs text-muted border border-border rounded-lg px-2 py-1 bg-white focus:outline-none focus:border-saffron"
+                  >
+                    <option value="" disabled>הוסף טקסט קבוע</option>
+                    {noteTemplates.map(t => (
+                      <option key={t.id} value={t.id}>{t.title}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
               <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="תנאי תשלום, הערות נוספות..." rows={3} />
             </div>
           </div>

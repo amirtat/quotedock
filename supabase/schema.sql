@@ -197,6 +197,10 @@ ALTER TABLE note_templates ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users manage own note templates" ON note_templates FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
 
+-- Migration: add recurring items (run if upgrading from earlier schema)
+-- ALTER TABLE quote_items ADD COLUMN IF NOT EXISTS item_type TEXT DEFAULT 'one_time';
+-- ALTER TABLE quote_items ADD COLUMN IF NOT EXISTS recurring_interval TEXT;
+
 -- Migration: add per-user quote settings (run if upgrading from earlier schema)
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS quote_number_prefix TEXT DEFAULT 'QD';
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS default_quote_validity_days INTEGER DEFAULT 30;

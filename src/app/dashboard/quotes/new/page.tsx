@@ -35,6 +35,7 @@ export default async function NewQuotePage() {
       currency={profile?.currency || 'ILS'}
       nextNumber={nextNumber}
       defaultValidUntil={defaultValidUntilStr}
+      noteTemplates={noteTemplatesResult.data || []}
     />
   )
 }

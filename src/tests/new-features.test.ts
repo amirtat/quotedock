@@ -6,7 +6,7 @@
  *   4. PDF print (no runtime logic to test — covered by CSS presence)
  */
 import { describe, it, expect } from 'vitest'
-import { calcTotal } from '@/lib/utils'
+import { calcTotal, intervalLabel } from '@/lib/utils'
 import type { QuoteItem, QuoteStatus } from '@/lib/types'
 
 // ─── helpers ────────────────────────────────────────────────────────────────

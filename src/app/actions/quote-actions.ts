@@ -26,18 +26,12 @@ export async function duplicateQuote(quoteId: string) {
     .order('sort_order')
 
   // Get next quote number
-  const { count } = await supabase
-    .from('quotes')
-    .select('id', { count: 'exact', head: true })
-    .eq('user_id', user.id)
+  const [{ count }, profileResult] = await Promise.all([
+    supabase.from('quotes').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+    supabase.from('profiles').select('quote_number_prefix').eq('id', user.id).single(),
+  ])
 
-  const { data: prefixConfig } = await supabase
-    .from('app_config')
-    .select('value')
-    .eq('key', 'quote_number_prefix')
-    .single()
-
-  const prefix = prefixConfig?.value ?? 'QD'
+  const prefix = profileResult.data?.quote_number_prefix || 'QD'
   const year = new Date().getFullYear()
   const nextNumber = `${prefix}-${year}-${String((count || 0) + 1).padStart(3, '0')}`
 

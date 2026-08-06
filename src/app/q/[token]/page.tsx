@@ -36,6 +36,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   const items = itemsResult.data || []
   const profile = profileResult.data
   const signature = signatureResult.data
+  const milestones = milestonesResult.data || []
   const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const { subtotal, discountAmount, vatAmount, total, recurringSubtotal } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')

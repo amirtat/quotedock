@@ -433,6 +433,16 @@ export function QuoteBuilder({
               </div>
               <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="תנאי תשלום, הערות נוספות..." rows={3} />
             </div>
+
+            {/* Attachments */}
+            {quoteId ? (
+              <AttachmentsManager quoteId={quoteId} userId={userId} />
+            ) : (
+              <div className="bg-white rounded-xl border border-border p-5">
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">מסמכים מצורפים</h2>
+                <p className="text-xs text-muted/50 text-center py-2">שמור טיוטה תחילה להוספת מסמכים</p>
+              </div>
+            )}
           </div>
         </div>
 

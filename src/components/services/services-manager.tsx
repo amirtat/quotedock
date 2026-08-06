@@ -13,7 +13,7 @@ import { formatCurrency } from '@/lib/utils'
 import { Briefcase, Plus, Pencil, Trash2 } from 'lucide-react'
 
 const UNITS = [
-  { value: 'unit', label: 'יחידה' },
+  { value: 'unit', label: 'פריט' },
   { value: 'hour', label: 'שעה' },
   { value: 'day', label: 'יום' },
   { value: 'month', label: 'חודש' },
@@ -117,7 +117,7 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
                   <p className="text-xs text-gray-500 mb-3">{service.description}</p>
                 )}
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-400">לכל {unitLabel(service.unit)}</span>
+                  <span className="text-xs text-gray-400">לפי {unitLabel(service.unit)}</span>
                   <span className="font-bold text-indigo-600">{formatCurrency(service.unit_price, currency)}</span>
                 </div>
               </CardContent>
@@ -152,7 +152,7 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label>סוג תחיוב</Label>
+                <Label>מחיר לפי</Label>
                 <select
                   value={form.unit}
                   onChange={(e) => setForm({ ...form, unit: e.target.value })}

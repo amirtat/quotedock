@@ -3,6 +3,21 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
+export async function deleteQuote(quoteId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Unauthorized')
+
+  const { error } = await supabase
+    .from('quotes')
+    .delete()
+    .eq('id', quoteId)
+    .eq('user_id', user.id)
+
+  if (error) throw new Error(error.message)
+  redirect('/dashboard')
+}
+
 export async function duplicateQuote(quoteId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

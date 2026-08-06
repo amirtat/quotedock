@@ -10,6 +10,7 @@ import { format } from 'date-fns'
 import CopyLinkButton from '@/components/quotes/copy-link-button'
 import DuplicateQuoteButton from '@/components/quotes/duplicate-quote-button'
 import PrintButton from '@/components/quotes/print-button'
+import DeleteQuoteButton from '@/components/quotes/delete-quote-button'
 
 export default async function QuotePreviewPage({ params }: PageProps<'/dashboard/quotes/[id]/preview'>) {
   const { id } = await params
@@ -39,10 +40,13 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
     <div className="p-6 max-w-3xl mx-auto">
       {/* Actions bar */}
       <div className="no-print flex items-center justify-between mb-6">
-        <Link href={`/dashboard/quotes/${id}`} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
-          <ArrowLeft className="h-4 w-4" />
-          חזרה לעריכה
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href={`/dashboard/quotes/${id}`} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
+            <ArrowLeft className="h-4 w-4" />
+            חזרה לעריכה
+          </Link>
+          <DeleteQuoteButton quoteId={id} />
+        </div>
         <div className="flex items-center gap-2">
           <PrintButton />
           <DuplicateQuoteButton quoteId={id} />
@@ -156,11 +160,10 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
       </div>
 
       {/* Status timeline — freelancer only, not printed */}
-      {(quote.sent_at || quote.viewed_at || quote.accepted_at || quote.declined_at) && (
-        <div className="no-print mt-4 bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-xs font-medium text-gray-500 uppercase mb-3">ציר זמן</p>
-          <div className="flex flex-col gap-2">
-            {[
+      <div className="no-print mt-4 bg-white rounded-xl border border-gray-200 p-4">
+        <p className="text-xs font-medium text-gray-500 uppercase mb-3">ציר זמן</p>
+        <div className="flex flex-col gap-2">
+          {[
               { label: 'נוצרה', ts: quote.created_at },
               { label: 'נשלחה', ts: quote.sent_at },
               { label: 'נצפתה', ts: quote.viewed_at },
@@ -187,9 +190,8 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                   )}
                 </div>
               ))}
-          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

@@ -224,33 +224,34 @@ export function QuoteBuilder({
 
               {/* Column headers */}
               <div className="grid grid-cols-12 gap-2 text-xs text-muted mb-2 px-1">
-                <div className="col-span-5">שם / תיאור</div>
-                <div className="col-span-3">שירות</div>
+                <div className="col-span-6">שם / תיאור</div>
                 <div className="col-span-2 text-center">כמות</div>
-                <div className="col-span-1 text-center">מחיר</div>
+                <div className="col-span-3 text-center">מחיר</div>
                 <div className="col-span-1" />
               </div>
 
               <div className="flex flex-col gap-2">
                 {items.map((item, index) => (
                   <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 rounded-lg bg-surface/60 border border-border/60">
-                    <div className="col-span-5 flex flex-col gap-1.5">
+                    <div className="col-span-6 flex flex-col gap-1.5">
                       <Input value={item.name} onChange={(e) => updateItem(index, 'name', e.target.value)} placeholder="שם הפריט" />
-                      <Input value={item.description || ''} onChange={(e) => updateItem(index, 'description', e.target.value)} placeholder="תיאור" className="text-xs" />
-                    </div>
-                    <div className="col-span-3">
-                      <Select value={item.service_id || ''} onValueChange={(val) => val && fillFromService(index, val)}>
-                        <SelectTrigger><SelectValue placeholder="בחר" /></SelectTrigger>
-                        <SelectContent>
-                          {services.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
+                      <Input value={item.description || ''} onChange={(e) => updateItem(index, 'description', e.target.value)} placeholder="תיאור (אופציונלי)" className="text-xs" />
+                      {services.length > 0 && (
+                        <select
+                          defaultValue=""
+                          onChange={(e) => { if (e.target.value) { fillFromService(index, e.target.value); e.target.value = '' } }}
+                          className="text-xs text-muted/60 bg-transparent border-0 p-0 focus:outline-none cursor-pointer hover:text-saffron transition-colors w-fit"
+                        >
+                          <option value="" disabled>← בחר מקטלוג</option>
+                          {services.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                        </select>
+                      )}
                     </div>
                     <div className="col-span-2">
                       <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
                     </div>
-                    <div className="col-span-1">
-                      <Input type="number" min="0" step="0.01" value={item.unit_price} onChange={(e) => updateItem(index, 'unit_price', e.target.value)} className="text-center text-xs" dir="ltr" />
+                    <div className="col-span-3">
+                      <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(index, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
                     </div>
                     <div className="col-span-1 flex items-center justify-center pt-1">
                       <button onClick={() => removeItem(index)} className="p-1 text-muted/50 hover:text-danger transition-colors" disabled={items.length === 1}>

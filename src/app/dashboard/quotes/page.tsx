@@ -86,6 +86,17 @@ export default async function QuotesPage() {
                           <Badge className={statusInfo.color}>{statusInfo.he}</Badge>
                         </Link>
                       </td>
+                      <td className="px-2 py-0">
+                        <form action={duplicateQuote.bind(null, quote.id)}>
+                          <button
+                            type="submit"
+                            title="שכפל הצעה"
+                            className="p-2 text-gray-300 hover:text-indigo-500 transition-colors rounded-lg hover:bg-indigo-50"
+                          >
+                            <Copy className="h-4 w-4" />
+                          </button>
+                        </form>
+                      </td>
                     </tr>
                   )
                 })}

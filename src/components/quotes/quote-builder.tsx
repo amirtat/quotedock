@@ -49,7 +49,7 @@ export function QuoteBuilder({
   const [notes, setNotes] = useState(initialData?.notes || '')
   const [validUntil, setValidUntil] = useState(initialData?.valid_until || '')
   const [discount, setDiscount] = useState(initialData?.discount || 0)
-  const [includeVat, setIncludeVat] = useState(initialData?.include_vat ?? true)
+  const [includeVat, setIncludeVat] = useState(initialData?.include_vat ?? (vatRate > 0))
   const [items, setItems] = useState<Array<Omit<QuoteItem, 'id' | 'quote_id'> & { id?: string }>>(
     initialItems.length > 0 ? initialItems : [emptyItem(0)]
   )

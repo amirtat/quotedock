@@ -22,10 +22,13 @@ export function calcTotal(
   items: QuoteItem[],
   discount: number,
   vatRate: number,
-  includeVat: boolean
+  includeVat: boolean,
+  discountType: 'percent' | 'fixed' = 'percent'
 ): { subtotal: number; discountAmount: number; vatAmount: number; total: number } {
   const subtotal = calcSubtotal(items)
-  const discountAmount = subtotal * (discount / 100)
+  const discountAmount = discountType === 'fixed'
+    ? Math.min(discount, subtotal)
+    : subtotal * (discount / 100)
   const afterDiscount = subtotal - discountAmount
   const vatAmount = includeVat ? afterDiscount * (vatRate / 100) : 0
   const total = afterDiscount + vatAmount

@@ -64,22 +64,25 @@ export default async function QuotesPage() {
               <tbody className="divide-y divide-gray-100">
                 {allQuotes.map((quote) => {
                   const statusInfo = STATUS_LABELS[quote.status]
+                  const href = `/dashboard/quotes/${quote.id}`
                   return (
-                    <tr key={quote.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-5 py-3.5">
-                        <Link href={`/dashboard/quotes/${quote.id}`} className="font-medium text-gray-900 hover:text-indigo-600">
-                          {quote.title}
+                    <tr key={quote.id} className="hover:bg-gray-50 transition-colors cursor-pointer">
+                      <td className="px-5 py-0">
+                        <Link href={href} className="block py-3.5 font-medium text-gray-900">{quote.title}</Link>
+                      </td>
+                      <td className="px-5 py-0">
+                        <Link href={href} className="block py-3.5 text-gray-600">{(quote as any).client?.name || '—'}</Link>
+                      </td>
+                      <td className="px-5 py-0">
+                        <Link href={href} className="block py-3.5 text-gray-500 font-mono text-xs">{quote.number}</Link>
+                      </td>
+                      <td className="px-5 py-0">
+                        <Link href={href} className="block py-3.5 text-gray-500">{format(new Date(quote.created_at), 'dd/MM/yyyy')}</Link>
+                      </td>
+                      <td className="px-5 py-0">
+                        <Link href={href} className="block py-3.5">
+                          <Badge className={statusInfo.color}>{statusInfo.he}</Badge>
                         </Link>
-                      </td>
-                      <td className="px-5 py-3.5 text-gray-600">
-                        {(quote as any).client?.name || '—'}
-                      </td>
-                      <td className="px-5 py-3.5 text-gray-500 font-mono text-xs">{quote.number}</td>
-                      <td className="px-5 py-3.5 text-gray-500">
-                        {format(new Date(quote.created_at), 'dd/MM/yyyy')}
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <Badge className={statusInfo.color}>{statusInfo.he}</Badge>
                       </td>
                     </tr>
                   )

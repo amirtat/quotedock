@@ -245,7 +245,7 @@ export function QuoteBuilder({
       </div>
 
       {/* Body */}
-      <fieldset disabled={editingLocked} className="flex flex-1 overflow-hidden min-w-0 min-h-0 disabled:opacity-60">
+      <div className={`flex flex-1 overflow-hidden min-w-0 min-h-0 ${editingLocked ? 'opacity-60 pointer-events-none select-none' : ''}`}>
         {/* Main form */}
         <div className="flex-1 overflow-y-auto bg-surface/40 p-6">
           <div className="max-w-2xl mx-auto flex flex-col gap-5">
@@ -552,7 +552,7 @@ export function QuoteBuilder({
             </p>
           </div>
         </div>
-      </fieldset>
+      </div>
     </div>
   )
 }

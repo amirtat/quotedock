@@ -40,6 +40,7 @@ export function QuoteBuilder({
   vatRate,
   currency,
   nextNumber,
+  defaultValidUntil,
 }: QuoteBuilderProps) {
   const router = useRouter()
   const [saving, setSaving] = useState(false)

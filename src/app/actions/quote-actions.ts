@@ -94,5 +94,17 @@ export async function duplicateQuote(quoteId: string) {
     )
   }
 
+  if (sourceMilestones && sourceMilestones.length > 0) {
+    await supabase.from('payment_milestones').insert(
+      sourceMilestones.map((m) => ({
+        quote_id: newQuote.id,
+        title: m.title,
+        percent: m.percent,
+        due_date: m.due_date,
+        sort_order: m.sort_order,
+      }))
+    )
+  }
+
   redirect(`/dashboard/quotes/${newQuote.id}`)
 }

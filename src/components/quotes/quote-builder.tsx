@@ -46,6 +46,7 @@ export function QuoteBuilder({
   noteTemplates = [],
 }: QuoteBuilderProps) {
   const router = useRouter()
+  const [deleting, startDelete] = useTransition()
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState<{ msg: string; type: 'ok' | 'err' } | null>(null)
 

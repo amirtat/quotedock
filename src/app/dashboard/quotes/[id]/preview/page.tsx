@@ -52,7 +52,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
       </div>
 
       {/* Quote document */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+      <div className="print-doc bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
         {/* Header */}
         <div className="flex justify-between items-start mb-8">
           <div>

@@ -36,7 +36,7 @@ export default async function EditQuotePage({ params }: PageProps<'/dashboard/qu
       clients={clientsResult.data || []}
       services={servicesResult.data || []}
       userId={user.id}
-      vatRate={profileResult.data?.vat_rate ?? 18}
+      vatRate={profileResult.data?.vat_rate ?? systemDefaultVat}
       currency={profileResult.data?.currency || 'ILS'}
       nextNumber={nextNumber}
     />

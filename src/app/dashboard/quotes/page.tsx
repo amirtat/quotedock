@@ -5,8 +5,9 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { STATUS_LABELS } from '@/lib/utils'
 import { Quote } from '@/lib/types'
-import { FileText, Plus } from 'lucide-react'
+import { FileText, Plus, Copy } from 'lucide-react'
 import { format } from 'date-fns'
+import { duplicateQuote } from '@/app/actions/quote-actions'
 
 export default async function QuotesPage() {
   const supabase = await createClient()

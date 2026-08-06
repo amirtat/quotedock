@@ -149,7 +149,7 @@ describe('Attachment file validation — size', () => {
     expect(validateFile('image/jpeg', 10 * MB)).toBeTruthy()
   })
 
-  it('allows exactly 5MB', () => {
+  it('allows exactly 5MB (bucket limit)', () => {
     expect(validateFile('application/pdf', 5 * MB)).toBeNull()
   })
 })

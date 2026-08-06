@@ -181,6 +181,20 @@ GRANT UPDATE ON app_config TO authenticated;
 INSERT INTO app_config (key, value) VALUES
   ('default_vat_rate', '18');
 
+-- Note templates (saved reusable texts for quote notes)
+CREATE TABLE note_templates (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  sort_order INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE note_templates ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users manage own note templates" ON note_templates FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
+
 -- Migration: add per-user quote settings (run if upgrading from earlier schema)
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS quote_number_prefix TEXT DEFAULT 'QD';
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS default_quote_validity_days INTEGER DEFAULT 30;

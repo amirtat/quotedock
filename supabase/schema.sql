@@ -72,6 +72,8 @@ CREATE TABLE quote_items (
   quantity DECIMAL(10,2) DEFAULT 1,
   unit_price DECIMAL(10,2) NOT NULL DEFAULT 0,
   sort_order INTEGER DEFAULT 0,
+  item_type TEXT DEFAULT 'one_time',
+  recurring_interval TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

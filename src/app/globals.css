@@ -73,6 +73,10 @@ body {
     print-color-adjust: exact;
   }
 
+  main {
+    width: 100% !important;
+  }
+
   .print-doc {
     box-shadow: none !important;
     border: none !important;

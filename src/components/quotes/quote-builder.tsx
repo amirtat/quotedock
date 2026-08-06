@@ -24,6 +24,7 @@ interface QuoteBuilderProps {
   currency: string
   nextNumber: string
   defaultValidUntil?: string
+  noteTemplates?: NoteTemplate[]
 }
 
 function emptyItem(sortOrder: number): Omit<QuoteItem, 'id' | 'quote_id'> {

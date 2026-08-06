@@ -159,6 +159,23 @@ INSERT INTO faqs (question, answer, sort_order) VALUES
   ('מה עושה "שירותים" בתפריט?', 'שירותים הם פריטים שמורים שאפשר להוסיף להצעה בלחיצה — חוסך הקלדה חוזרת של שמות ומחירים שגרתיים.', 9),
   ('האם ניתן לשנות את המטבע?', 'כן, בהגדרות ← "הגדרות מחירים" ← שדה מטבע. ניתן לבחור בין ₪ שקל, $ דולר, ו-€ אירו.', 10);
 
+-- App-wide configuration (editable via Supabase dashboard or settings UI)
+CREATE TABLE app_config (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE app_config ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "App config is publicly readable" ON app_config FOR SELECT USING (true);
+CREATE POLICY "Authenticated users can update app config" ON app_config
+  FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+
+GRANT SELECT ON app_config TO anon, authenticated;
+GRANT UPDATE ON app_config TO authenticated;
+
+INSERT INTO app_config (key, value) VALUES ('default_vat_rate', '18');
+
 -- Helper: get next quote number for a user
 CREATE OR REPLACE FUNCTION get_next_quote_number(p_user_id UUID)
 RETURNS TEXT AS $$

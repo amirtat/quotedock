@@ -42,6 +42,7 @@ export function QuoteBuilder({
   currency,
   nextNumber,
   defaultValidUntil,
+  noteTemplates = [],
 }: QuoteBuilderProps) {
   const router = useRouter()
   const [saving, setSaving] = useState(false)

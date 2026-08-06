@@ -12,6 +12,7 @@ import { formatCurrency, calcTotal, intervalLabel } from '@/lib/utils'
 import { Client, QuoteItem, Quote, Service, NoteTemplate, RecurringInterval } from '@/lib/types'
 import { Plus, Trash2, Save, Send, Eye, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { deleteQuote } from '@/app/actions/quote-actions'
 
 interface QuoteBuilderProps {
   quoteId?: string

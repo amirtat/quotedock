@@ -203,11 +203,11 @@ export function QuoteBuilder({
               {deleting ? 'מוחק...' : 'מחק'}
             </button>
           )}
-          <Button variant="outline" size="sm" onClick={() => save('draft')} loading={saving}>
+          <Button variant="outline" size="sm" onClick={() => save('draft')} loading={saving} disabled={editingLocked}>
             <Save className="h-4 w-4" />
             שמור טיוטה
           </Button>
-          <Button size="sm" onClick={() => save('sent')} loading={saving}>
+          <Button size="sm" onClick={() => save('sent')} loading={saving} disabled={editingLocked}>
             <Send className="h-4 w-4" />
             שמור ושלח
           </Button>

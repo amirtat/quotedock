@@ -60,6 +60,7 @@ export default async function QuotesPage() {
                   <th className="text-right px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">מספר</th>
                   <th className="text-right px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">תאריך</th>
                   <th className="text-right px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">סטטוס</th>
+                  <th className="w-10" />
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">

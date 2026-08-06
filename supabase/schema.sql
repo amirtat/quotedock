@@ -11,6 +11,8 @@ CREATE TABLE profiles (
   currency TEXT DEFAULT 'ILS',
   language TEXT DEFAULT 'he',
   vat_rate DECIMAL(5,2) DEFAULT 18,
+  quote_number_prefix TEXT DEFAULT 'QD',
+  default_quote_validity_days INTEGER DEFAULT 30,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

@@ -18,10 +18,11 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
 
-  const [quoteResult, itemsResult, profileResult] = await Promise.all([
+  const [quoteResult, itemsResult, profileResult, milestonesResult] = await Promise.all([
     supabase.from('quotes').select('*, client:clients(*)').eq('id', id).eq('user_id', user.id).single(),
     supabase.from('quote_items').select('*').eq('quote_id', id).order('sort_order'),
     supabase.from('profiles').select('*').eq('id', user.id).single(),
+    supabase.from('payment_milestones').select('*').eq('quote_id', id).order('sort_order'),
   ])
 
   if (!quoteResult.data) notFound()

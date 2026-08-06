@@ -173,6 +173,19 @@ export function QuoteBuilder({
               </Button>
             </Link>
           )}
+          {quoteId && (
+            <button
+              onClick={() => {
+                if (!confirm('למחוק את ההצעה לצמיתות?')) return
+                startDelete(() => deleteQuote(quoteId))
+              }}
+              disabled={deleting}
+              className="flex items-center gap-1 text-sm text-muted hover:text-danger transition-colors disabled:opacity-50 px-2 py-1"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              {deleting ? 'מוחק...' : 'מחק'}
+            </button>
+          )}
           <Button variant="outline" size="sm" onClick={() => save('draft')} loading={saving}>
             <Save className="h-4 w-4" />
             שמור טיוטה

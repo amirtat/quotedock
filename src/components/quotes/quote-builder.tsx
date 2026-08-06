@@ -48,6 +48,8 @@ export function QuoteBuilder({
   const router = useRouter()
   const [deleting, startDelete] = useTransition()
   const [saving, setSaving] = useState(false)
+  const isDraft = !initialData?.status || initialData.status === 'draft'
+  const [editingLocked, setEditingLocked] = useState(!isDraft)
   const [toast, setToast] = useState<{ msg: string; type: 'ok' | 'err' } | null>(null)
 
   const [title, setTitle] = useState(initialData?.title || '')

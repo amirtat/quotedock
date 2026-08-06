@@ -26,7 +26,7 @@ interface ServicesManagerProps {
   currency: string
 }
 
-const emptyForm = { name: '', description: '', unit_price: 0, unit: 'unit' }
+const emptyForm = { name: '', description: '', unit_price: 0, unit: 'project' }
 
 export function ServicesManager({ initialServices, userId, currency }: ServicesManagerProps) {
   const [services, setServices] = useState(initialServices)

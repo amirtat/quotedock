@@ -68,6 +68,14 @@ describe('calcTotal', () => {
     expect(result.vatAmount).toBe(180)
     expect(result.total).toBe(1180)
   })
+
+  it('vatRate 0 should default includeVat to false (עוסק זעיר logic)', () => {
+    // Mirrors: useState(initialData?.include_vat ?? (vatRate > 0))
+    const defaultIncludeVat = (vatRate: number) => vatRate > 0
+    expect(defaultIncludeVat(0)).toBe(false)   // עוסק זעיר — VAT off by default
+    expect(defaultIncludeVat(18)).toBe(true)   // רגיל — VAT on by default
+    expect(defaultIncludeVat(17)).toBe(true)   // ערך ישן — VAT on by default
+  })
 })
 
 // --- formatCurrency ---

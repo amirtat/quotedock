@@ -32,6 +32,8 @@ export function calcTotal(
   return { subtotal, discountAmount, vatAmount, total }
 }
 
+export const FALLBACK_VAT_RATE = 18
+
 export const STATUS_LABELS: Record<QuoteStatus, { he: string; en: string; color: string }> = {
   draft: { he: 'טיוטה', en: 'Draft', color: 'bg-gray-100 text-gray-700' },
   sent: { he: 'נשלח', en: 'Sent', color: 'bg-blue-100 text-blue-700' },

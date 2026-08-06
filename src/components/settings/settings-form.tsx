@@ -14,6 +14,7 @@ import { Upload, X } from 'lucide-react'
 interface SettingsFormProps {
   profile: Profile | null
   userId: string
+  systemDefaultVat: number
 }
 
 export function SettingsForm({ profile, userId }: SettingsFormProps) {

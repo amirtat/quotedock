@@ -43,6 +43,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
           חזרה לעריכה
         </Link>
         <div className="flex items-center gap-2">
+          <DuplicateQuoteButton quoteId={id} />
           <CopyLinkButton url={publicUrl} />
           <Badge className={statusInfo.color}>{statusInfo.he}</Badge>
         </div>

@@ -60,6 +60,8 @@ export interface Quote {
   items?: QuoteItem[]
 }
 
+export type RecurringInterval = 'monthly' | 'quarterly' | 'yearly'
+
 export interface QuoteItem {
   id: string
   quote_id: string
@@ -69,6 +71,8 @@ export interface QuoteItem {
   quantity: number
   unit_price: number
   sort_order: number
+  item_type: 'one_time' | 'recurring'
+  recurring_interval: RecurringInterval | null
 }
 
 export interface NoteTemplate {

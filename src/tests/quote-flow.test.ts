@@ -27,7 +27,7 @@ interface MockQuote {
 }
 
 function makeItem(name: string, qty: number, price: number, i = 0): QuoteItem {
-  return { id: String(i), quote_id: 'q1', service_id: null, name, description: null, quantity: qty, unit_price: price, sort_order: i }
+  return { id: String(i), quote_id: 'q1', service_id: null, name, description: null, quantity: qty, unit_price: price, sort_order: i, item_type: 'one_time', recurring_interval: null }
 }
 
 // Simulates the server action that sends a quote

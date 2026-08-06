@@ -12,7 +12,7 @@ import type { QuoteItem, QuoteStatus } from '@/lib/types'
 // ─── helpers ────────────────────────────────────────────────────────────────
 
 function makeItem(qty: number, price: number, i = 0): QuoteItem {
-  return { id: String(i), quote_id: 'q1', service_id: null, name: 'פריט', description: null, quantity: qty, unit_price: price, sort_order: i }
+  return { id: String(i), quote_id: 'q1', service_id: null, name: 'פריט', description: null, quantity: qty, unit_price: price, sort_order: i, item_type: 'one_time', recurring_interval: null }
 }
 
 // Mirrors the prefix + count + year logic in new/page.tsx and duplicate action

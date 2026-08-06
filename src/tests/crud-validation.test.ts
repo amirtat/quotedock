@@ -133,8 +133,8 @@ describe('Service CRUD validation', () => {
 
 describe('Quote save payload', () => {
   const items: QuoteItem[] = [
-    { id: '1', quote_id: 'q1', service_id: null, name: 'עיצוב', description: null, quantity: 2, unit_price: 1500, sort_order: 0 },
-    { id: '2', quote_id: 'q1', service_id: null, name: 'פיתוח', description: null, quantity: 1, unit_price: 5000, sort_order: 1 },
+    { id: '1', quote_id: 'q1', service_id: null, name: 'עיצוב', description: null, quantity: 2, unit_price: 1500, sort_order: 0, item_type: 'one_time', recurring_interval: null },
+    { id: '2', quote_id: 'q1', service_id: null, name: 'פיתוח', description: null, quantity: 1, unit_price: 5000, sort_order: 1, item_type: 'one_time', recurring_interval: null },
   ]
 
   it('subtotal matches sum of items', () => {

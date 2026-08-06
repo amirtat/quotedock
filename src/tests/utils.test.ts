@@ -6,6 +6,7 @@ const makeItem = (qty: number, price: number): QuoteItem => ({
   id: '1', quote_id: 'q1', service_id: null,
   name: 'Test', description: null,
   quantity: qty, unit_price: price, sort_order: 0,
+  item_type: 'one_time', recurring_interval: null,
 })
 
 // --- calcSubtotal ---

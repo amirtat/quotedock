@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { formatCurrency, calcTotal, STATUS_LABELS } from '@/lib/utils'
+import { formatCurrency, calcTotal, STATUS_LABELS, intervalLabel } from '@/lib/utils'
 import { format } from 'date-fns'
 import PublicQuoteActions from '@/components/quotes/public-quote-actions'
 
@@ -37,7 +37,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   const signature = signatureResult.data
   const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
-  const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')
+  const { subtotal, discountAmount, vatAmount, total, recurringSubtotal } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')
   const isPending = ['sent', 'viewed'].includes(quote.status)
   const isAccepted = quote.status === 'accepted'
   const isDeclined = quote.status === 'declined'
@@ -91,6 +91,24 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
               <p className="font-semibold text-gray-900 text-lg">{(quote as any).client.name}</p>
               {(quote as any).client.company && <p className="text-gray-600">{(quote as any).client.company}</p>}
               {(quote as any).client.email && <p className="text-sm text-gray-500">{(quote as any).client.email}</p>}
+            </div>
+          )}
+
+          {/* Recurring items summary */}
+          {recurringSubtotal > 0 && (
+            <div className="mb-6 p-4 bg-saffron-50 border border-saffron-100 rounded-xl">
+              <p className="text-xs font-semibold text-saffron-600 uppercase tracking-wide mb-2">תשלומים חוזרים</p>
+              {(['monthly', 'quarterly', 'yearly'] as const).map(interval => {
+                const intervalItems = (items as any[]).filter((i: any) => i.item_type === 'recurring' && (i.recurring_interval || 'monthly') === interval)
+                const intervalTotal = intervalItems.reduce((s: number, i: any) => s + i.quantity * i.unit_price, 0)
+                if (intervalTotal === 0) return null
+                return (
+                  <div key={interval} className="flex justify-between text-sm">
+                    <span className="text-gray-600">{intervalLabel(interval)}</span>
+                    <span className="font-semibold text-saffron-700">{formatCurrency(intervalTotal, currency)}</span>
+                  </div>
+                )
+              })}
             </div>
           )}
 

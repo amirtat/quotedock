@@ -24,15 +24,28 @@ export function calcTotal(
   vatRate: number,
   includeVat: boolean,
   discountType: 'percent' | 'fixed' = 'percent'
-): { subtotal: number; discountAmount: number; vatAmount: number; total: number } {
-  const subtotal = calcSubtotal(items)
+): { subtotal: number; discountAmount: number; vatAmount: number; total: number; recurringSubtotal: number } {
+  const oneTimeItems = items.filter(i => !i.item_type || i.item_type === 'one_time')
+  const recurringItems = items.filter(i => i.item_type === 'recurring')
+  const subtotal = calcSubtotal(oneTimeItems)
+  const recurringSubtotal = calcSubtotal(recurringItems)
   const discountAmount = discountType === 'fixed'
     ? Math.min(discount, subtotal)
     : subtotal * (discount / 100)
   const afterDiscount = subtotal - discountAmount
   const vatAmount = includeVat ? afterDiscount * (vatRate / 100) : 0
   const total = afterDiscount + vatAmount
-  return { subtotal, discountAmount, vatAmount, total }
+  return { subtotal, discountAmount, vatAmount, total, recurringSubtotal }
+}
+
+const INTERVAL_LABELS: Record<string, string> = {
+  monthly: 'חודשי',
+  quarterly: 'רבעוני',
+  yearly: 'שנתי',
+}
+
+export function intervalLabel(interval: string | null): string {
+  return interval ? (INTERVAL_LABELS[interval] || interval) : 'חודשי'
 }
 
 export const FALLBACK_VAT_RATE = 18

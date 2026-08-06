@@ -8,8 +8,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { formatCurrency, calcTotal } from '@/lib/utils'
-import { Client, QuoteItem, Quote, Service, NoteTemplate } from '@/lib/types'
+import { formatCurrency, calcTotal, intervalLabel } from '@/lib/utils'
+import { Client, QuoteItem, Quote, Service, NoteTemplate, RecurringInterval } from '@/lib/types'
 import { Plus, Trash2, Save, Send, Eye, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
@@ -28,7 +28,7 @@ interface QuoteBuilderProps {
 }
 
 function emptyItem(sortOrder: number): Omit<QuoteItem, 'id' | 'quote_id'> {
-  return { service_id: null, name: '', description: '', quantity: 1, unit_price: 0, sort_order: sortOrder }
+  return { service_id: null, name: '', description: '', quantity: 1, unit_price: 0, sort_order: sortOrder, item_type: 'one_time', recurring_interval: null }
 }
 
 export function QuoteBuilder({
@@ -61,7 +61,7 @@ export function QuoteBuilder({
   )
   const [quoteId, setQuoteId] = useState(initialQuoteId || null)
 
-  const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as QuoteItem[], discount, vatRate, includeVat, discountType)
+  const { subtotal, discountAmount, vatAmount, total, recurringSubtotal } = calcTotal(items as QuoteItem[], discount, vatRate, includeVat, discountType)
 
   function showToast(msg: string, type: 'ok' | 'err' = 'ok') {
     setToast({ msg, type })
@@ -126,6 +126,8 @@ export function QuoteBuilder({
           quote_id: currentQuoteId, service_id: item.service_id || null,
           name: item.name, description: item.description || null,
           quantity: Number(item.quantity), unit_price: Number(item.unit_price), sort_order: i,
+          item_type: item.item_type || 'one_time',
+          recurring_interval: item.item_type === 'recurring' ? (item.recurring_interval || 'monthly') : null,
         }))
       )
 
@@ -236,16 +238,41 @@ export function QuoteBuilder({
                     <div className="col-span-6 flex flex-col gap-1.5">
                       <Input value={item.name} onChange={(e) => updateItem(index, 'name', e.target.value)} placeholder="שם הפריט" />
                       <Input value={item.description || ''} onChange={(e) => updateItem(index, 'description', e.target.value)} placeholder="תיאור (אופציונלי)" className="text-xs" />
-                      {services.length > 0 && (
-                        <select
-                          defaultValue=""
-                          onChange={(e) => { if (e.target.value) { fillFromService(index, e.target.value); e.target.value = '' } }}
-                          className="text-xs text-muted/60 bg-transparent border-0 p-0 focus:outline-none cursor-pointer hover:text-saffron transition-colors w-fit"
-                        >
-                          <option value="" disabled>← בחר מקטלוג</option>
-                          {services.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-                        </select>
-                      )}
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {services.length > 0 && (
+                          <select
+                            defaultValue=""
+                            onChange={(e) => { if (e.target.value) { fillFromService(index, e.target.value); e.target.value = '' } }}
+                            className="text-xs text-muted/60 bg-transparent border-0 p-0 focus:outline-none cursor-pointer hover:text-saffron transition-colors"
+                          >
+                            <option value="" disabled>← בחר מקטלוג</option>
+                            {services.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                          </select>
+                        )}
+                        <div className="flex items-center gap-1 me-auto">
+                          <button
+                            type="button"
+                            onClick={() => updateItem(index, 'item_type', 'one_time')}
+                            className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type !== 'recurring' ? 'bg-ink text-white border-ink' : 'text-muted border-border hover:border-ink'}`}
+                          >חד-פעמי</button>
+                          <button
+                            type="button"
+                            onClick={() => updateItem(index, 'item_type', 'recurring')}
+                            className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'recurring' ? 'bg-saffron text-white border-saffron' : 'text-muted border-border hover:border-saffron'}`}
+                          >חוזר</button>
+                          {item.item_type === 'recurring' && (
+                            <select
+                              value={item.recurring_interval || 'monthly'}
+                              onChange={(e) => updateItem(index, 'recurring_interval', e.target.value as RecurringInterval)}
+                              className="text-xs text-saffron bg-transparent border-0 p-0 focus:outline-none cursor-pointer"
+                            >
+                              <option value="monthly">חודשי</option>
+                              <option value="quarterly">רבעוני</option>
+                              <option value="yearly">שנתי</option>
+                            </select>
+                          )}
+                        </div>
+                      </div>
                     </div>
                     <div className="col-span-2">
                       <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
@@ -301,6 +328,22 @@ export function QuoteBuilder({
           </div>
 
           <div className="flex-1 p-5 flex flex-col gap-3">
+            {recurringSubtotal > 0 && (
+              <div className="flex flex-col gap-1 pb-3 border-b border-obsidian-700">
+                <p className="text-white/30 text-xs uppercase tracking-wider">חוזר</p>
+                {(['monthly', 'quarterly', 'yearly'] as const).map(interval => {
+                  const intervalItems = (items as QuoteItem[]).filter(i => i.item_type === 'recurring' && (i.recurring_interval || 'monthly') === interval)
+                  const intervalTotal = intervalItems.reduce((s, i) => s + i.quantity * i.unit_price, 0)
+                  if (intervalTotal === 0) return null
+                  return (
+                    <div key={interval} className="flex justify-between text-sm">
+                      <span className="text-saffron/70">{intervalLabel(interval)}</span>
+                      <span className="text-saffron font-amount">{formatCurrency(intervalTotal, currency)}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
             <div className="flex justify-between text-sm">
               <span className="text-white/40">סכום ביניים</span>
               <span className="text-white/80 font-amount">{formatCurrency(subtotal, currency)}</span>

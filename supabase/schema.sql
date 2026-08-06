@@ -183,6 +183,10 @@ INSERT INTO app_config (key, value) VALUES
   ('quote_number_prefix', 'QD'),
   ('default_quote_validity_days', '30');
 
+-- Migration: add per-user quote settings (run if upgrading from earlier schema)
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS quote_number_prefix TEXT DEFAULT 'QD';
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS default_quote_validity_days INTEGER DEFAULT 30;
+
 -- Migration: add discount_type and discount_reason (run if upgrading from earlier schema)
 -- ALTER TABLE quotes ADD COLUMN IF NOT EXISTS discount_type TEXT DEFAULT 'percent';
 -- ALTER TABLE quotes ADD COLUMN IF NOT EXISTS discount_reason TEXT;

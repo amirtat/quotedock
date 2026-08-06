@@ -71,6 +71,15 @@ export interface QuoteItem {
   sort_order: number
 }
 
+export interface NoteTemplate {
+  id: string
+  user_id: string
+  title: string
+  content: string
+  sort_order: number
+  created_at: string
+}
+
 export interface Signature {
   id: string
   quote_id: string

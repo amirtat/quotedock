@@ -251,7 +251,22 @@ export function QuoteBuilder({
                 {items.map((item, index) => (
                   <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 rounded-lg bg-surface/60 border border-border/60">
                     <div className="col-span-6 flex flex-col gap-1.5">
-                      <Input value={item.name} onChange={(e) => updateItem(index, 'name', e.target.value)} placeholder="שם הפריט" />
+                      <Input
+                        value={item.name}
+                        list={`services-ac-${index}`}
+                        onChange={(e) => {
+                          const val = e.target.value
+                          updateItem(index, 'name', val)
+                          const matched = services.find(s => s.name === val)
+                          if (matched) fillFromService(index, matched.id)
+                        }}
+                        placeholder="שם הפריט"
+                      />
+                      {services.length > 0 && (
+                        <datalist id={`services-ac-${index}`}>
+                          {services.map(s => <option key={s.id} value={s.name} />)}
+                        </datalist>
+                      )}
                       <Input value={item.description || ''} onChange={(e) => updateItem(index, 'description', e.target.value)} placeholder="תיאור (אופציונלי)" className="text-xs" />
                       <div className="flex items-center gap-2 flex-wrap">
                         {services.length > 0 && (

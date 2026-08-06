@@ -102,7 +102,8 @@ export function QuoteBuilder({
         const { data, error } = await supabase.from('quotes').insert({
           user_id: userId, title, number: nextNumber,
           client_id: clientId || null, notes: notes || null,
-          valid_until: validUntil || null, discount, include_vat: includeVat, status,
+          valid_until: validUntil || null, discount, discount_type: discountType,
+          discount_reason: discountReason || null, include_vat: includeVat, status,
         }).select('id').single()
         if (error) throw error
         currentQuoteId = data.id
@@ -110,7 +111,8 @@ export function QuoteBuilder({
       } else {
         const { error } = await supabase.from('quotes').update({
           title, client_id: clientId || null, notes: notes || null,
-          valid_until: validUntil || null, discount, include_vat: includeVat, status,
+          valid_until: validUntil || null, discount, discount_type: discountType,
+          discount_reason: discountReason || null, include_vat: includeVat, status,
           ...(status === 'sent' ? { sent_at: new Date().toISOString() } : {}),
         }).eq('id', currentQuoteId)
         if (error) throw error

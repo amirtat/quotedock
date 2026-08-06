@@ -174,7 +174,10 @@ CREATE POLICY "Authenticated users can update app config" ON app_config
 GRANT SELECT ON app_config TO anon, authenticated;
 GRANT UPDATE ON app_config TO authenticated;
 
-INSERT INTO app_config (key, value) VALUES ('default_vat_rate', '18');
+INSERT INTO app_config (key, value) VALUES
+  ('default_vat_rate', '18'),
+  ('quote_number_prefix', 'QD'),
+  ('default_quote_validity_days', '30');
 
 -- Helper: get next quote number for a user
 CREATE OR REPLACE FUNCTION get_next_quote_number(p_user_id UUID)

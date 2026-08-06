@@ -63,25 +63,31 @@ body {
 
 /* Print / PDF export */
 @media print {
-  .no-print {
-    display: none !important;
+  /* Hide everything, then reveal only the quote document */
+  body * {
+    visibility: hidden !important;
+  }
+
+  .print-doc,
+  .print-doc * {
+    visibility: visible !important;
+  }
+
+  .print-doc {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: white !important;
+    overflow: visible !important;
   }
 
   body {
     background: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-  }
-
-  main {
-    width: 100% !important;
-  }
-
-  .print-doc {
-    box-shadow: none !important;
-    border: none !important;
-    border-radius: 0 !important;
-    padding: 0 !important;
   }
 
   @page {

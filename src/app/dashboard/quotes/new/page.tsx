@@ -7,11 +7,12 @@ export default async function NewQuotePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const [clientsResult, servicesResult, profileResult, countResult] = await Promise.all([
+  const [clientsResult, servicesResult, profileResult, countResult, noteTemplatesResult] = await Promise.all([
     supabase.from('clients').select('*').eq('user_id', user.id).order('name'),
     supabase.from('services').select('*').eq('user_id', user.id).order('name'),
     supabase.from('profiles').select('vat_rate, currency, quote_number_prefix, default_quote_validity_days').eq('id', user.id).single(),
     supabase.from('quotes').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+    supabase.from('note_templates').select('*').eq('user_id', user.id).order('sort_order'),
   ])
 
   const profile = profileResult.data

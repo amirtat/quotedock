@@ -76,6 +76,31 @@ describe('calcTotal', () => {
     expect(defaultIncludeVat(18)).toBe(true)   // רגיל — VAT on by default
     expect(defaultIncludeVat(17)).toBe(true)   // ערך ישן — VAT on by default
   })
+
+  it('fixed discount deducts exact amount', () => {
+    const result = calcTotal([makeItem(1, 1000)], 200, 18, false, 'fixed')
+    expect(result.discountAmount).toBe(200)
+    expect(result.total).toBe(800)
+  })
+
+  it('fixed discount capped at subtotal', () => {
+    const result = calcTotal([makeItem(1, 100)], 200, 18, false, 'fixed')
+    expect(result.discountAmount).toBe(100)
+    expect(result.total).toBe(0)
+  })
+
+  it('fixed discount with VAT applies VAT after discount', () => {
+    const result = calcTotal([makeItem(1, 1000)], 200, 18, true, 'fixed')
+    expect(result.discountAmount).toBe(200)
+    expect(result.vatAmount).toBeCloseTo(144)
+    expect(result.total).toBeCloseTo(944)
+  })
+
+  it('percent discount still works (explicit type)', () => {
+    const result = calcTotal([makeItem(1, 1000)], 10, 18, false, 'percent')
+    expect(result.discountAmount).toBe(100)
+    expect(result.total).toBe(900)
+  })
 })
 
 // --- formatCurrency ---

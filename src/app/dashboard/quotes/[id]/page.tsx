@@ -9,13 +9,14 @@ export default async function EditQuotePage({ params }: PageProps<'/dashboard/qu
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const [quoteResult, itemsResult, clientsResult, servicesResult, profileResult, configResult] = await Promise.all([
+  const [quoteResult, itemsResult, clientsResult, servicesResult, profileResult, configResult, noteTemplatesResult] = await Promise.all([
     supabase.from('quotes').select('*, client:clients(name)').eq('id', id).eq('user_id', user.id).single(),
     supabase.from('quote_items').select('*').eq('quote_id', id).order('sort_order'),
     supabase.from('clients').select('*').eq('user_id', user.id).order('name'),
     supabase.from('services').select('*').eq('user_id', user.id).order('name'),
     supabase.from('profiles').select('vat_rate, currency').eq('id', user.id).single(),
     supabase.from('app_config').select('value').eq('key', 'default_vat_rate').single(),
+    supabase.from('note_templates').select('*').eq('user_id', user.id).order('sort_order'),
   ])
 
   if (!quoteResult.data) notFound()

@@ -198,6 +198,28 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
             <p className="text-sm text-gray-700 whitespace-pre-wrap">{quote.notes}</p>
           </div>
         )}
+
+        {/* Attachments */}
+        {attachments.length > 0 && (
+          <div className="mt-6 pt-6 border-t border-gray-100">
+            <p className="text-xs font-medium text-gray-500 uppercase mb-3">מסמכים מצורפים</p>
+            <div className="flex flex-col gap-2">
+              {attachments.map((att: any) => {
+                const isImage = att.file_type?.startsWith('image/')
+                return (
+                  <a key={att.id} href={att.file_url} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-2.5 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors">
+                    {isImage
+                      ? <img src={att.file_url} alt={att.file_name} className="h-9 w-9 object-cover rounded shrink-0" />
+                      : <div className="h-9 w-9 bg-red-50 rounded flex items-center justify-center shrink-0"><span className="text-xs font-bold text-red-400">PDF</span></div>
+                    }
+                    <span className="text-sm text-gray-700 flex-1 truncate">{att.file_name}</span>
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Status timeline — freelancer only, not printed */}

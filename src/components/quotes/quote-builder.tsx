@@ -361,6 +361,54 @@ export function QuoteBuilder({
               </button>
             </div>
 
+            {/* Payment schedule */}
+            <div className="bg-white rounded-xl border border-border p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">לוח תשלומים</h2>
+                <div className="flex items-center gap-2">
+                  <button type="button" onClick={() => applyMilestonePreset([50, 50], ['מקדמה בחתימה', 'יתרה במסירה'])} className="text-xs text-muted hover:text-saffron border border-border rounded px-1.5 py-0.5 transition-colors">50/50</button>
+                  <button type="button" onClick={() => applyMilestonePreset([40, 30, 30], ['מקדמה בחתימה', 'אמצע פרויקט', 'יתרה במסירה'])} className="text-xs text-muted hover:text-saffron border border-border rounded px-1.5 py-0.5 transition-colors">40/30/30</button>
+                  <button type="button" onClick={() => setMilestones(p => [...p, { title: '', percent: 0, due_date: '' }])} className="text-xs text-saffron hover:text-saffron-600 font-medium transition-colors">+ הוסף</button>
+                </div>
+              </div>
+
+              {milestones.length === 0 ? (
+                <p className="text-xs text-muted/50 text-center py-3">ללא לוח תשלומים — בחר תבנית או הוסף ידנית</p>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <div className="grid grid-cols-12 gap-2 text-xs text-muted px-1 mb-1">
+                    <div className="col-span-5">תיאור</div>
+                    <div className="col-span-2 text-center">%</div>
+                    <div className="col-span-4 text-center">תאריך יעד</div>
+                    <div className="col-span-1" />
+                  </div>
+                  {milestones.map((m, i) => (
+                    <div key={i} className="grid grid-cols-12 gap-2 items-center">
+                      <div className="col-span-5">
+                        <Input value={m.title} onChange={e => setMilestones(p => p.map((x, j) => j === i ? { ...x, title: e.target.value } : x))} placeholder="מקדמה בחתימה" />
+                      </div>
+                      <div className="col-span-2">
+                        <Input type="number" min="0" max="100" value={m.percent || ''} onChange={e => setMilestones(p => p.map((x, j) => j === i ? { ...x, percent: Number(e.target.value) } : x))} className="text-center" dir="ltr" />
+                      </div>
+                      <div className="col-span-4">
+                        <Input type="date" value={m.due_date} onChange={e => setMilestones(p => p.map((x, j) => j === i ? { ...x, due_date: e.target.value } : x))} dir="ltr" />
+                      </div>
+                      <div className="col-span-1 flex justify-center">
+                        <button type="button" onClick={() => setMilestones(p => p.filter((_, j) => j !== i))} className="p-1 text-muted/50 hover:text-danger transition-colors">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  {milestones.length > 0 && (
+                    <div className="flex justify-end mt-1">
+                      {(() => { const sum = milestones.reduce((s, m) => s + m.percent, 0); return sum !== 100 ? <span className="text-xs text-orange-500">סה"כ: {sum}% (חייב להיות 100%)</span> : <span className="text-xs text-green-600">✓ סה"כ: 100%</span> })()}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
             {/* Notes */}
             <div className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-center justify-between mb-3">

@@ -9,6 +9,7 @@ import { ArrowLeft, Edit, Copy } from 'lucide-react'
 import { format } from 'date-fns'
 import CopyLinkButton from '@/components/quotes/copy-link-button'
 import DuplicateQuoteButton from '@/components/quotes/duplicate-quote-button'
+import PrintButton from '@/components/quotes/print-button'
 
 export default async function QuotePreviewPage({ params }: PageProps<'/dashboard/quotes/[id]/preview'>) {
   const { id } = await params

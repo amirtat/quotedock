@@ -17,8 +17,11 @@ interface SettingsFormProps {
   systemDefaultVat: number
 }
 
-export function SettingsForm({ profile, userId }: SettingsFormProps) {
+export function SettingsForm({ profile, userId, systemDefaultVat }: SettingsFormProps) {
   const router = useRouter()
+  const [defaultVat, setDefaultVat] = useState(systemDefaultVat)
+  const [savingVat, setSavingVat] = useState(false)
+  const [vatSaved, setVatSaved] = useState(false)
   const [form, setForm] = useState({
     business_name: profile?.business_name || '',
     email: profile?.email || '',

@@ -42,6 +42,7 @@ export default async function EditQuotePage({ params }: PageProps<'/dashboard/qu
       currency={profileResult.data?.currency || 'ILS'}
       nextNumber={nextNumber}
       noteTemplates={noteTemplatesResult.data || []}
+      initialMilestones={milestonesResult.data || []}
     />
   )
 }

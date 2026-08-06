@@ -101,6 +101,10 @@ export function QuoteBuilder({
     )
   }
 
+  function applyMilestonePreset(percents: number[], titles: string[]) {
+    setMilestones(percents.map((p, i) => ({ title: titles[i], percent: p, due_date: '' })))
+  }
+
   async function save(status: 'draft' | 'sent' = 'draft') {
     if (!title.trim()) return showToast('נא להזין כותרת', 'err')
     if (items.some(i => !i.name.trim())) return showToast('נא למלא שם לכל הפריטים', 'err')

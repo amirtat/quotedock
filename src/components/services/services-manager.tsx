@@ -143,10 +143,16 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
                 <Label>מחיר</Label>
-                <Input type="number" min="0" step="0.01" value={form.unit_price} onChange={(e) => setForm({ ...form, unit_price: Number(e.target.value) })} dir="ltr" />
+                <Input
+                  type="number" min="0" step="0.01"
+                  value={form.unit_price || ''}
+                  placeholder="0"
+                  onChange={(e) => setForm({ ...form, unit_price: e.target.value === '' ? 0 : Number(e.target.value) })}
+                  dir="ltr"
+                />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label>יחידה</Label>
+                <Label>סוג תחיוב</Label>
                 <select
                   value={form.unit}
                   onChange={(e) => setForm({ ...form, unit: e.target.value })}

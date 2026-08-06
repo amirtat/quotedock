@@ -286,20 +286,44 @@ export function QuoteBuilder({
             </div>
 
             {/* Discount input */}
-            <div className="flex items-center justify-between">
-              <span className="text-white/40 text-sm">הנחה %</span>
-              <input
-                type="number" min="0" max="100"
-                value={discount}
-                onChange={(e) => setDiscount(Number(e.target.value))}
-                className="w-16 text-center text-sm bg-obsidian-700 text-white border border-obsidian-700 rounded-lg px-2 py-1 focus:outline-none focus:border-saffron"
-                dir="ltr"
-              />
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setDiscountType('percent')}
+                    className={`text-xs px-2 py-0.5 rounded transition-colors ${discountType === 'percent' ? 'bg-saffron text-obsidian-900 font-medium' : 'text-white/40 hover:text-white/60'}`}
+                  >%</button>
+                  <button
+                    type="button"
+                    onClick={() => setDiscountType('fixed')}
+                    className={`text-xs px-2 py-0.5 rounded transition-colors ${discountType === 'fixed' ? 'bg-saffron text-obsidian-900 font-medium' : 'text-white/40 hover:text-white/60'}`}
+                  >₪</button>
+                  <span className="text-white/40 text-sm me-1">הנחה</span>
+                </div>
+                <input
+                  type="number" min="0"
+                  max={discountType === 'percent' ? 100 : undefined}
+                  value={discount}
+                  onChange={(e) => setDiscount(Number(e.target.value))}
+                  className="w-16 text-center text-sm bg-obsidian-700 text-white border border-obsidian-700 rounded-lg px-2 py-1 focus:outline-none focus:border-saffron"
+                  dir="ltr"
+                />
+              </div>
+              {discount > 0 && (
+                <input
+                  type="text"
+                  value={discountReason}
+                  onChange={(e) => setDiscountReason(e.target.value)}
+                  placeholder="סיבת הנחה (אופציונלי)"
+                  className="text-xs bg-obsidian-700 text-white/60 border border-obsidian-700 rounded-lg px-2 py-1 focus:outline-none focus:border-saffron placeholder-white/20 w-full"
+                />
+              )}
             </div>
 
             {discount > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-red-400/70">הנחה</span>
+                <span className="text-red-400/70">הנחה{discountReason ? ` (${discountReason})` : ''}</span>
                 <span className="text-red-400 font-amount">-{formatCurrency(discountAmount, currency)}</span>
               </div>
             )}

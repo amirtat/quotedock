@@ -51,7 +51,7 @@ export default function AttachmentsManager({
     const path = `${userId}/${quoteId}/${Date.now()}-${safeName}`
 
     const { error: upErr } = await supabase.storage.from('quote-attachments').upload(path, file)
-    if (upErr) { setError('שגיאה בהעלאה'); setUploading(false); return }
+    if (upErr) { setError(upErr.message); setUploading(false); return }
 
     const { data: { publicUrl } } = supabase.storage.from('quote-attachments').getPublicUrl(path)
 

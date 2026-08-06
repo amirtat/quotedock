@@ -70,6 +70,16 @@ export function SettingsForm({ profile, userId, systemDefaultVat }: SettingsForm
     setLogoUrl(null)
   }
 
+  async function handleSaveDefaultVat(e: React.FormEvent) {
+    e.preventDefault()
+    setSavingVat(true)
+    const supabase = createClient()
+    await supabase.from('app_config').update({ value: String(defaultVat) }).eq('key', 'default_vat_rate')
+    setSavingVat(false)
+    setVatSaved(true)
+    setTimeout(() => setVatSaved(false), 3000)
+  }
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)

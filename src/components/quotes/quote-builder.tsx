@@ -269,16 +269,6 @@ export function QuoteBuilder({
                       )}
                       <Input value={item.description || ''} onChange={(e) => updateItem(index, 'description', e.target.value)} placeholder="תיאור (אופציונלי)" className="text-xs" />
                       <div className="flex items-center gap-2 flex-wrap">
-                        {services.length > 0 && (
-                          <select
-                            defaultValue=""
-                            onChange={(e) => { if (e.target.value) { fillFromService(index, e.target.value); e.target.value = '' } }}
-                            className="text-xs text-muted/60 bg-transparent border-0 p-0 focus:outline-none cursor-pointer hover:text-saffron transition-colors"
-                          >
-                            <option value="" disabled>← בחר מקטלוג</option>
-                            {services.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-                          </select>
-                        )}
                         <div className="flex items-center gap-1 me-auto">
                           <button
                             type="button"

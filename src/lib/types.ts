@@ -10,6 +10,8 @@ export interface Profile {
   currency: string
   language: string
   vat_rate: number
+  quote_number_prefix: string
+  default_quote_validity_days: number
   created_at: string
 }
 

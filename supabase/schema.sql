@@ -179,9 +179,7 @@ GRANT SELECT ON app_config TO anon, authenticated;
 GRANT UPDATE ON app_config TO authenticated;
 
 INSERT INTO app_config (key, value) VALUES
-  ('default_vat_rate', '18'),
-  ('quote_number_prefix', 'QD'),
-  ('default_quote_validity_days', '30');
+  ('default_vat_rate', '18');
 
 -- Migration: add per-user quote settings (run if upgrading from earlier schema)
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS quote_number_prefix TEXT DEFAULT 'QD';

@@ -187,9 +187,15 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
 
         {/* Existing signature */}
         {signature && (
-          <div className="mt-4 bg-white rounded-2xl border border-green-200 p-6 text-center">
-            <p className="text-green-700 font-medium mb-1">ההצעה נחתמה על ידי {signature.signer_name}</p>
-            <p className="text-gray-500 text-sm">{format(new Date(signature.signed_at), 'dd/MM/yyyy HH:mm')}</p>
+          <div className="mt-4 bg-white rounded-2xl border border-green-200 p-6">
+            <p className="text-green-700 font-medium mb-3 text-center">✓ ההצעה אושרה ונחתמה</p>
+            {signature.signature_data?.startsWith('data:image') && (
+              <div className="border border-gray-100 rounded-lg bg-gray-50 p-2 mb-3">
+                <img src={signature.signature_data} alt="חתימה" className="max-h-24 mx-auto" />
+              </div>
+            )}
+            <p className="text-center text-sm text-gray-600">{signature.signer_name}</p>
+            <p className="text-center text-gray-400 text-xs mt-0.5">{format(new Date(signature.signed_at), 'dd/MM/yyyy HH:mm')}</p>
           </div>
         )}
 

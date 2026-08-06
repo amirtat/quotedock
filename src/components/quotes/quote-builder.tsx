@@ -62,6 +62,11 @@ export function QuoteBuilder({
   const [discountType, setDiscountType] = useState<'percent' | 'fixed'>(initialData?.discount_type || 'percent')
   const [discountReason, setDiscountReason] = useState(initialData?.discount_reason || '')
   const [includeVat, setIncludeVat] = useState(initialData?.include_vat ?? (vatRate > 0))
+  type MilestoneRow = { title: string; percent: number; due_date: string }
+  const [milestones, setMilestones] = useState<MilestoneRow[]>(
+    initialMilestones.map(m => ({ title: m.title, percent: m.percent, due_date: m.due_date || '' }))
+  )
+
   const [items, setItems] = useState<Array<Omit<QuoteItem, 'id' | 'quote_id'> & { id?: string }>>(
     initialItems.length > 0 ? initialItems : [emptyItem(0)]
   )

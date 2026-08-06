@@ -173,6 +173,25 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
             </div>
           </div>
 
+          {/* Payment schedule */}
+          {milestones.length > 0 && (
+            <div className="pt-6 border-t border-gray-100">
+              <p className="text-xs font-medium text-gray-500 uppercase mb-3">לוח תשלומים</p>
+              <div className="flex flex-col gap-1.5">
+                {milestones.map((m: any, i: number) => (
+                  <div key={i} className="flex items-center justify-between text-sm py-1.5 border-b border-gray-50 last:border-0">
+                    <span className="text-gray-700">{i + 1}. {m.title}</span>
+                    <div className="flex items-center gap-4 text-left">
+                      {m.due_date && <span className="text-gray-400 text-xs">{format(new Date(m.due_date), 'dd/MM/yyyy')}</span>}
+                      <span className="text-gray-500 w-10 text-center">{m.percent}%</span>
+                      <span className="font-medium text-gray-900 w-24 text-left">{formatCurrency(total * m.percent / 100, currency)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Notes */}
           {quote.notes && (
             <div className="pt-6 border-t border-gray-100">

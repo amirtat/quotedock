@@ -29,7 +29,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
   const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const statusInfo = STATUS_LABELS[quote.status as QuoteStatus]
-  const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat)
+  const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')
 
   const publicUrl = `${process.env.NEXT_PUBLIC_SITE_URL || ''}/q/${quote.public_token}`
 

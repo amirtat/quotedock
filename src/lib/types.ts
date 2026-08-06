@@ -93,6 +93,17 @@ export interface PaymentMilestone {
   sort_order: number
 }
 
+export interface QuoteAttachment {
+  id: string
+  quote_id: string
+  file_name: string
+  file_url: string
+  file_size: number | null
+  file_type: string | null
+  sort_order: number
+  created_at: string
+}
+
 export interface Signature {
   id: string
   quote_id: string

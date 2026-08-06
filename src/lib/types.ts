@@ -84,6 +84,15 @@ export interface NoteTemplate {
   created_at: string
 }
 
+export interface PaymentMilestone {
+  id: string
+  quote_id: string
+  title: string
+  percent: number
+  due_date: string | null
+  sort_order: number
+}
+
 export interface Signature {
   id: string
   quote_id: string

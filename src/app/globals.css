@@ -60,3 +60,28 @@ body {
   outline: 2px solid var(--color-saffron);
   outline-offset: 2px;
 }
+
+/* Print / PDF export */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-doc {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    margin: 15mm;
+    size: A4;
+  }
+}

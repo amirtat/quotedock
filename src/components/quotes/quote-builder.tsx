@@ -151,6 +151,19 @@ export function QuoteBuilder({
         }))
       )
 
+      await supabase.from('payment_milestones').delete().eq('quote_id', currentQuoteId!)
+      if (milestones.length > 0) {
+        await supabase.from('payment_milestones').insert(
+          milestones.map((m, i) => ({
+            quote_id: currentQuoteId!,
+            title: m.title,
+            percent: m.percent,
+            due_date: m.due_date || null,
+            sort_order: i,
+          }))
+        )
+      }
+
       showToast(status === 'sent' ? 'ההצעה נשלחה ✓' : 'נשמר ✓')
       router.push(`/dashboard/quotes/${currentQuoteId}/preview`)
     } catch {

@@ -15,11 +15,15 @@ interface SettingsFormProps {
   profile: Profile | null
   userId: string
   systemDefaultVat: number
+  systemQuotePrefix: string
+  systemValidityDays: number
 }
 
-export function SettingsForm({ profile, userId, systemDefaultVat }: SettingsFormProps) {
+export function SettingsForm({ profile, userId, systemDefaultVat, systemQuotePrefix, systemValidityDays }: SettingsFormProps) {
   const router = useRouter()
   const [defaultVat, setDefaultVat] = useState(systemDefaultVat)
+  const [quotePrefix, setQuotePrefix] = useState(systemQuotePrefix)
+  const [validityDays, setValidityDays] = useState(systemValidityDays)
   const [savingVat, setSavingVat] = useState(false)
   const [vatSaved, setVatSaved] = useState(false)
   const [form, setForm] = useState({
@@ -70,11 +74,15 @@ export function SettingsForm({ profile, userId, systemDefaultVat }: SettingsForm
     setLogoUrl(null)
   }
 
-  async function handleSaveDefaultVat(e: React.FormEvent) {
+  async function handleSaveSystemConfig(e: React.FormEvent) {
     e.preventDefault()
     setSavingVat(true)
     const supabase = createClient()
-    await supabase.from('app_config').update({ value: String(defaultVat) }).eq('key', 'default_vat_rate')
+    await Promise.all([
+      supabase.from('app_config').update({ value: String(defaultVat) }).eq('key', 'default_vat_rate'),
+      supabase.from('app_config').update({ value: quotePrefix.trim() || 'QD' }).eq('key', 'quote_number_prefix'),
+      supabase.from('app_config').update({ value: String(validityDays) }).eq('key', 'default_quote_validity_days'),
+    ])
     setSavingVat(false)
     setVatSaved(true)
     setTimeout(() => setVatSaved(false), 3000)
@@ -227,30 +235,56 @@ export function SettingsForm({ profile, userId, systemDefaultVat }: SettingsForm
       </form>
 
       {/* System settings */}
-      <form onSubmit={handleSaveDefaultVat} className="mt-4">
+      <form onSubmit={handleSaveSystemConfig} className="mt-4">
         <Card>
           <CardHeader>
             <CardTitle>הגדרות מערכת</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="default-vat">שיעור מע&quot;מ ברירת מחדל לישראל (%)</Label>
-              <p className="text-xs text-gray-400">ערך זה משמש כברירת מחדל למשתמשים חדשים. ניתן לשנות בהתאם לחוק.</p>
-              <div className="flex items-center gap-3">
-                <Input
-                  id="default-vat"
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.1"
-                  value={defaultVat}
-                  onChange={(e) => setDefaultVat(Number(e.target.value))}
-                  dir="ltr"
-                  className="w-28"
-                />
-                <Button type="submit" variant="outline" loading={savingVat}>עדכן</Button>
-                {vatSaved && <span className="text-sm text-green-600 font-medium">עודכן ✓</span>}
-              </div>
+              <Label htmlFor="default-vat">שיעור מע&quot;מ ברירת מחדל (%)</Label>
+              <p className="text-xs text-gray-400">ברירת מחדל למשתמשים חדשים. ניתן לשנות בהתאם לחוק.</p>
+              <Input
+                id="default-vat"
+                type="number"
+                min="0"
+                max="100"
+                step="0.1"
+                value={defaultVat}
+                onChange={(e) => setDefaultVat(Number(e.target.value))}
+                dir="ltr"
+                className="w-28"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="quote-prefix">קידומת מספר הצעה</Label>
+              <p className="text-xs text-gray-400">הקידומת שתופיע לפני מספר ההצעה (למשל: QD-2025-001)</p>
+              <Input
+                id="quote-prefix"
+                value={quotePrefix}
+                onChange={(e) => setQuotePrefix(e.target.value)}
+                dir="ltr"
+                className="w-28"
+                maxLength={10}
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="validity-days">תוקף הצעה ברירת מחדל (ימים)</Label>
+              <p className="text-xs text-gray-400">מספר הימים שהצעה חדשה תהיה בתוקף</p>
+              <Input
+                id="validity-days"
+                type="number"
+                min="1"
+                max="365"
+                value={validityDays}
+                onChange={(e) => setValidityDays(Number(e.target.value))}
+                dir="ltr"
+                className="w-28"
+              />
+            </div>
+            <div className="flex items-center gap-3">
+              <Button type="submit" variant="outline" loading={savingVat}>עדכן הגדרות מערכת</Button>
+              {vatSaved && <span className="text-sm text-green-600 font-medium">עודכן ✓</span>}
             </div>
           </CardContent>
         </Card>

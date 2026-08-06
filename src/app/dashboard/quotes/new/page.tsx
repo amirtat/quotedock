@@ -7,19 +7,16 @@ export default async function NewQuotePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const [clientsResult, servicesResult, profileResult, countResult, vatResult, prefixResult, validityResult] = await Promise.all([
+  const [clientsResult, servicesResult, profileResult, countResult] = await Promise.all([
     supabase.from('clients').select('*').eq('user_id', user.id).order('name'),
     supabase.from('services').select('*').eq('user_id', user.id).order('name'),
-    supabase.from('profiles').select('vat_rate, currency').eq('id', user.id).single(),
+    supabase.from('profiles').select('vat_rate, currency, quote_number_prefix, default_quote_validity_days').eq('id', user.id).single(),
     supabase.from('quotes').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
-    supabase.from('app_config').select('value').eq('key', 'default_vat_rate').single(),
-    supabase.from('app_config').select('value').eq('key', 'quote_number_prefix').single(),
-    supabase.from('app_config').select('value').eq('key', 'default_quote_validity_days').single(),
   ])
 
-  const systemDefaultVat = Number(vatResult.data?.value ?? FALLBACK_VAT_RATE)
-  const prefix = prefixResult.data?.value ?? 'QD'
-  const validityDays = Number(validityResult.data?.value ?? 30)
+  const profile = profileResult.data
+  const prefix = profile?.quote_number_prefix || 'QD'
+  const validityDays = profile?.default_quote_validity_days ?? 30
   const year = new Date().getFullYear()
   const count = (countResult.count || 0) + 1
   const nextNumber = `${prefix}-${year}-${String(count).padStart(3, '0')}`
@@ -33,8 +30,8 @@ export default async function NewQuotePage() {
       clients={clientsResult.data || []}
       services={servicesResult.data || []}
       userId={user.id}
-      vatRate={profileResult.data?.vat_rate ?? systemDefaultVat}
-      currency={profileResult.data?.currency || 'ILS'}
+      vatRate={profile?.vat_rate ?? FALLBACK_VAT_RATE}
+      currency={profile?.currency || 'ILS'}
       nextNumber={nextNumber}
       defaultValidUntil={defaultValidUntilStr}
     />

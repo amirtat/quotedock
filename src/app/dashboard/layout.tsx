@@ -18,14 +18,16 @@ export default async function DashboardLayout({ children }: LayoutProps<'/dashbo
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar
-        businessName={profile?.business_name}
-        email={profile?.email || user.email}
-        logoUrl={profile?.logo_url}
-      />
+      <div className="no-print">
+        <Sidebar
+          businessName={profile?.business_name}
+          email={profile?.email || user.email}
+          logoUrl={profile?.logo_url}
+        />
+      </div>
       <main className="flex-1 overflow-auto flex flex-col">
         <div className="flex-1">{children}</div>
-        <footer className="px-6 py-3 border-t border-border text-center">
+        <footer className="no-print px-6 py-3 border-t border-border text-center">
           <p className="text-xs text-muted/50">
             Powered by{' '}
             <a href="http://www.tripleai.co.il" target="_blank" rel="noopener noreferrer" className="font-medium text-muted/70 hover:text-muted/90 transition-colors">

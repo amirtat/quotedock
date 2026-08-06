@@ -59,7 +59,7 @@ export function QuoteBuilder({
   )
   const [quoteId, setQuoteId] = useState(initialQuoteId || null)
 
-  const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as QuoteItem[], discount, vatRate, includeVat)
+  const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as QuoteItem[], discount, vatRate, includeVat, discountType)
 
   function showToast(msg: string, type: 'ok' | 'err' = 'ok') {
     setToast({ msg, type })

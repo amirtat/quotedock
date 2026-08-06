@@ -225,6 +225,36 @@ export function SettingsForm({ profile, userId, systemDefaultVat }: SettingsForm
           {saveError && <span className="text-sm text-red-600">{saveError}</span>}
         </div>
       </form>
+
+      {/* System settings */}
+      <form onSubmit={handleSaveDefaultVat} className="mt-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>הגדרות מערכת</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="default-vat">שיעור מע&quot;מ ברירת מחדל לישראל (%)</Label>
+              <p className="text-xs text-gray-400">ערך זה משמש כברירת מחדל למשתמשים חדשים. ניתן לשנות בהתאם לחוק.</p>
+              <div className="flex items-center gap-3">
+                <Input
+                  id="default-vat"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={defaultVat}
+                  onChange={(e) => setDefaultVat(Number(e.target.value))}
+                  dir="ltr"
+                  className="w-28"
+                />
+                <Button type="submit" variant="outline" loading={savingVat}>עדכן</Button>
+                {vatSaved && <span className="text-sm text-green-600 font-medium">עודכן ✓</span>}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </form>
     </div>
   )
 }

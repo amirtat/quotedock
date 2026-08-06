@@ -128,7 +128,10 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
               </div>
               {quote.discount > 0 && (
                 <div className="flex justify-between text-red-500">
-                  <span>הנחה ({quote.discount}%)</span>
+                  <span>
+                    {(quote as any).discount_reason ? `הנחה — ${(quote as any).discount_reason}` : 'הנחה'}
+                    {(quote as any).discount_type !== 'fixed' && ` (${quote.discount}%)`}
+                  </span>
                   <span>-{formatCurrency(discountAmount, currency)}</span>
                 </div>
               )}

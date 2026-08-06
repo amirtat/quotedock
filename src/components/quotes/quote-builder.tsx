@@ -13,6 +13,7 @@ import { Client, QuoteItem, Quote, Service, NoteTemplate, RecurringInterval, Pay
 import { Plus, Trash2, Save, Send, Eye, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { deleteQuote } from '@/app/actions/quote-actions'
+import AttachmentsManager from '@/components/quotes/attachments-manager'
 
 interface QuoteBuilderProps {
   quoteId?: string

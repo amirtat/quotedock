@@ -154,6 +154,42 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
           </div>
         )}
       </div>
+
+      {/* Status timeline — freelancer only, not printed */}
+      {(quote.sent_at || quote.viewed_at || quote.accepted_at || quote.declined_at) && (
+        <div className="no-print mt-4 bg-white rounded-xl border border-gray-200 p-4">
+          <p className="text-xs font-medium text-gray-500 uppercase mb-3">ציר זמן</p>
+          <div className="flex flex-col gap-2">
+            {[
+              { label: 'נוצרה', ts: quote.created_at },
+              { label: 'נשלחה', ts: quote.sent_at },
+              { label: 'נצפתה', ts: quote.viewed_at },
+              { label: 'אושרה', ts: quote.accepted_at },
+              { label: 'נדחתה', ts: quote.declined_at },
+            ]
+              .filter((e) => e.ts)
+              .map((e) => (
+                <div key={e.label} className="flex items-center gap-3 text-sm">
+                  <span className="w-16 text-gray-500 shrink-0">{e.label}</span>
+                  <span className="w-1 h-1 rounded-full bg-gray-300 shrink-0" />
+                  <span className="text-gray-700 font-mono text-xs">
+                    {format(new Date(e.ts!), 'dd/MM/yyyy HH:mm')}
+                  </span>
+                  {e.label === 'נצפתה' && quote.sent_at && (
+                    <span className="text-xs text-gray-400">
+                      ({Math.round((new Date(e.ts!).getTime() - new Date(quote.sent_at).getTime()) / 3600000)} שע' מהשליחה)
+                    </span>
+                  )}
+                  {(e.label === 'אושרה' || e.label === 'נדחתה') && quote.sent_at && (
+                    <span className="text-xs text-gray-400">
+                      ({Math.round((new Date(e.ts!).getTime() - new Date(quote.sent_at).getTime()) / 86400000)} ימים מהשליחה)
+                    </span>
+                  )}
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

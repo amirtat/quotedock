@@ -216,6 +216,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
 --   quote_id UUID REFERENCES quotes(id) ON DELETE CASCADE NOT NULL,
 --   title TEXT NOT NULL DEFAULT '',
 --   content TEXT NOT NULL DEFAULT '',
+--   position TEXT NOT NULL DEFAULT 'start',
 --   sort_order INTEGER DEFAULT 0
 -- );
 -- ALTER TABLE quote_sections ENABLE ROW LEVEL SECURITY;

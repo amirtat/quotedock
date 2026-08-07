@@ -521,18 +521,18 @@ export function QuoteBuilder({
                                     <option value="yearly">שנתי</option>
                                   </select>
                                 )}
-                                {/* Free item toggle */}
-                                <button
-                                  type="button"
-                                  onClick={() => updateItem(item._key, 'discount_percent', (item.discount_percent || 0) === 100 ? 0 : 100)}
-                                  className={`text-xs px-2 py-0.5 rounded-full border transition-colors ms-auto ${(item.discount_percent || 0) === 100 ? 'bg-green-100 text-green-700 border-green-200' : 'text-muted border-border hover:border-green-300'}`}
-                                >ללא עלות</button>
-                                {/* Optional toggle */}
-                                <button
-                                  type="button"
-                                  onClick={() => updateItem(item._key, 'is_optional', !item.is_optional)}
-                                  className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.is_optional ? 'bg-amber-100 text-amber-700 border-amber-200' : 'text-muted border-border hover:border-amber-300'}`}
-                                >אופציונלי</button>
+                                <div className="flex items-center gap-1 ms-auto">
+                                  <button
+                                    type="button"
+                                    onClick={() => updateItem(item._key, 'discount_percent', (item.discount_percent || 0) === 100 ? 0 : 100)}
+                                    className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${(item.discount_percent || 0) === 100 ? 'bg-green-100 text-green-700 border-green-200' : 'text-muted border-border hover:border-green-300'}`}
+                                  >ללא עלות</button>
+                                  <button
+                                    type="button"
+                                    onClick={() => updateItem(item._key, 'is_optional', !item.is_optional)}
+                                    className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.is_optional ? 'bg-amber-100 text-amber-700 border-amber-200' : 'text-muted border-border hover:border-amber-300'}`}
+                                  >אופציונלי</button>
+                                </div>
                               </div>
                             </div>
                             {showQuantity && (

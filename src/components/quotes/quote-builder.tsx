@@ -369,11 +369,9 @@ export function QuoteBuilder({
                         </div>
                       </div>
                     </div>
-                    {showQuantity && (
-                      <div className="col-span-2">
-                        <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
-                      </div>
-                    )}
+                    <div className="col-span-2" style={{ display: showQuantity ? '' : 'none' }}>
+                      <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
+                    </div>
                     <div className="col-span-3">
                       <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(index, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
                     </div>

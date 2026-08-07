@@ -9,7 +9,7 @@ export default async function EditQuotePage({ params }: PageProps<'/dashboard/qu
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const [quoteResult, itemsResult, clientsResult, servicesResult, profileResult, configResult, noteTemplatesResult, milestonesResult, attachmentsResult] = await Promise.all([
+  const [quoteResult, itemsResult, clientsResult, servicesResult, profileResult, configResult, noteTemplatesResult, milestonesResult, attachmentsResult, sectionsResult] = await Promise.all([
     supabase.from('quotes').select('*, client:clients(name)').eq('id', id).eq('user_id', user.id).single(),
     supabase.from('quote_items').select('*').eq('quote_id', id).order('sort_order'),
     supabase.from('clients').select('*').eq('user_id', user.id).order('name'),
@@ -19,6 +19,7 @@ export default async function EditQuotePage({ params }: PageProps<'/dashboard/qu
     supabase.from('note_templates').select('*').eq('user_id', user.id).order('sort_order'),
     supabase.from('payment_milestones').select('*').eq('quote_id', id).order('sort_order'),
     supabase.from('quote_attachments').select('*').eq('quote_id', id).order('sort_order'),
+    supabase.from('quote_sections').select('*').eq('quote_id', id).order('sort_order'),
   ])
 
   if (!quoteResult.data) notFound()

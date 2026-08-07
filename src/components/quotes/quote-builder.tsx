@@ -47,8 +47,34 @@ interface QuoteBuilderProps {
   showQuantityDefault?: boolean
 }
 
-function emptyItem(sortOrder: number): Omit<QuoteItem, 'id' | 'quote_id'> {
-  return { service_id: null, name: '', description: '', quantity: 1, unit_price: 0, sort_order: sortOrder, item_type: 'one_time', recurring_interval: null, discount_percent: 0 }
+type ItemRow = Omit<QuoteItem, 'id' | 'quote_id'> & { id?: string; _key: string }
+
+function emptyItem(sortOrder: number): ItemRow {
+  return { _key: crypto.randomUUID(), service_id: null, name: '', description: '', quantity: 1, unit_price: 0, sort_order: sortOrder, item_type: 'one_time', recurring_interval: null, discount_percent: 0 }
+}
+
+function SortableItemRow({ id, children }: { id: string; children: (dragHandle: React.ReactNode) => React.ReactNode }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 10 : undefined,
+  }
+  const dragHandle = (
+    <div
+      {...attributes}
+      {...listeners}
+      className="w-5 shrink-0 flex items-center justify-center cursor-grab active:cursor-grabbing text-muted/30 hover:text-muted/60 transition-colors pt-1 touch-none"
+    >
+      <GripVertical className="h-4 w-4" />
+    </div>
+  )
+  return (
+    <div ref={setNodeRef} style={style}>
+      {children(dragHandle)}
+    </div>
+  )
 }
 
 export function QuoteBuilder({

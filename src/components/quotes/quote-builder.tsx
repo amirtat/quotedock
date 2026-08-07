@@ -44,6 +44,7 @@ interface QuoteBuilderProps {
   noteTemplates?: NoteTemplate[]
   initialMilestones?: PaymentMilestone[]
   initialAttachments?: QuoteAttachment[]
+  initialSections?: QuoteSection[]
   showQuantityDefault?: boolean
 }
 

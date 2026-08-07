@@ -210,6 +210,24 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
 -- ALTER TABLE quotes ADD COLUMN IF NOT EXISTS discount_reason TEXT;
 -- INSERT INTO app_config (key, value) VALUES ('quote_number_prefix', 'QD'), ('default_quote_validity_days', '30') ON CONFLICT (key) DO NOTHING;
 
+-- Migration: quote sections (run if upgrading from earlier schema)
+-- CREATE TABLE IF NOT EXISTS quote_sections (
+--   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+--   quote_id UUID REFERENCES quotes(id) ON DELETE CASCADE NOT NULL,
+--   title TEXT NOT NULL DEFAULT '',
+--   content TEXT NOT NULL DEFAULT '',
+--   sort_order INTEGER DEFAULT 0
+-- );
+-- ALTER TABLE quote_sections ENABLE ROW LEVEL SECURITY;
+-- CREATE POLICY "Users manage own quote sections" ON quote_sections FOR ALL USING (
+--   EXISTS (SELECT 1 FROM quotes WHERE quotes.id = quote_sections.quote_id AND quotes.user_id = auth.uid())
+-- );
+-- CREATE POLICY "Public can view quote sections" ON quote_sections FOR SELECT USING (
+--   EXISTS (SELECT 1 FROM quotes WHERE quotes.id = quote_sections.quote_id AND quotes.public_token IS NOT NULL)
+-- );
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON quote_sections TO authenticated;
+-- GRANT SELECT ON quote_sections TO anon;
+
 -- Migration: freelancer signature + per-item discount (run if upgrading from earlier schema)
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS freelancer_signature TEXT;
 -- ALTER TABLE quote_items ADD COLUMN IF NOT EXISTS discount_percent DECIMAL(5,2) DEFAULT 0;

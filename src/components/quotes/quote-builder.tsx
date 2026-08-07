@@ -315,17 +315,17 @@ export function QuoteBuilder({
               </div>
 
               {/* Column headers */}
-              <div className="grid grid-cols-12 gap-2 text-xs text-muted mb-2 px-1">
-                <div style={{ gridColumn: `span ${showQuantity ? 6 : 8} / span ${showQuantity ? 6 : 8}` }}>שם / תיאור</div>
-                <div className="col-span-2 text-center" style={{ display: showQuantity ? '' : 'none' }}>כמות</div>
-                <div className="col-span-3 text-center">מחיר</div>
-                <div className="col-span-1" />
+              <div className="flex gap-2 text-xs text-muted mb-2 px-1">
+                <div className="flex-1">שם / תיאור</div>
+                {showQuantity && <div className="w-20 shrink-0 text-center">כמות</div>}
+                <div className="w-28 shrink-0 text-center">מחיר</div>
+                <div className="w-7 shrink-0" />
               </div>
 
               <div className="flex flex-col gap-2">
                 {items.map((item, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 rounded-lg bg-surface/60 border border-border/60">
-                    <div className="flex flex-col gap-1.5" style={{ gridColumn: `span ${showQuantity ? 6 : 8} / span ${showQuantity ? 6 : 8}` }}>
+                  <div key={index} className="flex gap-2 items-start p-3 rounded-lg bg-surface/60 border border-border/60">
+                    <div className="flex-1 min-w-0 flex flex-col gap-1.5">
                       <Input
                         value={item.name}
                         list={`services-ac-${index}`}
@@ -369,13 +369,15 @@ export function QuoteBuilder({
                         </div>
                       </div>
                     </div>
-                    <div className="col-span-2" style={{ display: showQuantity ? '' : 'none' }}>
-                      <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
-                    </div>
-                    <div className="col-span-3">
+                    {showQuantity && (
+                      <div className="w-20 shrink-0">
+                        <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
+                      </div>
+                    )}
+                    <div className="w-28 shrink-0">
                       <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(index, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
                     </div>
-                    <div className="col-span-1 flex items-center justify-center pt-1">
+                    <div className="w-7 shrink-0 flex items-center justify-center pt-1">
                       <button onClick={() => removeItem(index)} className="p-1 text-muted/50 hover:text-danger transition-colors" disabled={items.length === 1}>
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>

@@ -125,9 +125,10 @@ export function QuoteBuilder({
       if (!currentQuoteId) {
         const { data, error } = await supabase.from('quotes').insert({
           user_id: userId, title, number: nextNumber,
-          client_id: clientId || null, notes: notes || null,
+          client_id: clientId || null, notes: notes || null, preamble: preamble || null,
           valid_until: validUntil || null, discount, discount_type: discountType,
           discount_reason: discountReason || null, include_vat: includeVat, status,
+          show_quantity: showQuantity,
           ...(status === 'sent' ? { public_token: crypto.randomUUID(), sent_at: new Date().toISOString() } : {}),
         }).select('id').single()
         if (error) throw error

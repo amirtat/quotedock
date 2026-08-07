@@ -14,7 +14,7 @@ export default async function EditQuotePage({ params }: PageProps<'/dashboard/qu
     supabase.from('quote_items').select('*').eq('quote_id', id).order('sort_order'),
     supabase.from('clients').select('*').eq('user_id', user.id).order('name'),
     supabase.from('services').select('*').eq('user_id', user.id).order('name'),
-    supabase.from('profiles').select('vat_rate, currency').eq('id', user.id).single(),
+    supabase.from('profiles').select('vat_rate, currency, show_quantity_default').eq('id', user.id).single(),
     supabase.from('app_config').select('value').eq('key', 'default_vat_rate').single(),
     supabase.from('note_templates').select('*').eq('user_id', user.id).order('sort_order'),
     supabase.from('payment_milestones').select('*').eq('quote_id', id).order('sort_order'),
@@ -45,6 +45,7 @@ export default async function EditQuotePage({ params }: PageProps<'/dashboard/qu
       noteTemplates={noteTemplatesResult.data || []}
       initialMilestones={milestonesResult.data || []}
       initialAttachments={attachmentsResult.data || []}
+      showQuantityDefault={profileResult.data?.show_quantity_default ?? false}
     />
   )
 }

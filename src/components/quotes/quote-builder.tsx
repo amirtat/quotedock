@@ -290,14 +290,34 @@ export function QuoteBuilder({
               </div>
             </div>
 
+            {/* Preamble */}
+            <div className="bg-white rounded-xl border border-border p-5">
+              <h2 className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">הקדמה / תיאור הפרויקט</h2>
+              <Textarea
+                value={preamble}
+                onChange={(e) => setPreamble(e.target.value)}
+                placeholder="תאר את הצורך, הפערים שזיהית, הרציונל, מה יקרה אחרי..."
+                rows={4}
+              />
+            </div>
+
             {/* Items */}
             <div className="bg-white rounded-xl border border-border p-5">
-              <h2 className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">פריטים</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">פריטים</h2>
+                <button
+                  type="button"
+                  onClick={() => setShowQuantity((p: boolean) => !p)}
+                  className="text-xs text-muted hover:text-ink border border-border rounded px-2 py-0.5 transition-colors"
+                >
+                  {showQuantity ? 'הסתר כמות' : 'הצג כמות'}
+                </button>
+              </div>
 
               {/* Column headers */}
               <div className="grid grid-cols-12 gap-2 text-xs text-muted mb-2 px-1">
-                <div className="col-span-6">שם / תיאור</div>
-                <div className="col-span-2 text-center">כמות</div>
+                <div className={showQuantity ? 'col-span-6' : 'col-span-8'}>שם / תיאור</div>
+                {showQuantity && <div className="col-span-2 text-center">כמות</div>}
                 <div className="col-span-3 text-center">מחיר</div>
                 <div className="col-span-1" />
               </div>
@@ -305,7 +325,7 @@ export function QuoteBuilder({
               <div className="flex flex-col gap-2">
                 {items.map((item, index) => (
                   <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 rounded-lg bg-surface/60 border border-border/60">
-                    <div className="col-span-6 flex flex-col gap-1.5">
+                    <div className={`${showQuantity ? 'col-span-6' : 'col-span-8'} flex flex-col gap-1.5`}>
                       <Input
                         value={item.name}
                         list={`services-ac-${index}`}
@@ -349,9 +369,11 @@ export function QuoteBuilder({
                         </div>
                       </div>
                     </div>
-                    <div className="col-span-2">
-                      <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
-                    </div>
+                    {showQuantity && (
+                      <div className="col-span-2">
+                        <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
+                      </div>
+                    )}
                     <div className="col-span-3">
                       <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(index, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
                     </div>

@@ -66,11 +66,13 @@ export async function duplicateQuote(quoteId: string) {
       number: nextNumber,
       status: 'draft',
       notes: original.notes,
+      preamble: original.preamble,
       valid_until: original.valid_until,
       discount: original.discount,
       discount_type: original.discount_type,
       discount_reason: original.discount_reason,
       include_vat: original.include_vat,
+      show_quantity: original.show_quantity,
     })
     .select('id')
     .single()

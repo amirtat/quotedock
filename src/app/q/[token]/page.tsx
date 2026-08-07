@@ -42,6 +42,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const { subtotal, discountAmount, vatAmount, total, recurringSubtotal } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')
+  const showQuantity = (quote as any).show_quantity ?? false
   const isPending = ['sent', 'viewed'].includes(quote.status)
   const isAccepted = quote.status === 'accepted'
   const isDeclined = quote.status === 'declined'
@@ -98,6 +99,14 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
             </div>
           )}
 
+          {/* Preamble */}
+          {(quote as any).preamble && (
+            <div className="mb-8 p-4 bg-gray-50 rounded-xl border border-gray-100">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">על הפרויקט</p>
+              <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{(quote as any).preamble}</p>
+            </div>
+          )}
+
           {/* Recurring items summary */}
           {recurringSubtotal > 0 && (
             <div className="mb-6 p-4 bg-saffron-50 border border-saffron-100 rounded-xl">
@@ -116,12 +125,28 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
             </div>
           )}
 
-          {/* Items */}
-          <table className="w-full text-sm mb-6">
+          {/* Items — mobile: cards, desktop: table */}
+          <div className="sm:hidden flex flex-col divide-y divide-gray-100 mb-6">
+            {items.map((item: any, i: number) => (
+              <div key={i} className="py-3.5 flex justify-between items-start gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-gray-900">{item.name}</p>
+                  {item.description && <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{item.description}</p>}
+                  {showQuantity && item.quantity !== 1 ? (
+                    <p className="text-xs text-gray-400 mt-1">{item.quantity} × {formatCurrency(item.unit_price, currency)}</p>
+                  ) : (
+                    <p className="text-xs text-gray-400 mt-1">{formatCurrency(item.unit_price, currency)}</p>
+                  )}
+                </div>
+                <p className="font-semibold text-gray-900 shrink-0">{formatCurrency(item.quantity * item.unit_price, currency)}</p>
+              </div>
+            ))}
+          </div>
+          <table className="hidden sm:table w-full text-sm mb-6">
             <thead>
               <tr className="border-b-2 border-gray-200">
                 <th className="text-right py-3 font-semibold text-gray-700">פריט</th>
-                <th className="text-center py-3 font-semibold text-gray-700 w-20">כמות</th>
+                {showQuantity && <th className="text-center py-3 font-semibold text-gray-700 w-20">כמות</th>}
                 <th className="text-center py-3 font-semibold text-gray-700 w-28">מחיר יחידה</th>
                 <th className="text-left py-3 font-semibold text-gray-700 w-28">סה&quot;כ</th>
               </tr>
@@ -133,7 +158,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                     <p className="font-medium text-gray-900">{item.name}</p>
                     {item.description && <p className="text-gray-500 text-xs mt-0.5">{item.description}</p>}
                   </td>
-                  <td className="py-3.5 text-center text-gray-700">{item.quantity}</td>
+                  {showQuantity && <td className="py-3.5 text-center text-gray-700">{item.quantity}</td>}
                   <td className="py-3.5 text-center text-gray-700">{formatCurrency(item.unit_price, currency)}</td>
                   <td className="py-3.5 text-left font-medium">{formatCurrency(item.quantity * item.unit_price, currency)}</td>
                 </tr>

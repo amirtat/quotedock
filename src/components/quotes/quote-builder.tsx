@@ -188,6 +188,17 @@ export function QuoteBuilder({
   function updateSection(key: string, field: 'title' | 'content', value: string) {
     setSections(prev => prev.map(s => s._key === key ? { ...s, [field]: value } : s))
   }
+  function handleSectionDragEnd(event: DragEndEvent, position: 'start' | 'end') {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+    setSections(prev => {
+      const posItems = prev.filter(s => s.position === position)
+      const others = prev.filter(s => s.position !== position)
+      const oldIndex = posItems.findIndex(s => s._key === active.id)
+      const newIndex = posItems.findIndex(s => s._key === over.id)
+      return [...others, ...arrayMove(posItems, oldIndex, newIndex)]
+    })
+  }
 
   async function save(status: 'draft' | 'sent' = 'draft') {
     if (!title.trim()) return showToast('נא להזין כותרת', 'err')

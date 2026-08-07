@@ -289,8 +289,8 @@ export function QuoteBuilder({
         showToast('נשמר ✓')
         router.push(`/dashboard/quotes/${currentQuoteId}/preview`)
       }
-    } catch {
-      showToast('שגיאה בשמירה', 'err')
+    } catch (err: any) {
+      showToast(err?.message || 'שגיאה בשמירה', 'err')
     } finally {
       setSaving(false)
     }

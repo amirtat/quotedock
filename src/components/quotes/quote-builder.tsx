@@ -52,7 +52,7 @@ interface QuoteBuilderProps {
 type ItemRow = Omit<QuoteItem, 'id' | 'quote_id'> & { id?: string; _key: string }
 
 function emptyItem(sortOrder: number): ItemRow {
-  return { _key: crypto.randomUUID(), service_id: null, name: '', description: '', quantity: 1, unit_price: 0, sort_order: sortOrder, item_type: 'one_time', recurring_interval: null, discount_percent: 0 }
+  return { _key: crypto.randomUUID(), service_id: null, name: '', description: '', quantity: 1, unit_price: 0, sort_order: sortOrder, item_type: 'one_time', recurring_interval: null, discount_percent: 0, is_optional: false }
 }
 
 function SortableItemRow({ id, children }: { id: string; children: (dragHandle: React.ReactNode) => React.ReactNode }) {

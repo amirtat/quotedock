@@ -50,6 +50,7 @@ export function QuoteBuilder({
   noteTemplates = [],
   initialMilestones = [],
   initialAttachments = [],
+  showQuantityDefault = false,
 }: QuoteBuilderProps) {
   const router = useRouter()
   const [deleting, startDelete] = useTransition()

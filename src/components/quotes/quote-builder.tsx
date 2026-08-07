@@ -250,6 +250,7 @@ export function QuoteBuilder({
           item_type: item.item_type || 'one_time',
           recurring_interval: item.item_type === 'recurring' ? (item.recurring_interval || 'monthly') : null,
           discount_percent: item.item_type === 'excluded' ? 0 : Number(item.discount_percent || 0),
+          is_optional: item.is_optional || false,
         }))
       )
 

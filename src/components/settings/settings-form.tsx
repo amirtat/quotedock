@@ -229,6 +229,16 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                 />
               </div>
             </div>
+            <div className="flex items-center gap-2 pt-2">
+              <Checkbox
+                id="show-qty"
+                checked={form.show_quantity_default}
+                onCheckedChange={(checked) => setForm({ ...form, show_quantity_default: !!checked })}
+              />
+              <Label htmlFor="show-qty" className="cursor-pointer font-normal">
+                הצג עמודת כמות בהצעות חדשות
+              </Label>
+            </div>
           </CardContent>
         </Card>
 

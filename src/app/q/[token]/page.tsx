@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { formatCurrency, calcTotal, STATUS_LABELS, intervalLabel, itemLineTotal } from '@/lib/utils'
 import { format } from 'date-fns'
 import PublicQuoteActions from '@/components/quotes/public-quote-actions'
+import ReactMarkdown from 'react-markdown'
 
 export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'>) {
   const { token } = await params

@@ -294,7 +294,21 @@ export function QuoteBuilder({
     }
   }
 
+  const selectedClient = clients.find(c => c.id === clientId)
+
   return (
+    <>
+    {shareData && (
+      <ShareDialog
+        open={!!shareData}
+        quoteId={shareData.quoteId}
+        quoteUrl={shareData.url}
+        quoteTitle={title}
+        clientName={selectedClient?.name}
+        clientEmail={selectedClient?.email || undefined}
+        onClose={() => setShareData(null)}
+      />
+    )}
     <div className="flex flex-col h-screen">
       {/* Sent quote warning banner */}
       {editingLocked && (
@@ -815,5 +829,6 @@ export function QuoteBuilder({
         </div>
       </div>
     </div>
+    </>
   )
 }

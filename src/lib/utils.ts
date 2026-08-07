@@ -14,8 +14,13 @@ export function formatCurrency(amount: number, currency = 'ILS'): string {
   }).format(amount)
 }
 
+export function itemLineTotal(item: QuoteItem): number {
+  const dp = item.discount_percent || 0
+  return item.quantity * item.unit_price * (1 - dp / 100)
+}
+
 export function calcSubtotal(items: QuoteItem[]): number {
-  return items.reduce((sum, item) => sum + item.quantity * item.unit_price, 0)
+  return items.reduce((sum, item) => sum + itemLineTotal(item), 0)
 }
 
 export function calcTotal(

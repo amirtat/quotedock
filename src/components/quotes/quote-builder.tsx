@@ -33,7 +33,7 @@ interface QuoteBuilderProps {
 }
 
 function emptyItem(sortOrder: number): Omit<QuoteItem, 'id' | 'quote_id'> {
-  return { service_id: null, name: '', description: '', quantity: 1, unit_price: 0, sort_order: sortOrder, item_type: 'one_time', recurring_interval: null }
+  return { service_id: null, name: '', description: '', quantity: 1, unit_price: 0, sort_order: sortOrder, item_type: 'one_time', recurring_interval: null, discount_percent: 0 }
 }
 
 export function QuoteBuilder({
@@ -103,7 +103,7 @@ export function QuoteBuilder({
     if (!service) return
     setItems(prev =>
       prev.map((item, i) =>
-        i === index ? { ...item, service_id: serviceId, name: service.name, description: service.description || '', unit_price: service.unit_price } : item
+        i === index ? { ...item, service_id: serviceId, name: service.name, description: service.description || '', unit_price: service.unit_price, discount_percent: 0 } : item
       )
     )
   }
@@ -157,6 +157,7 @@ export function QuoteBuilder({
           quantity: Number(item.quantity), unit_price: Number(item.unit_price), sort_order: i,
           item_type: item.item_type || 'one_time',
           recurring_interval: item.item_type === 'recurring' ? (item.recurring_interval || 'monthly') : null,
+          discount_percent: Number((item as any).discount_percent || 0),
         }))
       )
 
@@ -374,8 +375,21 @@ export function QuoteBuilder({
                         <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
                       </div>
                     )}
-                    <div className="w-28 shrink-0">
+                    <div className="w-28 shrink-0 flex flex-col gap-1">
                       <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(index, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          step="1"
+                          value={(item as any).discount_percent || ''}
+                          placeholder="הנחה %"
+                          onChange={(e) => updateItem(index, 'discount_percent', e.target.value === '' ? 0 : Number(e.target.value))}
+                          className="w-full text-center text-xs bg-transparent border border-border/60 rounded px-1 py-0.5 text-muted focus:outline-none focus:border-saffron"
+                          dir="ltr"
+                        />
+                      </div>
                     </div>
                     <div className="w-7 shrink-0 flex items-center justify-center pt-1">
                       <button onClick={() => removeItem(index)} className="p-1 text-muted/50 hover:text-danger transition-colors" disabled={items.length === 1}>

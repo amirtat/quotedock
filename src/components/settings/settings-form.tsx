@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Profile } from '@/lib/types'
@@ -9,7 +9,97 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Upload, X } from 'lucide-react'
+import { Upload, X, RotateCcw } from 'lucide-react'
+
+function SignaturePad({ onChange }: { onChange: (dataUrl: string | null) => void }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const drawing = useRef(false)
+  const empty = useRef(true)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')!
+    ctx.strokeStyle = '#1e293b'
+    ctx.lineWidth = 2
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+  }, [])
+
+  function getPos(e: React.MouseEvent | React.TouchEvent) {
+    const canvas = canvasRef.current!
+    const rect = canvas.getBoundingClientRect()
+    const scaleX = canvas.width / rect.width
+    const scaleY = canvas.height / rect.height
+    const src = 'touches' in e ? e.touches[0] : e
+    return { x: (src.clientX - rect.left) * scaleX, y: (src.clientY - rect.top) * scaleY }
+  }
+
+  function startDraw(e: React.MouseEvent | React.TouchEvent) {
+    e.preventDefault()
+    drawing.current = true
+    const ctx = canvasRef.current!.getContext('2d')!
+    const { x, y } = getPos(e)
+    ctx.beginPath()
+    ctx.moveTo(x, y)
+  }
+
+  function draw(e: React.MouseEvent | React.TouchEvent) {
+    e.preventDefault()
+    if (!drawing.current) return
+    const canvas = canvasRef.current!
+    const ctx = canvas.getContext('2d')!
+    const { x, y } = getPos(e)
+    ctx.lineTo(x, y)
+    ctx.stroke()
+    empty.current = false
+    onChange(canvas.toDataURL())
+  }
+
+  function stopDraw(e: React.MouseEvent | React.TouchEvent) {
+    e.preventDefault()
+    drawing.current = false
+  }
+
+  function clear() {
+    const canvas = canvasRef.current!
+    canvas.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height)
+    empty.current = true
+    onChange(null)
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div className="flex items-center justify-between">
+        <Label>חתימה</Label>
+        <button type="button" onClick={clear} className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors">
+          <RotateCcw className="h-3 w-3" />
+          נקה
+        </button>
+      </div>
+      <div className="relative border border-gray-200 rounded-xl bg-gray-50 overflow-hidden" style={{ touchAction: 'none' }}>
+        <canvas
+          ref={canvasRef}
+          width={600}
+          height={140}
+          className="w-full cursor-crosshair"
+          onMouseDown={startDraw}
+          onMouseMove={draw}
+          onMouseUp={stopDraw}
+          onMouseLeave={stopDraw}
+          onTouchStart={startDraw}
+          onTouchMove={draw}
+          onTouchEnd={stopDraw}
+        />
+        {empty.current && (
+          <p className="absolute inset-0 flex items-center justify-center text-sm text-gray-300 pointer-events-none select-none">
+            חתום כאן
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
 
 interface SettingsFormProps {
   profile: Profile | null
@@ -36,6 +126,13 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
   const [saved, setSaved] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Freelancer signature
+  const [sigMode, setSigMode] = useState<'draw' | 'upload'>('draw')
+  const [freelancerSignature, setFreelancerSignature] = useState<string | null>(profile?.freelancer_signature || null)
+  const [sigUploading, setSigUploading] = useState(false)
+  const sigFileRef = useRef<HTMLInputElement>(null)
+  const [canvasSig, setCanvasSig] = useState<string | null>(null)
 
   async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -67,6 +164,47 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     const supabase = createClient()
     await supabase.from('profiles').update({ logo_url: null }).eq('id', userId)
     setLogoUrl(null)
+  }
+
+  async function handleSigUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setSigUploading(true)
+    const supabase = createClient()
+    const ext = file.name.split('.').pop()
+    const path = `${userId}/signature.${ext}`
+    const { error } = await supabase.storage.from('logos').upload(path, file, { upsert: true })
+    if (!error) {
+      const { data } = supabase.storage.from('logos').getPublicUrl(path)
+      setFreelancerSignature(data.publicUrl)
+      await supabase.from('profiles').update({ freelancer_signature: data.publicUrl }).eq('id', userId)
+    }
+    setSigUploading(false)
+    if (sigFileRef.current) sigFileRef.current.value = ''
+  }
+
+  async function saveCanvasSignature() {
+    if (!canvasSig) return
+    setSigUploading(true)
+    const supabase = createClient()
+    // Convert data URL to blob
+    const res = await fetch(canvasSig)
+    const blob = await res.blob()
+    const path = `${userId}/signature.png`
+    const { error } = await supabase.storage.from('logos').upload(path, blob, { upsert: true, contentType: 'image/png' })
+    if (!error) {
+      const { data } = supabase.storage.from('logos').getPublicUrl(path)
+      setFreelancerSignature(data.publicUrl)
+      await supabase.from('profiles').update({ freelancer_signature: data.publicUrl }).eq('id', userId)
+    }
+    setSigUploading(false)
+  }
+
+  async function clearSignature() {
+    const supabase = createClient()
+    await supabase.from('profiles').update({ freelancer_signature: null }).eq('id', userId)
+    setFreelancerSignature(null)
+    setCanvasSig(null)
   }
 
   async function handleSave(e: React.FormEvent) {
@@ -159,6 +297,81 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
               <Label>כתובת</Label>
               <Input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="רחוב, עיר" />
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>החתימה שלי</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            {freelancerSignature ? (
+              <div className="flex flex-col gap-3">
+                <div className="border border-gray-200 rounded-xl bg-gray-50 p-4 flex items-center justify-center">
+                  <img src={freelancerSignature} alt="חתימה" className="max-h-20 max-w-full object-contain" />
+                </div>
+                <button
+                  type="button"
+                  onClick={clearSignature}
+                  className="flex items-center gap-1.5 text-sm text-red-500 hover:text-red-700 transition-colors w-fit"
+                >
+                  <X className="h-3.5 w-3.5" />
+                  מחק חתימה
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSigMode('draw')}
+                    className={`text-sm px-3 py-1 rounded-full border transition-colors ${sigMode === 'draw' ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-500 border-gray-200 hover:border-gray-400'}`}
+                  >ציור</button>
+                  <button
+                    type="button"
+                    onClick={() => setSigMode('upload')}
+                    className={`text-sm px-3 py-1 rounded-full border transition-colors ${sigMode === 'upload' ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-500 border-gray-200 hover:border-gray-400'}`}
+                  >העלאת קובץ</button>
+                </div>
+
+                {sigMode === 'draw' ? (
+                  <div className="flex flex-col gap-2">
+                    <SignaturePad onChange={setCanvasSig} />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={saveCanvasSignature}
+                      loading={sigUploading}
+                      disabled={!canvasSig}
+                      className="w-fit text-sm"
+                    >
+                      שמור חתימה
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <input
+                      ref={sigFileRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                      onChange={handleSigUpload}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => sigFileRef.current?.click()}
+                      loading={sigUploading}
+                      className="w-fit text-sm"
+                    >
+                      <Upload className="h-4 w-4" />
+                      העלה תמונת חתימה
+                    </Button>
+                    <p className="text-xs text-gray-400">PNG, JPG, SVG — רקע שקוף עדיף</p>
+                  </div>
+                )}
+              </div>
+            )}
           </CardContent>
         </Card>
 

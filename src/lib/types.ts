@@ -77,6 +77,7 @@ export interface QuoteItem {
   sort_order: number
   item_type: 'one_time' | 'recurring'
   recurring_interval: RecurringInterval | null
+  discount_percent?: number
 }
 
 export interface NoteTemplate {

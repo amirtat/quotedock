@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { STATUS_LABELS, formatCurrency, calcTotal, intervalLabel } from '@/lib/utils'
+import { STATUS_LABELS, formatCurrency, calcTotal, intervalLabel, itemLineTotal } from '@/lib/utils'
 import { QuoteStatus } from '@/lib/types'
 import { ArrowLeft, Edit, Copy } from 'lucide-react'
 import { format } from 'date-fns'
@@ -36,8 +36,11 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
   const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const statusInfo = STATUS_LABELS[quote.status as QuoteStatus]
-  const { subtotal, discountAmount, vatAmount, total, recurringSubtotal } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')
+  const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')
   const showQuantity = (quote as any).show_quantity ?? false
+
+  const oneTimeItems = items.filter((i: any) => !i.item_type || i.item_type === 'one_time')
+  const recurringItems = items.filter((i: any) => i.item_type === 'recurring')
 
   const publicUrl = `${process.env.NEXT_PUBLIC_SITE_URL || ''}/q/${quote.public_token}`
 
@@ -104,38 +107,20 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
           </div>
         )}
 
-        {/* Recurring items summary */}
-        {recurringSubtotal > 0 && (
-          <div className="mb-6 p-4 bg-saffron-50 border border-saffron-100 rounded-xl">
-            <p className="text-xs font-semibold text-saffron-600 uppercase tracking-wide mb-2">תשלומים חוזרים</p>
-            {(['monthly', 'quarterly', 'yearly'] as const).map(interval => {
-              const intervalItems = (items as any[]).filter(i => i.item_type === 'recurring' && (i.recurring_interval || 'monthly') === interval)
-              const intervalTotal = intervalItems.reduce((s: number, i: any) => s + i.quantity * i.unit_price, 0)
-              if (intervalTotal === 0) return null
-              return (
-                <div key={interval} className="flex justify-between text-sm">
-                  <span className="text-gray-600">{intervalLabel(interval)}</span>
-                  <span className="font-semibold text-saffron-700">{formatCurrency(intervalTotal, currency)}</span>
-                </div>
-              )
-            })}
-          </div>
-        )}
-
         {/* Items — mobile: cards, desktop: table */}
         <div className="sm:hidden flex flex-col divide-y divide-gray-100 mb-6">
-          {items.map((item: any, i: number) => (
+          {oneTimeItems.map((item: any, i: number) => (
             <div key={i} className="py-3.5 flex justify-between items-start gap-3">
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-gray-900">{item.name}</p>
-                {item.description && <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{item.description}</p>}
+                {item.description && <p className="text-gray-600 text-sm mt-0.5 leading-relaxed">{item.description}</p>}
                 {showQuantity && item.quantity !== 1 ? (
-                  <p className="text-xs text-gray-400 mt-1">{item.quantity} × {formatCurrency(item.unit_price, currency)}</p>
+                  <p className="text-xs text-gray-400 mt-1">{item.quantity} × {formatCurrency(item.unit_price, currency)}{item.discount_percent > 0 ? ` (${item.discount_percent}% הנחה)` : ''}</p>
                 ) : (
-                  <p className="text-xs text-gray-400 mt-1">{formatCurrency(item.unit_price, currency)}</p>
+                  <p className="text-xs text-gray-400 mt-1">{formatCurrency(item.unit_price, currency)}{item.discount_percent > 0 ? ` (${item.discount_percent}% הנחה)` : ''}</p>
                 )}
               </div>
-              <p className="font-semibold text-gray-900 shrink-0">{formatCurrency(item.quantity * item.unit_price, currency)}</p>
+              <p className="font-semibold text-gray-900 shrink-0">{formatCurrency(itemLineTotal(item as any), currency)}</p>
             </div>
           ))}
         </div>
@@ -149,15 +134,16 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
             </tr>
           </thead>
           <tbody>
-            {items.map((item: any, i: number) => (
+            {oneTimeItems.map((item: any, i: number) => (
               <tr key={i} className="border-b border-gray-100">
                 <td className="py-3">
                   <p className="font-medium text-gray-900">{item.name}</p>
-                  {item.description && <p className="text-gray-500 text-xs mt-0.5">{item.description}</p>}
+                  {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
+                  {item.discount_percent > 0 && <p className="text-xs text-green-600 mt-0.5">הנחה {item.discount_percent}%</p>}
                 </td>
                 {showQuantity && <td className="py-3 text-center text-gray-700">{item.quantity}</td>}
                 <td className="py-3 text-center text-gray-700">{formatCurrency(item.unit_price, currency)}</td>
-                <td className="py-3 text-left font-medium">{formatCurrency(item.quantity * item.unit_price, currency)}</td>
+                <td className="py-3 text-left font-medium">{formatCurrency(itemLineTotal(item as any), currency)}</td>
               </tr>
             ))}
           </tbody>
@@ -187,15 +173,48 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
             )}
             {vatRate === 0 && (
               <div className="flex justify-between text-gray-500 text-xs">
-                <span>פטור ממע&quot;מ (עוסק זעיר)</span>
+                <span>פטור ממע&quot;מ</span>
               </div>
             )}
-            <div className="flex justify-between border-t-2 border-gray-200 pt-2 font-bold text-base">
+            <div className="flex justify-between border-t-2 border-gray-200 pt-2 font-black text-xl">
               <span>סה&quot;כ לתשלום</span>
               <span className="text-indigo-600">{formatCurrency(total, currency)}</span>
             </div>
           </div>
         </div>
+
+        {/* Recurring items */}
+        {recurringItems.length > 0 && (
+          <div className="mt-6 pt-6 border-t border-gray-100">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">תשלומים חוזרים</p>
+            <div className="sm:hidden flex flex-col divide-y divide-gray-100">
+              {recurringItems.map((item: any, i: number) => (
+                <div key={i} className="py-3 flex justify-between items-start gap-3">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900">{item.name}</p>
+                    {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
+                    <p className="text-xs text-gray-400 mt-1">{intervalLabel(item.recurring_interval)}</p>
+                  </div>
+                  <p className="font-semibold text-gray-900 shrink-0">{formatCurrency(itemLineTotal(item as any), currency)}</p>
+                </div>
+              ))}
+            </div>
+            <table className="hidden sm:table w-full text-sm">
+              <tbody>
+                {recurringItems.map((item: any, i: number) => (
+                  <tr key={i} className="border-b border-gray-100 last:border-0">
+                    <td className="py-3">
+                      <p className="font-medium text-gray-900">{item.name}</p>
+                      {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
+                    </td>
+                    <td className="py-3 text-left text-gray-500 text-xs w-24">{intervalLabel(item.recurring_interval)}</td>
+                    <td className="py-3 text-left font-medium w-28">{formatCurrency(itemLineTotal(item as any), currency)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* Payment schedule */}
         {milestones.length > 0 && (
@@ -243,6 +262,15 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                 )
               })}
             </div>
+          </div>
+        )}
+
+        {/* Freelancer signature */}
+        {(profile as any)?.freelancer_signature && (
+          <div className="mt-8 pt-6 border-t border-gray-100">
+            <p className="text-xs text-gray-400 mb-2">חתימת הספק</p>
+            <img src={(profile as any).freelancer_signature} alt="חתימה" className="max-h-16 max-w-[200px] object-contain" />
+            <p className="text-sm font-medium text-gray-700 mt-1">{profile?.business_name}</p>
           </div>
         )}
       </div>

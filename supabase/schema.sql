@@ -210,6 +210,10 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
 -- ALTER TABLE quotes ADD COLUMN IF NOT EXISTS discount_reason TEXT;
 -- INSERT INTO app_config (key, value) VALUES ('quote_number_prefix', 'QD'), ('default_quote_validity_days', '30') ON CONFLICT (key) DO NOTHING;
 
+-- Migration: freelancer signature + per-item discount (run if upgrading from earlier schema)
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS freelancer_signature TEXT;
+-- ALTER TABLE quote_items ADD COLUMN IF NOT EXISTS discount_percent DECIMAL(5,2) DEFAULT 0;
+
 -- Helper: get next quote number for a user
 CREATE OR REPLACE FUNCTION get_next_quote_number(p_user_id UUID)
 RETURNS TEXT AS $$

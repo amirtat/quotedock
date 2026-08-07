@@ -27,6 +27,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     currency: profile?.currency || 'ILS',
     quote_number_prefix: profile?.quote_number_prefix || 'QD',
     default_quote_validity_days: profile?.default_quote_validity_days ?? 30,
+    show_quantity_default: profile?.show_quantity_default ?? false,
   })
   const [logoUrl, setLogoUrl] = useState<string | null>(profile?.logo_url || null)
   const [logoUploading, setLogoUploading] = useState(false)

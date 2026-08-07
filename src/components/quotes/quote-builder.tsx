@@ -105,7 +105,17 @@ export function QuoteBuilder({
   const [title, setTitle] = useState(initialData?.title || '')
   const [clientId, setClientId] = useState(initialData?.client_id || '')
   const [notes, setNotes] = useState(initialData?.notes || '')
-  const [preamble, setPreamble] = useState((initialData as any)?.preamble || '')
+  type SectionRow = { _key: string; id?: string; title: string; content: string }
+  const [sections, setSections] = useState<SectionRow[]>(() => {
+    if (initialSections.length > 0) {
+      return initialSections.map(s => ({ _key: s.id, id: s.id, title: s.title, content: s.content }))
+    }
+    const oldPreamble = (initialData as any)?.preamble
+    if (oldPreamble) {
+      return [{ _key: crypto.randomUUID(), title: 'הקדמה', content: oldPreamble }]
+    }
+    return []
+  })
   const [showQuantity, setShowQuantity] = useState((initialData as any)?.show_quantity ?? showQuantityDefault)
   const [validUntil, setValidUntil] = useState(initialData?.valid_until || defaultValidUntil || '')
   const [discount, setDiscount] = useState(initialData?.discount || 0)
@@ -169,6 +179,16 @@ export function QuoteBuilder({
     setMilestones(percents.map((p, i) => ({ title: titles[i], percent: p, due_date: '' })))
   }
 
+  function addSection() {
+    setSections(prev => [...prev, { _key: crypto.randomUUID(), title: '', content: '' }])
+  }
+  function removeSection(key: string) {
+    setSections(prev => prev.filter(s => s._key !== key))
+  }
+  function updateSection(key: string, field: 'title' | 'content', value: string) {
+    setSections(prev => prev.map(s => s._key === key ? { ...s, [field]: value } : s))
+  }
+
   async function save(status: 'draft' | 'sent' = 'draft') {
     if (!title.trim()) return showToast('נא להזין כותרת', 'err')
     if (items.some(i => !i.name.trim())) return showToast('נא למלא שם לכל הפריטים', 'err')
@@ -182,7 +202,7 @@ export function QuoteBuilder({
       if (!currentQuoteId) {
         const { data, error } = await supabase.from('quotes').insert({
           user_id: userId, title, number: nextNumber,
-          client_id: clientId || null, notes: notes || null, preamble: preamble || null,
+          client_id: clientId || null, notes: notes || null,
           valid_until: validUntil || null, discount, discount_type: discountType,
           discount_reason: discountReason || null, include_vat: includeVat, status,
           show_quantity: showQuantity,
@@ -194,7 +214,7 @@ export function QuoteBuilder({
       } else {
         const existingToken = (initialData as any)?.public_token
         const { error } = await supabase.from('quotes').update({
-          title, client_id: clientId || null, notes: notes || null, preamble: preamble || null,
+          title, client_id: clientId || null, notes: notes || null,
           valid_until: validUntil || null, discount, discount_type: discountType,
           discount_reason: discountReason || null, include_vat: includeVat, status,
           show_quantity: showQuantity,
@@ -228,6 +248,18 @@ export function QuoteBuilder({
             title: m.title,
             percent: m.percent,
             due_date: m.due_date || null,
+            sort_order: i,
+          }))
+        )
+      }
+
+      await supabase.from('quote_sections').delete().eq('quote_id', currentQuoteId!)
+      if (sections.length > 0) {
+        await supabase.from('quote_sections').insert(
+          sections.map((s, i) => ({
+            quote_id: currentQuoteId!,
+            title: s.title,
+            content: s.content,
             sort_order: i,
           }))
         )
@@ -350,15 +382,41 @@ export function QuoteBuilder({
               </div>
             </div>
 
-            {/* Preamble */}
+            {/* Sections */}
             <div className="bg-white rounded-xl border border-border p-5">
-              <h2 className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">הקדמה / תיאור הפרויקט</h2>
-              <Textarea
-                value={preamble}
-                onChange={(e) => setPreamble(e.target.value)}
-                placeholder="תאר את הצורך, הפערים שזיהית, הרציונל, מה יקרה אחרי..."
-                rows={4}
-              />
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">חלקי פתיח</h2>
+                <button type="button" onClick={addSection} className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1 pointer-events-auto">
+                  <Plus className="h-3.5 w-3.5" /> הוסף חלק
+                </button>
+              </div>
+              {sections.length === 0 ? (
+                <p className="text-sm text-muted text-center py-3">הוסף חלקי פתיח להצעה — תיאור פרויקט, "איך מתקדמים" וכדומה</p>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  {sections.map((sec) => (
+                    <div key={sec._key} className="flex flex-col gap-1.5 p-3 rounded-lg border border-border bg-gray-50/50">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          value={sec.title}
+                          onChange={(e) => updateSection(sec._key, 'title', e.target.value)}
+                          placeholder="כותרת (על הפרויקט, איך מתקדמים...)"
+                          className="flex-1 text-sm font-medium"
+                        />
+                        <button type="button" onClick={() => removeSection(sec._key)} className="p-1.5 text-gray-400 hover:text-red-500 rounded hover:bg-red-50 shrink-0">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                      <Textarea
+                        value={sec.content}
+                        onChange={(e) => updateSection(sec._key, 'content', e.target.value)}
+                        placeholder={"תומך Markdown: **מודגש**, *נטוי*, - בולטים, 1. ממוספר"}
+                        rows={3}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Items */}

@@ -13,6 +13,7 @@ export interface Profile {
   quote_number_prefix: string
   default_quote_validity_days: number
   show_quantity_default: boolean
+  freelancer_signature: string | null
   created_at: string
 }
 

@@ -118,7 +118,9 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-gray-900">{item.name}</p>
                   {item.description && <p className="text-gray-600 text-sm mt-0.5 leading-relaxed">{item.description}</p>}
-                  {showQuantity && item.quantity !== 1 ? (
+                  {item.discount_percent === 100 ? (
+                    <p className="text-xs text-green-600 mt-1 font-medium">ללא עלות</p>
+                  ) : showQuantity && item.quantity !== 1 ? (
                     <p className="text-xs text-gray-400 mt-1">{item.quantity} × {formatCurrency(item.unit_price, currency)}{item.discount_percent > 0 ? ` (${item.discount_percent}% הנחה)` : ''}</p>
                   ) : (
                     <p className="text-xs text-gray-400 mt-1">{formatCurrency(item.unit_price, currency)}{item.discount_percent > 0 ? ` (${item.discount_percent}% הנחה)` : ''}</p>

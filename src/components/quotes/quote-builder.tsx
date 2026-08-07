@@ -62,6 +62,8 @@ export function QuoteBuilder({
   const [title, setTitle] = useState(initialData?.title || '')
   const [clientId, setClientId] = useState(initialData?.client_id || '')
   const [notes, setNotes] = useState(initialData?.notes || '')
+  const [preamble, setPreamble] = useState((initialData as any)?.preamble || '')
+  const [showQuantity, setShowQuantity] = useState((initialData as any)?.show_quantity ?? showQuantityDefault)
   const [validUntil, setValidUntil] = useState(initialData?.valid_until || defaultValidUntil || '')
   const [discount, setDiscount] = useState(initialData?.discount || 0)
   const [discountType, setDiscountType] = useState<'percent' | 'fixed'>(initialData?.discount_type || 'percent')

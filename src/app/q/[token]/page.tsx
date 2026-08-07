@@ -50,8 +50,9 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   const isAccepted = quote.status === 'accepted'
   const isDeclined = quote.status === 'declined'
 
-  const oneTimeItems = items.filter((i: any) => !i.item_type || i.item_type === 'one_time')
-  const recurringItems = items.filter((i: any) => i.item_type === 'recurring')
+  const optionalItems = items.filter((i: any) => i.is_optional)
+  const oneTimeItems = items.filter((i: any) => !i.is_optional && (!i.item_type || i.item_type === 'one_time'))
+  const recurringItems = items.filter((i: any) => !i.is_optional && i.item_type === 'recurring')
   const excludedItems = items.filter((i: any) => i.item_type === 'excluded')
 
   return (

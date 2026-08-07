@@ -49,6 +49,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
 
   const oneTimeItems = items.filter((i: any) => !i.item_type || i.item_type === 'one_time')
   const recurringItems = items.filter((i: any) => i.item_type === 'recurring')
+  const excludedItems = items.filter((i: any) => i.item_type === 'excluded')
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30 py-8 px-4">
@@ -216,6 +217,24 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {/* Excluded items */}
+          {excludedItems.length > 0 && (
+            <div className="mb-6 pt-4 border-t border-dashed border-gray-200">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">אינו כלול בהצעה</p>
+              <div className="flex flex-col gap-1.5">
+                {excludedItems.map((item: any, i: number) => (
+                  <div key={i} className="flex items-start gap-2 text-sm text-gray-500">
+                    <span className="text-red-400 mt-0.5 shrink-0">✕</span>
+                    <div>
+                      <span className="font-medium text-gray-700">{item.name}</span>
+                      {item.description && <span className="text-gray-400"> — {item.description}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

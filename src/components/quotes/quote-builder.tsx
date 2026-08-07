@@ -115,36 +115,50 @@ export function QuoteBuilder({
     initialMilestones.map(m => ({ title: m.title, percent: m.percent, due_date: m.due_date || '' }))
   )
 
-  const [items, setItems] = useState<Array<Omit<QuoteItem, 'id' | 'quote_id'> & { id?: string }>>(
-    initialItems.length > 0 ? initialItems : [emptyItem(0)]
+  const [items, setItems] = useState<ItemRow[]>(
+    initialItems.length > 0
+      ? initialItems.map(i => ({ ...i, _key: i.id || crypto.randomUUID() }))
+      : [emptyItem(0)]
   )
+
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+    setItems(prev => {
+      const oldIndex = prev.findIndex(i => i._key === active.id)
+      const newIndex = prev.findIndex(i => i._key === over.id)
+      return arrayMove(prev, oldIndex, newIndex)
+    })
+  }
   const [quoteId, setQuoteId] = useState(initialQuoteId || null)
 
-  const { subtotal, discountAmount, vatAmount, total, recurringSubtotal } = calcTotal(items as QuoteItem[], discount, vatRate, includeVat, discountType)
+  const { subtotal, discountAmount, vatAmount, total, recurringSubtotal } = calcTotal(items as unknown as QuoteItem[], discount, vatRate, includeVat, discountType)
 
   function showToast(msg: string, type: 'ok' | 'err' = 'ok') {
     setToast({ msg, type })
     setTimeout(() => setToast(null), 3000)
   }
 
-  function addItem() {
-    setItems(prev => [...prev, emptyItem(prev.length)])
+  function addItem(type: 'one_time' | 'excluded' = 'one_time') {
+    setItems(prev => [...prev, { ...emptyItem(prev.length), item_type: type }])
   }
 
-  function removeItem(index: number) {
-    setItems(prev => prev.filter((_, i) => i !== index))
+  function removeItem(key: string) {
+    setItems(prev => prev.filter(i => i._key !== key))
   }
 
-  function updateItem(index: number, field: string, value: string | number) {
-    setItems(prev => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)))
+  function updateItem(key: string, field: string, value: string | number | boolean) {
+    setItems(prev => prev.map(item => (item._key === key ? { ...item, [field]: value } : item)))
   }
 
-  function fillFromService(index: number, serviceId: string) {
+  function fillFromService(key: string, serviceId: string) {
     const service = services.find(s => s.id === serviceId)
     if (!service) return
     setItems(prev =>
-      prev.map((item, i) =>
-        i === index ? { ...item, service_id: serviceId, name: service.name, description: service.description || '', unit_price: service.unit_price, discount_percent: 0 } : item
+      prev.map(item =>
+        item._key === key ? { ...item, service_id: serviceId, name: service.name, description: service.description || '', unit_price: service.unit_price, discount_percent: 0 } : item
       )
     )
   }
@@ -195,10 +209,12 @@ export function QuoteBuilder({
         items.map((item, i) => ({
           quote_id: currentQuoteId, service_id: item.service_id || null,
           name: item.name, description: item.description || null,
-          quantity: Number(item.quantity), unit_price: Number(item.unit_price), sort_order: i,
+          quantity: item.item_type === 'excluded' ? 1 : Number(item.quantity),
+          unit_price: item.item_type === 'excluded' ? 0 : Number(item.unit_price),
+          sort_order: i,
           item_type: item.item_type || 'one_time',
           recurring_interval: item.item_type === 'recurring' ? (item.recurring_interval || 'monthly') : null,
-          discount_percent: Number((item as any).discount_percent || 0),
+          discount_percent: item.item_type === 'excluded' ? 0 : Number(item.discount_percent || 0),
         }))
       )
 
@@ -358,92 +374,141 @@ export function QuoteBuilder({
 
               {/* Column headers */}
               <div className="flex gap-2 text-xs text-muted mb-2 px-1">
+                <div className="w-5 shrink-0" />
                 <div className="flex-1">שם / תיאור</div>
                 {showQuantity && <div className="w-20 shrink-0 text-center">כמות</div>}
                 <div className="w-28 shrink-0 text-center">מחיר</div>
                 <div className="w-7 shrink-0" />
               </div>
 
-              <div className="flex flex-col gap-2">
-                {items.map((item, index) => (
-                  <div key={index} className="flex gap-2 items-start p-3 rounded-lg bg-surface/60 border border-border/60">
-                    <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-                      <Input
-                        value={item.name}
-                        list={`services-ac-${index}`}
-                        onChange={(e) => {
-                          const val = e.target.value
-                          updateItem(index, 'name', val)
-                          const matched = services.find(s => s.name === val)
-                          if (matched) fillFromService(index, matched.id)
-                        }}
-                        placeholder="שם הפריט"
-                      />
-                      {services.length > 0 && (
-                        <datalist id={`services-ac-${index}`}>
-                          {services.map(s => <option key={s.id} value={s.name} />)}
-                        </datalist>
-                      )}
-                      <Input value={item.description || ''} onChange={(e) => updateItem(index, 'description', e.target.value)} placeholder="תיאור (אופציונלי)" className="text-xs" />
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <div className="flex items-center gap-1 me-auto">
-                          <button
-                            type="button"
-                            onClick={() => updateItem(index, 'item_type', 'one_time')}
-                            className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type !== 'recurring' ? 'bg-ink text-white border-ink' : 'text-muted border-border hover:border-ink'}`}
-                          >חד-פעמי</button>
-                          <button
-                            type="button"
-                            onClick={() => updateItem(index, 'item_type', 'recurring')}
-                            className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'recurring' ? 'bg-saffron text-white border-saffron' : 'text-muted border-border hover:border-saffron'}`}
-                          >חוזר</button>
-                          {item.item_type === 'recurring' && (
-                            <select
-                              value={item.recurring_interval || 'monthly'}
-                              onChange={(e) => updateItem(index, 'recurring_interval', e.target.value as RecurringInterval)}
-                              className="text-xs text-saffron bg-transparent border-0 p-0 focus:outline-none cursor-pointer"
-                            >
-                              <option value="monthly">חודשי</option>
-                              <option value="quarterly">רבעוני</option>
-                              <option value="yearly">שנתי</option>
-                            </select>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    {showQuantity && (
-                      <div className="w-20 shrink-0">
-                        <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(index, 'quantity', e.target.value)} className="text-center" dir="ltr" />
-                      </div>
-                    )}
-                    <div className="w-28 shrink-0 flex flex-col gap-1">
-                      <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(index, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          step="1"
-                          value={(item as any).discount_percent || ''}
-                          placeholder="הנחה %"
-                          onChange={(e) => updateItem(index, 'discount_percent', e.target.value === '' ? 0 : Number(e.target.value))}
-                          className="w-full text-center text-xs bg-transparent border border-border/60 rounded px-1 py-0.5 text-muted focus:outline-none focus:border-saffron"
-                          dir="ltr"
-                        />
-                      </div>
-                    </div>
-                    <div className="w-7 shrink-0 flex items-center justify-center pt-1">
-                      <button onClick={() => removeItem(index)} className="p-1 text-muted/50 hover:text-danger transition-colors" disabled={items.length === 1}>
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <SortableContext items={items.map(i => i._key)} strategy={verticalListSortingStrategy}>
+                  <div className="flex flex-col gap-2">
+                    {items.filter(i => i.item_type !== 'excluded').map((item) => (
+                      <SortableItemRow key={item._key} id={item._key}>
+                        {(dragHandle) => (
+                          <div className="flex gap-2 items-start p-3 rounded-lg bg-surface/60 border border-border/60">
+                            {dragHandle}
+                            <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                              <Input
+                                value={item.name}
+                                list={`services-ac-${item._key}`}
+                                onChange={(e) => {
+                                  const val = e.target.value
+                                  updateItem(item._key, 'name', val)
+                                  const matched = services.find(s => s.name === val)
+                                  if (matched) fillFromService(item._key, matched.id)
+                                }}
+                                placeholder="שם הפריט"
+                              />
+                              {services.length > 0 && (
+                                <datalist id={`services-ac-${item._key}`}>
+                                  {services.map(s => <option key={s.id} value={s.name} />)}
+                                </datalist>
+                              )}
+                              <Input value={item.description || ''} onChange={(e) => updateItem(item._key, 'description', e.target.value)} placeholder="תיאור (אופציונלי)" className="text-xs" />
+                              <div className="flex items-center gap-1 flex-wrap">
+                                <button
+                                  type="button"
+                                  onClick={() => updateItem(item._key, 'item_type', 'one_time')}
+                                  className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'one_time' ? 'bg-ink text-white border-ink' : 'text-muted border-border hover:border-ink'}`}
+                                >חד-פעמי</button>
+                                <button
+                                  type="button"
+                                  onClick={() => updateItem(item._key, 'item_type', 'recurring')}
+                                  className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'recurring' ? 'bg-saffron text-white border-saffron' : 'text-muted border-border hover:border-saffron'}`}
+                                >חוזר</button>
+                                {item.item_type === 'recurring' && (
+                                  <select
+                                    value={item.recurring_interval || 'monthly'}
+                                    onChange={(e) => updateItem(item._key, 'recurring_interval', e.target.value as RecurringInterval)}
+                                    className="text-xs text-saffron bg-transparent border-0 p-0 focus:outline-none cursor-pointer"
+                                  >
+                                    <option value="monthly">חודשי</option>
+                                    <option value="quarterly">רבעוני</option>
+                                    <option value="yearly">שנתי</option>
+                                  </select>
+                                )}
+                                {/* Free item toggle */}
+                                <button
+                                  type="button"
+                                  onClick={() => updateItem(item._key, 'discount_percent', (item.discount_percent || 0) === 100 ? 0 : 100)}
+                                  className={`text-xs px-2 py-0.5 rounded-full border transition-colors ms-auto ${(item.discount_percent || 0) === 100 ? 'bg-green-100 text-green-700 border-green-200' : 'text-muted border-border hover:border-green-300'}`}
+                                >ללא עלות</button>
+                              </div>
+                            </div>
+                            {showQuantity && (
+                              <div className="w-20 shrink-0">
+                                <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(item._key, 'quantity', e.target.value)} className="text-center" dir="ltr" />
+                              </div>
+                            )}
+                            <div className="w-28 shrink-0 flex flex-col gap-1">
+                              {(item.discount_percent || 0) === 100 ? (
+                                <div className="h-9 flex items-center justify-center text-xs text-green-600 font-medium bg-green-50 border border-green-100 rounded-lg">ללא עלות</div>
+                              ) : (
+                                <>
+                                  <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(item._key, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    max="99"
+                                    step="1"
+                                    value={(item.discount_percent || 0) > 0 && (item.discount_percent || 0) < 100 ? item.discount_percent : ''}
+                                    placeholder="הנחה %"
+                                    onChange={(e) => updateItem(item._key, 'discount_percent', e.target.value === '' ? 0 : Number(e.target.value))}
+                                    className="w-full text-center text-xs bg-transparent border border-border/60 rounded px-1 py-0.5 text-muted focus:outline-none focus:border-saffron"
+                                    dir="ltr"
+                                  />
+                                </>
+                              )}
+                            </div>
+                            <div className="w-7 shrink-0 flex items-center justify-center pt-1">
+                              <button type="button" onClick={() => removeItem(item._key)} className="p-1 text-muted/50 hover:text-danger transition-colors">
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </SortableItemRow>
+                    ))}
                   </div>
-                ))}
+                </SortableContext>
+              </DndContext>
+
+              <div className="flex items-center gap-3 mt-4 px-1">
+                <button type="button" onClick={() => addItem('one_time')} className="flex items-center gap-1.5 text-sm text-saffron hover:text-saffron-600 font-medium transition-colors">
+                  <Plus className="h-4 w-4" />
+                  הוסף פריט
+                </button>
               </div>
 
-              <button onClick={addItem} className="flex items-center gap-1.5 text-sm text-saffron hover:text-saffron-600 font-medium mt-4 px-1 transition-colors">
-                <Plus className="h-4 w-4" />
-                הוסף פריט
+              {/* Excluded items section */}
+              {items.some(i => i.item_type === 'excluded') && (
+                <div className="mt-5 pt-4 border-t border-dashed border-border">
+                  <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">אינו כלול</p>
+                  <div className="flex flex-col gap-2">
+                    {items.filter(i => i.item_type === 'excluded').map((item) => (
+                      <div key={item._key} className="flex gap-2 items-center p-2.5 rounded-lg bg-red-50/40 border border-red-100/60">
+                        <div className="flex-1 min-w-0 flex flex-col gap-1">
+                          <Input
+                            value={item.name}
+                            onChange={(e) => updateItem(item._key, 'name', e.target.value)}
+                            placeholder="מה אינו כלול"
+                            className="text-sm"
+                          />
+                          <Input value={item.description || ''} onChange={(e) => updateItem(item._key, 'description', e.target.value)} placeholder="הסבר (אופציונלי)" className="text-xs" />
+                        </div>
+                        <button type="button" onClick={() => removeItem(item._key)} className="p-1 text-muted/50 hover:text-danger transition-colors shrink-0">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <button type="button" onClick={() => addItem('excluded')} className="flex items-center gap-1.5 text-xs text-muted hover:text-danger/70 font-medium transition-colors mt-3 px-1">
+                <Plus className="h-3.5 w-3.5" />
+                הוסף "אינו כלול"
               </button>
             </div>
 
@@ -542,7 +607,7 @@ export function QuoteBuilder({
               <div className="flex flex-col gap-1 pb-3 border-b border-obsidian-700">
                 <p className="text-white/30 text-xs uppercase tracking-wider">חוזר</p>
                 {(['monthly', 'quarterly', 'yearly'] as const).map(interval => {
-                  const intervalItems = (items as QuoteItem[]).filter(i => i.item_type === 'recurring' && (i.recurring_interval || 'monthly') === interval)
+                  const intervalItems = (items as unknown as QuoteItem[]).filter(i => i.item_type === 'recurring' && (i.recurring_interval || 'monthly') === interval)
                   const intervalTotal = intervalItems.reduce((s, i) => s + i.quantity * i.unit_price, 0)
                   if (intervalTotal === 0) return null
                   return (

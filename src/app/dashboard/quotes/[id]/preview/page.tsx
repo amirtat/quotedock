@@ -104,13 +104,24 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
           </div>
         )}
 
-        {/* Preamble */}
-        {(quote as any).preamble && (
+        {/* Sections */}
+        {sections.length > 0 ? (
+          <div className="flex flex-col gap-4 mb-8">
+            {sections.map((sec: any) => (
+              <div key={sec.id} className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                {sec.title && <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">{sec.title}</p>}
+                <div className="text-sm text-gray-700 leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-0.5 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-0.5 [&_strong]:font-semibold [&_strong]:text-gray-900 [&_p]:mb-1 [&_p:last-child]:mb-0">
+                  <ReactMarkdown>{sec.content}</ReactMarkdown>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (quote as any).preamble ? (
           <div className="mb-8 p-4 bg-gray-50 rounded-xl border border-gray-100">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">על הפרויקט</p>
             <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{(quote as any).preamble}</p>
           </div>
-        )}
+        ) : null}
 
         {/* Items — mobile: cards, desktop: table */}
         <div className="sm:hidden flex flex-col divide-y divide-gray-100 mb-6">

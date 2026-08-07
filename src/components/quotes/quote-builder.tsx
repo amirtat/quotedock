@@ -10,10 +10,25 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatCurrency, calcTotal, intervalLabel } from '@/lib/utils'
 import { Client, QuoteItem, Quote, Service, NoteTemplate, RecurringInterval, PaymentMilestone, QuoteAttachment } from '@/lib/types'
-import { Plus, Trash2, Save, Send, Eye, ArrowLeft } from 'lucide-react'
+import { Plus, Trash2, Save, Send, Eye, ArrowLeft, GripVertical } from 'lucide-react'
 import Link from 'next/link'
 import { deleteQuote } from '@/app/actions/quote-actions'
 import AttachmentsManager from '@/components/quotes/attachments-manager'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 interface QuoteBuilderProps {
   quoteId?: string

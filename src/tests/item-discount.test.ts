@@ -96,20 +96,23 @@ describe('calcTotal with per-item discounts', () => {
   })
 })
 
-// ─── 4. One-time / recurring separation (mirrors page.tsx filter logic) ───────
+// ─── 4. Three-way item separation (mirrors page.tsx filter logic) ─────────────
 
-describe('One-time vs recurring item separation', () => {
+describe('Three-way item separation: one_time / recurring / excluded', () => {
   const items = [
     makeItem({ id: '1', item_type: 'one_time' }),
     makeItem({ id: '2', item_type: 'recurring', recurring_interval: 'monthly' }),
     makeItem({ id: '3', item_type: 'recurring', recurring_interval: 'yearly' }),
     makeItem({ id: '4' }), // item_type defaults to 'one_time'
+    makeItem({ id: '5', item_type: 'excluded' }),
+    makeItem({ id: '6', item_type: 'excluded' }),
   ]
 
   const oneTime = items.filter(i => !i.item_type || i.item_type === 'one_time')
   const recurring = items.filter(i => i.item_type === 'recurring')
+  const excluded = items.filter(i => i.item_type === 'excluded')
 
-  it('one-time filter picks up items without item_type too', () => {
+  it('one-time filter picks up items without item_type too, ignores excluded', () => {
     expect(oneTime.map(i => i.id)).toEqual(['1', '4'])
   })
 
@@ -117,14 +120,50 @@ describe('One-time vs recurring item separation', () => {
     expect(recurring.map(i => i.id)).toEqual(['2', '3'])
   })
 
-  it('no overlap between the two groups', () => {
-    const oneTimeIds = new Set(oneTime.map(i => i.id))
-    const recurringIds = new Set(recurring.map(i => i.id))
-    const overlap = [...oneTimeIds].filter(id => recurringIds.has(id))
-    expect(overlap).toHaveLength(0)
+  it('excluded filter picks up only excluded items', () => {
+    expect(excluded.map(i => i.id)).toEqual(['5', '6'])
   })
 
-  it('union covers all items', () => {
-    expect(oneTime.length + recurring.length).toBe(items.length)
+  it('no item appears in more than one group', () => {
+    const allGrouped = [...oneTime, ...recurring, ...excluded].map(i => i.id)
+    const unique = new Set(allGrouped)
+    expect(unique.size).toBe(allGrouped.length)
+  })
+
+  it('three groups together cover all items', () => {
+    expect(oneTime.length + recurring.length + excluded.length).toBe(items.length)
+  })
+})
+
+// ─── 5. Excluded items in calcTotal ──────────────────────────────────────────
+
+describe('calcTotal — excluded items contribute nothing', () => {
+  it('excluded item does not add to subtotal', () => {
+    const items: QuoteItem[] = [
+      makeItem({ unit_price: 1000, item_type: 'one_time' }),
+      makeItem({ unit_price: 9999, item_type: 'excluded' }),
+    ]
+    const { subtotal } = calcTotal(items, 0, 0, false, 'percent')
+    expect(subtotal).toBe(1000)
+  })
+
+  it('excluded item does not add to recurringSubtotal', () => {
+    const items: QuoteItem[] = [
+      makeItem({ unit_price: 500, item_type: 'recurring', recurring_interval: 'monthly' }),
+      makeItem({ unit_price: 9999, item_type: 'excluded' }),
+    ]
+    const { recurringSubtotal } = calcTotal(items, 0, 0, false, 'percent')
+    expect(recurringSubtotal).toBe(500)
+  })
+
+  it('all items excluded → subtotal and total are zero', () => {
+    const items: QuoteItem[] = [
+      makeItem({ unit_price: 5000, item_type: 'excluded' }),
+      makeItem({ unit_price: 3000, item_type: 'excluded' }),
+    ]
+    const { subtotal, total, recurringSubtotal } = calcTotal(items, 0, 18, true, 'percent')
+    expect(subtotal).toBe(0)
+    expect(total).toBe(0)
+    expect(recurringSubtotal).toBe(0)
   })
 })

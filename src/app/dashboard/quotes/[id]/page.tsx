@@ -44,6 +44,7 @@ export default async function EditQuotePage({ params }: PageProps<'/dashboard/qu
       nextNumber={nextNumber}
       noteTemplates={noteTemplatesResult.data || []}
       initialMilestones={milestonesResult.data || []}
+      initialAttachments={attachmentsResult.data || []}
     />
   )
 }

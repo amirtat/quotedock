@@ -308,7 +308,7 @@ export function QuoteBuilder({
                 <button
                   type="button"
                   onClick={() => setShowQuantity((p: boolean) => !p)}
-                  className="text-xs text-muted hover:text-ink border border-border rounded px-2 py-0.5 transition-colors"
+                  className="text-xs text-muted hover:text-ink border border-border rounded px-2 py-0.5 transition-colors pointer-events-auto"
                 >
                   {showQuantity ? 'הסתר כמות' : 'הצג כמות'}
                 </button>

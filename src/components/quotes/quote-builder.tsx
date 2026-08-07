@@ -269,7 +269,7 @@ export function QuoteBuilder({
 
       await supabase.from('quote_sections').delete().eq('quote_id', currentQuoteId!)
       if (sections.length > 0) {
-        await supabase.from('quote_sections').insert(
+        const { error: sectionsErr } = await supabase.from('quote_sections').insert(
           sections.map((s, i) => ({
             quote_id: currentQuoteId!,
             title: s.title,
@@ -278,6 +278,7 @@ export function QuoteBuilder({
             sort_order: i,
           }))
         )
+        if (sectionsErr) throw new Error(`שגיאה בשמירת סקשנים: ${sectionsErr.message}`)
       }
 
       if (status === 'sent') {

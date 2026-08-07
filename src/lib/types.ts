@@ -50,6 +50,8 @@ export interface Quote {
   discount_type: 'percent' | 'fixed'
   discount_reason: string | null
   include_vat: boolean
+  show_quantity: boolean
+  preamble: string | null
   public_token: string
   viewed_at: string | null
   accepted_at: string | null

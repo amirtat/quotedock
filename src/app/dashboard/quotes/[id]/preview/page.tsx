@@ -42,8 +42,9 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
   const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')
   const showQuantity = (quote as any).show_quantity ?? false
 
-  const oneTimeItems = items.filter((i: any) => !i.item_type || i.item_type === 'one_time')
-  const recurringItems = items.filter((i: any) => i.item_type === 'recurring')
+  const optionalItems = items.filter((i: any) => i.is_optional)
+  const oneTimeItems = items.filter((i: any) => !i.is_optional && (!i.item_type || i.item_type === 'one_time'))
+  const recurringItems = items.filter((i: any) => !i.is_optional && i.item_type === 'recurring')
   const excludedItems = items.filter((i: any) => i.item_type === 'excluded')
 
   const publicUrl = `${process.env.NEXT_PUBLIC_SITE_URL || ''}/q/${quote.public_token}`

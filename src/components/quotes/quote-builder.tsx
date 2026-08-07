@@ -92,6 +92,7 @@ export function QuoteBuilder({
   noteTemplates = [],
   initialMilestones = [],
   initialAttachments = [],
+  initialSections = [],
   showQuantityDefault = false,
 }: QuoteBuilderProps) {
   const router = useRouter()

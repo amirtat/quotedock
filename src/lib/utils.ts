@@ -32,6 +32,7 @@ export function calcTotal(
 ): { subtotal: number; discountAmount: number; vatAmount: number; total: number; recurringSubtotal: number } {
   const oneTimeItems = items.filter(i => !i.item_type || i.item_type === 'one_time')
   const recurringItems = items.filter(i => i.item_type === 'recurring')
+  // excluded items contribute nothing to any total
   const subtotal = calcSubtotal(oneTimeItems)
   const recurringSubtotal = calcSubtotal(recurringItems)
   const discountAmount = discountType === 'fixed'

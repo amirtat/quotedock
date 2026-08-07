@@ -1,5 +1,9 @@
 import ReactMarkdown from 'react-markdown'
-import remarkBreaks from 'remark-breaks'
+
+// Convert single newlines to Markdown hard breaks (two trailing spaces)
+function hardBreaks(text: string): string {
+  return text.replace(/([^\n])\n([^\n])/g, '$1  \n$2')
+}
 
 const mdComponents = {
   ul: ({ children }: any) => <ul className="list-disc list-inside space-y-0.5">{children}</ul>,
@@ -11,9 +15,7 @@ const mdComponents = {
 export function Markdown({ children }: { children: string }) {
   return (
     <div className="text-sm text-gray-700 leading-relaxed">
-      <ReactMarkdown remarkPlugins={[remarkBreaks]} components={mdComponents}>
-        {children}
-      </ReactMarkdown>
+      <ReactMarkdown components={mdComponents}>{hardBreaks(children)}</ReactMarkdown>
     </div>
   )
 }

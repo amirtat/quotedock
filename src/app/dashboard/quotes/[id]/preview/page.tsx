@@ -123,10 +123,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                   <p className="text-xs text-gray-400 mt-1">{formatCurrency(item.unit_price, currency)}{item.discount_percent > 0 ? ` (${item.discount_percent}% הנחה)` : ''}</p>
                 )}
               </div>
-              {item.discount_percent === 100
-                ? <p className="font-semibold text-green-600 shrink-0">ללא עלות</p>
-                : <p className="font-semibold text-gray-900 shrink-0">{formatCurrency(itemLineTotal(item as any), currency)}</p>
-              }
+              <p className="font-semibold text-gray-900 shrink-0">{formatCurrency(itemLineTotal(item as any), currency)}</p>
             </div>
           ))}
         </div>

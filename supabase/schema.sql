@@ -229,6 +229,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
 -- GRANT SELECT, INSERT, UPDATE, DELETE ON quote_sections TO authenticated;
 -- GRANT SELECT ON quote_sections TO anon;
 
+-- Migration: optional items (run if upgrading from earlier schema)
+-- ALTER TABLE quote_items ADD COLUMN IF NOT EXISTS is_optional BOOLEAN DEFAULT false;
+
 -- Migration: freelancer signature + per-item discount (run if upgrading from earlier schema)
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS freelancer_signature TEXT;
 -- ALTER TABLE quote_items ADD COLUMN IF NOT EXISTS discount_percent DECIMAL(5,2) DEFAULT 0;

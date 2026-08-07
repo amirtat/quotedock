@@ -629,6 +629,40 @@ export function QuoteBuilder({
               )}
             </div>
 
+            {/* End sections */}
+            <div className="bg-white rounded-xl border border-border p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">חלקי סיום</h2>
+                <button type="button" onClick={() => addSection('end')} className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1 pointer-events-auto">
+                  <Plus className="h-3.5 w-3.5" /> הוסף חלק
+                </button>
+              </div>
+              {sections.filter(s => s.position === 'end').length === 0 ? (
+                <p className="text-sm text-muted text-center py-3">הוסף חלקי סיום — "איך מתקדמים", תנאים, שלבי תשלום וכדומה</p>
+              ) : (
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleSectionDragEnd(e, 'end')}>
+                  <SortableContext items={sections.filter(s => s.position === 'end').map(s => s._key)} strategy={verticalListSortingStrategy}>
+                    <div className="flex flex-col gap-3">
+                      {sections.filter(s => s.position === 'end').map((sec) => (
+                        <SortableItemRow key={sec._key} id={sec._key}>
+                          {(dragHandle) => (
+                            <div className="flex flex-col gap-1.5 p-3 rounded-lg border border-border bg-gray-50/50">
+                              <div className="flex items-center gap-2">
+                                {dragHandle}
+                                <Input value={sec.title} onChange={(e) => updateSection(sec._key, 'title', e.target.value)} placeholder="כותרת (איך מתקדמים, השלבים הבאים...)" className="flex-1 text-sm font-medium" />
+                                <button type="button" onClick={() => removeSection(sec._key)} className="p-1.5 text-gray-400 hover:text-red-500 rounded hover:bg-red-50 shrink-0"><Trash2 className="h-3.5 w-3.5" /></button>
+                              </div>
+                              <Textarea value={sec.content} onChange={(e) => updateSection(sec._key, 'content', e.target.value)} placeholder={"תומך Markdown: **מודגש**, *נטוי*, - בולטים, 1. ממוספר"} rows={3} />
+                            </div>
+                          )}
+                        </SortableItemRow>
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
+              )}
+            </div>
+
             {/* Notes */}
             <div className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-center justify-between mb-3">

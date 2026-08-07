@@ -273,7 +273,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
               <div className="flex flex-col gap-1.5">
                 {excludedItems.map((item: any, i: number) => (
                   <div key={i} className="flex items-start gap-2 text-sm text-gray-500">
-                    <span className="text-red-400 mt-0.5 shrink-0">✕</span>
+                    <span className="text-gray-300 mt-0.5 shrink-0">·</span>
                     <div>
                       <span className="font-medium text-gray-700">{item.name}</span>
                       {item.description && <span className="text-gray-400"> — {item.description}</span>}

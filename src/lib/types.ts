@@ -85,6 +85,7 @@ export interface QuoteSection {
   quote_id: string
   title: string
   content: string
+  position: 'start' | 'end'
   sort_order: number
 }
 

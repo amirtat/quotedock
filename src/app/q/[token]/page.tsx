@@ -40,6 +40,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   const signature = signatureResult.data
   const milestones = milestonesResult.data || []
   const attachments = attachmentsResult.data || []
+  const sections = sectionsResult.data || []
   const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')

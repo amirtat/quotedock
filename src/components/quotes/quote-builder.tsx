@@ -105,14 +105,14 @@ export function QuoteBuilder({
   const [title, setTitle] = useState(initialData?.title || '')
   const [clientId, setClientId] = useState(initialData?.client_id || '')
   const [notes, setNotes] = useState(initialData?.notes || '')
-  type SectionRow = { _key: string; id?: string; title: string; content: string }
+  type SectionRow = { _key: string; id?: string; title: string; content: string; position: 'start' | 'end' }
   const [sections, setSections] = useState<SectionRow[]>(() => {
     if (initialSections.length > 0) {
-      return initialSections.map(s => ({ _key: s.id, id: s.id, title: s.title, content: s.content }))
+      return initialSections.map(s => ({ _key: s.id, id: s.id, title: s.title, content: s.content, position: s.position || 'start' }))
     }
     const oldPreamble = (initialData as any)?.preamble
     if (oldPreamble) {
-      return [{ _key: crypto.randomUUID(), title: 'הקדמה', content: oldPreamble }]
+      return [{ _key: crypto.randomUUID(), title: 'הקדמה', content: oldPreamble, position: 'start' as const }]
     }
     return []
   })
@@ -179,8 +179,8 @@ export function QuoteBuilder({
     setMilestones(percents.map((p, i) => ({ title: titles[i], percent: p, due_date: '' })))
   }
 
-  function addSection() {
-    setSections(prev => [...prev, { _key: crypto.randomUUID(), title: '', content: '' }])
+  function addSection(position: 'start' | 'end' = 'start') {
+    setSections(prev => [...prev, { _key: crypto.randomUUID(), title: '', content: '', position }])
   }
   function removeSection(key: string) {
     setSections(prev => prev.filter(s => s._key !== key))
@@ -260,6 +260,7 @@ export function QuoteBuilder({
             quote_id: currentQuoteId!,
             title: s.title,
             content: s.content,
+            position: s.position,
             sort_order: i,
           }))
         )
@@ -386,15 +387,15 @@ export function QuoteBuilder({
             <div className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">חלקי פתיח</h2>
-                <button type="button" onClick={addSection} className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1 pointer-events-auto">
+                <button type="button" onClick={() => addSection('start')} className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1 pointer-events-auto">
                   <Plus className="h-3.5 w-3.5" /> הוסף חלק
                 </button>
               </div>
-              {sections.length === 0 ? (
-                <p className="text-sm text-muted text-center py-3">הוסף חלקי פתיח להצעה — תיאור פרויקט, "איך מתקדמים" וכדומה</p>
+              {sections.filter(s => s.position === 'start').length === 0 ? (
+                <p className="text-sm text-muted text-center py-3">הוסף חלקי פתיח להצעה — תיאור פרויקט, רקע, מטרות וכדומה</p>
               ) : (
                 <div className="flex flex-col gap-3">
-                  {sections.map((sec) => (
+                  {sections.filter(s => s.position === 'start').map((sec) => (
                     <div key={sec._key} className="flex flex-col gap-1.5 p-3 rounded-lg border border-border bg-gray-50/50">
                       <div className="flex items-center gap-2">
                         <Input

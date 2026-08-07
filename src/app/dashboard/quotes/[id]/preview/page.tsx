@@ -280,11 +280,15 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
 
         {/* End sections */}
         {sections.filter((s: any) => s.position === 'end').length > 0 && (
-          <div className="flex flex-col gap-4 mt-8">
+          <div className="flex flex-col gap-3 mt-8">
             {sections.filter((s: any) => s.position === 'end').map((sec: any) => (
-              <div key={sec.id} className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                {sec.title && <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">{sec.title}</p>}
-                <div className="text-sm text-gray-700 leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-0.5 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-0.5 [&_strong]:font-semibold [&_strong]:text-gray-900 [&_p]:mb-1 [&_p:last-child]:mb-0">
+              <div key={sec.id} className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex gap-4">
+                {sec.title && (
+                  <div className="w-28 shrink-0 pt-0.5 border-l border-gray-200 pl-4">
+                    <p className="text-sm font-semibold text-gray-800 leading-snug">{sec.title}</p>
+                  </div>
+                )}
+                <div className="flex-1 text-sm text-gray-700 leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-0.5 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-0.5 [&_strong]:font-semibold [&_strong]:text-gray-900 [&_p]:mb-1 [&_p:last-child]:mb-0">
                   <ReactMarkdown>{sec.content}</ReactMarkdown>
                 </div>
               </div>

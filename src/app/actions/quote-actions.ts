@@ -93,6 +93,7 @@ export async function duplicateQuote(quoteId: string) {
         item_type: item.item_type || 'one_time',
         recurring_interval: item.recurring_interval ?? null,
         discount_percent: item.discount_percent ?? 0,
+        is_optional: item.is_optional ?? false,
       }))
     )
   }

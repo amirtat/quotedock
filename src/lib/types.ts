@@ -75,7 +75,7 @@ export interface QuoteItem {
   quantity: number
   unit_price: number
   sort_order: number
-  item_type: 'one_time' | 'recurring'
+  item_type: 'one_time' | 'recurring' | 'excluded'
   recurring_interval: RecurringInterval | null
   discount_percent?: number
 }

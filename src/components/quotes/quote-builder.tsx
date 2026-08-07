@@ -208,7 +208,7 @@ export function QuoteBuilder({
       )}
 
       {/* Top bar */}
-      <div className="flex items-center justify-between px-6 py-3.5 border-b border-border bg-white shrink-0">
+      <div className="flex items-center justify-between px-6 py-3.5 border-b border-border bg-white shrink-0 sticky top-0 z-30">
         <div className="flex items-center gap-4">
           <Link href="/dashboard/quotes" className="flex items-center gap-1.5 text-sm text-muted hover:text-ink transition-colors">
             <ArrowLeft className="h-4 w-4" />

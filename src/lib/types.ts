@@ -12,6 +12,7 @@ export interface Profile {
   vat_rate: number
   quote_number_prefix: string
   default_quote_validity_days: number
+  show_quantity_default: boolean
   created_at: string
 }
 

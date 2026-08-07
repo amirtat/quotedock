@@ -241,7 +241,7 @@ export function QuoteBuilder({
   }
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col h-screen">
       {/* Sent quote warning banner */}
       {editingLocked && (
         <div className="shrink-0 bg-amber-50 border-b border-amber-200 px-6 py-2.5 flex items-center justify-between">

@@ -146,6 +146,7 @@ export function QuoteBuilder({
     })
   }
   const [quoteId, setQuoteId] = useState(initialQuoteId || null)
+  const [shareData, setShareData] = useState<{ url: string; quoteId: string } | null>(null)
 
   const { subtotal, discountAmount, vatAmount, total, recurringSubtotal } = calcTotal(items as unknown as QuoteItem[], discount, vatRate, includeVat, discountType)
 

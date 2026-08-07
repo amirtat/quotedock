@@ -26,12 +26,13 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   }
 
   // Get items and profile
-  const [itemsResult, profileResult, signatureResult, milestonesResult, attachmentsResult] = await Promise.all([
+  const [itemsResult, profileResult, signatureResult, milestonesResult, attachmentsResult, sectionsResult] = await Promise.all([
     supabase.from('quote_items').select('*').eq('quote_id', quote.id).order('sort_order'),
     supabase.from('profiles').select('*').eq('id', quote.user_id).single(),
     supabase.from('signatures').select('*').eq('quote_id', quote.id).single(),
     supabase.from('payment_milestones').select('*').eq('quote_id', quote.id).order('sort_order'),
     supabase.from('quote_attachments').select('*').eq('quote_id', quote.id).order('sort_order'),
+    supabase.from('quote_sections').select('*').eq('quote_id', quote.id).order('sort_order'),
   ])
 
   const items = itemsResult.data || []

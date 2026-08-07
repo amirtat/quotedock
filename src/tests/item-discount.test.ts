@@ -135,7 +135,41 @@ describe('Three-way item separation: one_time / recurring / excluded', () => {
   })
 })
 
-// ─── 5. Excluded items in calcTotal ──────────────────────────────────────────
+// ─── 5. Optional items in calcTotal ──────────────────────────────────────────
+
+describe('calcTotal — optional items contribute nothing', () => {
+  it('optional one-time item does not add to subtotal', () => {
+    const items: QuoteItem[] = [
+      makeItem({ unit_price: 1000, item_type: 'one_time' }),
+      makeItem({ unit_price: 500, item_type: 'one_time', is_optional: true }),
+    ]
+    const { subtotal } = calcTotal(items, 0, 0, false, 'percent')
+    expect(subtotal).toBe(1000)
+  })
+
+  it('optional recurring item does not add to recurringSubtotal', () => {
+    const items: QuoteItem[] = [
+      makeItem({ unit_price: 500, item_type: 'recurring', recurring_interval: 'monthly' }),
+      makeItem({ unit_price: 300, item_type: 'recurring', recurring_interval: 'monthly', is_optional: true }),
+    ]
+    const { recurringSubtotal } = calcTotal(items, 0, 0, false, 'percent')
+    expect(recurringSubtotal).toBe(500)
+  })
+
+  it('non-optional items are unaffected by optional items', () => {
+    const items: QuoteItem[] = [
+      makeItem({ unit_price: 1000, item_type: 'one_time' }),
+      makeItem({ unit_price: 9999, item_type: 'one_time', is_optional: true }),
+      makeItem({ unit_price: 9999, item_type: 'recurring', recurring_interval: 'monthly', is_optional: true }),
+    ]
+    const { subtotal, total, recurringSubtotal } = calcTotal(items, 0, 0, false, 'percent')
+    expect(subtotal).toBe(1000)
+    expect(total).toBe(1000)
+    expect(recurringSubtotal).toBe(0)
+  })
+})
+
+// ─── 6. Excluded items in calcTotal ──────────────────────────────────────────
 
 describe('calcTotal — excluded items contribute nothing', () => {
   it('excluded item does not add to subtotal', () => {

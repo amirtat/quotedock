@@ -69,27 +69,31 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
         {/* Quote document */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
           {/* Header */}
-          <div className="flex justify-between items-start mb-8">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{quote.title}</h1>
-              <p className="text-gray-500 mt-1 font-mono text-sm">{quote.number}</p>
-              <p className="text-gray-500 text-sm mt-0.5">
-                {format(new Date(quote.created_at), 'dd/MM/yyyy')}
-              </p>
-              {quote.valid_until && (
-                <p className="text-sm text-gray-500 mt-1">
-                  בתוקף עד: {format(new Date(quote.valid_until), 'dd/MM/yyyy')}
+          <div className="mb-8">
+            {profile?.logo_url && (
+              <div className="flex justify-end mb-5 pb-5 border-b border-gray-100">
+                <img src={profile.logo_url} alt={profile?.business_name || ''} className="max-h-24 max-w-full object-contain" />
+              </div>
+            )}
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">{quote.title}</h1>
+                <p className="text-gray-500 mt-1 font-mono text-sm">{quote.number}</p>
+                <p className="text-gray-500 text-sm mt-0.5">
+                  {format(new Date(quote.created_at), 'dd/MM/yyyy')}
                 </p>
-              )}
-            </div>
-            <div className="text-left flex flex-col items-end gap-1">
-              {profile?.logo_url && (
-                <img src={profile.logo_url} alt={profile?.business_name || ''} className="h-14 max-w-[160px] object-contain mb-1" />
-              )}
-              <p className="font-bold text-gray-900 text-lg">{profile?.business_name}</p>
-              {profile?.email && <p className="text-sm text-gray-500">{profile.email}</p>}
-              {profile?.phone && <p className="text-sm text-gray-500">{profile.phone}</p>}
-              {profile?.address && <p className="text-sm text-gray-500">{profile.address}</p>}
+                {quote.valid_until && (
+                  <p className="text-sm text-gray-500 mt-1">
+                    בתוקף עד: {format(new Date(quote.valid_until), 'dd/MM/yyyy')}
+                  </p>
+                )}
+              </div>
+              <div className="text-left flex flex-col items-end gap-1">
+                <p className="font-bold text-gray-900 text-lg">{profile?.business_name}</p>
+                {profile?.email && <p className="text-sm text-gray-500">{profile.email}</p>}
+                {profile?.phone && <p className="text-sm text-gray-500">{profile.phone}</p>}
+                {profile?.address && <p className="text-sm text-gray-500">{profile.address}</p>}
+              </div>
             </div>
           </div>
 

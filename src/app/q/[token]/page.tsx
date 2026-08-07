@@ -148,11 +148,19 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                   <td className="py-3.5">
                     <p className="font-medium text-gray-900">{item.name}</p>
                     {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
-                    {item.discount_percent > 0 && <p className="text-xs text-green-600 mt-0.5">הנחה {item.discount_percent}%</p>}
+                    {item.discount_percent === 100
+                      ? <p className="text-xs text-green-600 mt-0.5 font-medium">ללא עלות</p>
+                      : item.discount_percent > 0 && <p className="text-xs text-green-600 mt-0.5">הנחה {item.discount_percent}%</p>
+                    }
                   </td>
-                  {showQuantity && <td className="py-3.5 text-center text-gray-700">{item.quantity}</td>}
-                  <td className="py-3.5 text-center text-gray-700">{formatCurrency(item.unit_price, currency)}</td>
-                  <td className="py-3.5 text-left font-medium">{formatCurrency(itemLineTotal(item as any), currency)}</td>
+                  {showQuantity && <td className="py-3.5 text-center text-gray-700">{item.discount_percent === 100 ? '' : item.quantity}</td>}
+                  <td className="py-3.5 text-center text-gray-700">{item.discount_percent === 100 ? '' : formatCurrency(item.unit_price, currency)}</td>
+                  <td className="py-3.5 text-left font-medium">
+                    {item.discount_percent === 100
+                      ? <span className="text-green-600">ללא עלות</span>
+                      : formatCurrency(itemLineTotal(item as any), currency)
+                    }
+                  </td>
                 </tr>
               ))}
             </tbody>

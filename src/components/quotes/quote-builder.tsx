@@ -121,15 +121,6 @@ export function QuoteBuilder({
       : [emptyItem(0)]
   )
 
-  // Lock the layout's main scroll container so the top bar stays fixed
-  useEffect(() => {
-    const main = document.querySelector('main')
-    if (!main) return
-    const prev = main.style.overflowY
-    main.style.overflowY = 'hidden'
-    return () => { main.style.overflowY = prev }
-  }, [])
-
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
 
   function handleDragEnd(event: DragEndEvent) {

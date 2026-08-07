@@ -266,24 +266,6 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
             </div>
           )}
 
-          {/* Excluded items */}
-          {excludedItems.length > 0 && (
-            <div className="mb-6 pt-4 border-t border-dashed border-gray-200">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">אינו כלול בהצעה</p>
-              <div className="flex flex-col gap-1.5">
-                {excludedItems.map((item: any, i: number) => (
-                  <div key={i} className="flex items-start gap-2 text-sm text-gray-500">
-                    <span className="text-gray-300 mt-0.5 shrink-0">·</span>
-                    <div>
-                      <span className="font-medium text-gray-700">{item.name}</span>
-                      {item.description && <span className="text-gray-400"> — {item.description}</span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Payment schedule */}
           {milestones.length > 0 && (
             <div className="pt-6 border-t border-gray-100">

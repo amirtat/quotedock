@@ -28,6 +28,7 @@ interface QuoteBuilderProps {
   defaultValidUntil?: string
   noteTemplates?: NoteTemplate[]
   initialMilestones?: PaymentMilestone[]
+  initialAttachments?: QuoteAttachment[]
 }
 
 function emptyItem(sortOrder: number): Omit<QuoteItem, 'id' | 'quote_id'> {

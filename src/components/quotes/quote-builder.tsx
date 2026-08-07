@@ -267,10 +267,17 @@ export function QuoteBuilder({
         )
       }
 
-      await supabase.from('quote_sections').delete().eq('quote_id', currentQuoteId!)
+      // Diff sections: only delete removed ones, upsert the rest
+      const originalSectionIds = new Set(initialSections.map(s => s.id))
+      const currentSectionIds = new Set(sections.filter(s => s.id).map(s => s.id!))
+      const sectionIdsToDelete = [...originalSectionIds].filter(id => !currentSectionIds.has(id))
+      if (sectionIdsToDelete.length > 0) {
+        await supabase.from('quote_sections').delete().in('id', sectionIdsToDelete)
+      }
       if (sections.length > 0) {
-        const { error: sectionsErr } = await supabase.from('quote_sections').insert(
+        const { error: sectionsErr } = await supabase.from('quote_sections').upsert(
           sections.map((s, i) => ({
+            ...(s.id ? { id: s.id } : {}),
             quote_id: currentQuoteId!,
             title: s.title,
             content: s.content,

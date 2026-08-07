@@ -150,14 +150,9 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                       : item.discount_percent > 0 && <p className="text-xs text-green-600 mt-0.5">הנחה {item.discount_percent}%</p>
                     }
                   </td>
-                  {showQuantity && <td className="py-3.5 text-center text-gray-700">{item.discount_percent === 100 ? '' : item.quantity}</td>}
-                  <td className="py-3.5 text-center text-gray-700">{item.discount_percent === 100 ? '' : formatCurrency(item.unit_price, currency)}</td>
-                  <td className="py-3.5 text-left font-medium">
-                    {item.discount_percent === 100
-                      ? <span className="text-green-600">ללא עלות</span>
-                      : formatCurrency(itemLineTotal(item as any), currency)
-                    }
-                  </td>
+                  {showQuantity && <td className="py-3.5 text-center text-gray-700">{item.quantity}</td>}
+                  <td className="py-3.5 text-center text-gray-700">{formatCurrency(item.unit_price, currency)}</td>
+                  <td className="py-3.5 text-left font-medium">{formatCurrency(itemLineTotal(item as any), currency)}</td>
                 </tr>
               ))}
             </tbody>

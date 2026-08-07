@@ -11,7 +11,7 @@ import CopyLinkButton from '@/components/quotes/copy-link-button'
 import DuplicateQuoteButton from '@/components/quotes/duplicate-quote-button'
 import PrintButton from '@/components/quotes/print-button'
 import DeleteQuoteButton from '@/components/quotes/delete-quote-button'
-import ReactMarkdown from 'react-markdown'
+import { Markdown } from '@/components/ui/markdown'
 
 export default async function QuotePreviewPage({ params }: PageProps<'/dashboard/quotes/[id]/preview'>) {
   const { id } = await params
@@ -114,9 +114,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                     <p className="text-sm font-semibold text-gray-800 leading-snug">{sec.title}</p>
                   </div>
                 )}
-                <div className="flex-1 text-sm text-gray-700 leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-0.5 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-0.5 [&_strong]:font-semibold [&_strong]:text-gray-900 [&_p]:mb-1 [&_p:last-child]:mb-0">
-                  <ReactMarkdown>{sec.content}</ReactMarkdown>
-                </div>
+                <div className="flex-1"><Markdown>{sec.content}</Markdown></div>
               </div>
             ))}
           </div>
@@ -288,9 +286,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                     <p className="text-sm font-semibold text-gray-800 leading-snug">{sec.title}</p>
                   </div>
                 )}
-                <div className="flex-1 text-sm text-gray-700 leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-0.5 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-0.5 [&_strong]:font-semibold [&_strong]:text-gray-900 [&_p]:mb-1 [&_p:last-child]:mb-0">
-                  <ReactMarkdown>{sec.content}</ReactMarkdown>
-                </div>
+                <div className="flex-1"><Markdown>{sec.content}</Markdown></div>
               </div>
             ))}
           </div>
@@ -300,9 +296,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         {quote.notes && (
           <div className="mt-6 pt-6 border-t border-gray-100">
             <p className="text-xs font-medium text-gray-500 uppercase mb-2">הערות</p>
-            <div className="text-sm text-gray-700 leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-0.5 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-0.5 [&_strong]:font-semibold [&_strong]:text-gray-900 [&_p]:mb-1 [&_p:last-child]:mb-0">
-              <ReactMarkdown>{quote.notes}</ReactMarkdown>
-            </div>
+            <Markdown>{quote.notes}</Markdown>
           </div>
         )}
 

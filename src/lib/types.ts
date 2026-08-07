@@ -80,6 +80,14 @@ export interface QuoteItem {
   discount_percent?: number
 }
 
+export interface QuoteSection {
+  id: string
+  quote_id: string
+  title: string
+  content: string
+  sort_order: number
+}
+
 export interface NoteTemplate {
   id: string
   user_id: string

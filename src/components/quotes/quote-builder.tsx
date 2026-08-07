@@ -316,8 +316,8 @@ export function QuoteBuilder({
 
               {/* Column headers */}
               <div className="grid grid-cols-12 gap-2 text-xs text-muted mb-2 px-1">
-                <div className={showQuantity ? 'col-span-6' : 'col-span-8'}>שם / תיאור</div>
-                {showQuantity && <div className="col-span-2 text-center">כמות</div>}
+                <div style={{ gridColumn: `span ${showQuantity ? 6 : 8} / span ${showQuantity ? 6 : 8}` }}>שם / תיאור</div>
+                <div className="col-span-2 text-center" style={{ display: showQuantity ? '' : 'none' }}>כמות</div>
                 <div className="col-span-3 text-center">מחיר</div>
                 <div className="col-span-1" />
               </div>
@@ -325,7 +325,7 @@ export function QuoteBuilder({
               <div className="flex flex-col gap-2">
                 {items.map((item, index) => (
                   <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 rounded-lg bg-surface/60 border border-border/60">
-                    <div className={`${showQuantity ? 'col-span-6' : 'col-span-8'} flex flex-col gap-1.5`}>
+                    <div className="flex flex-col gap-1.5" style={{ gridColumn: `span ${showQuantity ? 6 : 8} / span ${showQuantity ? 6 : 8}` }}>
                       <Input
                         value={item.name}
                         list={`services-ac-${index}`}

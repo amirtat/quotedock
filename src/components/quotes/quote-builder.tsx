@@ -438,7 +438,7 @@ export function QuoteBuilder({
 
             {/* Attachments */}
             {quoteId ? (
-              <AttachmentsManager quoteId={quoteId} userId={userId} />
+              <AttachmentsManager quoteId={quoteId} userId={userId} initialAttachments={initialAttachments} />
             ) : (
               <div className="bg-white rounded-xl border border-border p-5">
                 <h2 className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">מסמכים מצורפים</h2>

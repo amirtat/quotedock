@@ -279,8 +279,14 @@ export function QuoteBuilder({
         )
       }
 
-      showToast(status === 'sent' ? 'ההצעה נשלחה ✓' : 'נשמר ✓')
-      router.push(`/dashboard/quotes/${currentQuoteId}/preview`)
+      if (status === 'sent') {
+        const { data: tokenData } = await supabase.from('quotes').select('public_token').eq('id', currentQuoteId!).single()
+        const publicUrl = `${window.location.origin}/q/${tokenData?.public_token}`
+        setShareData({ url: publicUrl, quoteId: currentQuoteId! })
+      } else {
+        showToast('נשמר ✓')
+        router.push(`/dashboard/quotes/${currentQuoteId}/preview`)
+      }
     } catch {
       showToast('שגיאה בשמירה', 'err')
     } finally {

@@ -35,6 +35,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
   const profile = profileResult.data
   const milestones = milestonesResult.data || []
   const attachments = attachmentsResult.data || []
+  const sections = sectionsResult.data || []
   const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const statusInfo = STATUS_LABELS[quote.status as QuoteStatus]

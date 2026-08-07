@@ -48,6 +48,7 @@ export function QuoteBuilder({
   defaultValidUntil,
   noteTemplates = [],
   initialMilestones = [],
+  initialAttachments = [],
 }: QuoteBuilderProps) {
   const router = useRouter()
   const [deleting, startDelete] = useTransition()

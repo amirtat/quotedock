@@ -105,7 +105,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           {/* Client */}
           {(quote as any).client && (
             <div className="mb-8 p-4 bg-indigo-50/50 rounded-xl border border-indigo-100">
-              <p className="text-xs font-medium text-indigo-400 uppercase tracking-wider mb-1">הצעה עבור</p>
+              <p className="text-xs font-medium text-indigo-400 uppercase tracking-wider mb-1">{T.quote_for}</p>
               <p className="font-semibold text-gray-900 text-lg">{(quote as any).client.name}</p>
               {(quote as any).client.company && <p className="text-gray-600">{(quote as any).client.company}</p>}
               {(quote as any).client.email && <p className="text-sm text-gray-500">{(quote as any).client.email}</p>}

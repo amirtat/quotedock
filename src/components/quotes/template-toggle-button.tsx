@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { LayoutTemplate } from 'lucide-react'
 import { toggleTemplate } from '@/app/actions/quote-actions'
 import { useRouter } from 'next/navigation'
@@ -8,13 +8,22 @@ import { useRouter } from 'next/navigation'
 export default function TemplateToggleButton({ quoteId, isTemplate }: { quoteId: string; isTemplate: boolean }) {
   const [isPending, startTransition] = useTransition()
   const [current, setCurrent] = useState(isTemplate)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+
+  useEffect(() => { setCurrent(isTemplate) }, [isTemplate])
 
   function handleToggle() {
     const next = !current
     setCurrent(next)
+    setError(null)
     startTransition(async () => {
-      await toggleTemplate(quoteId, next)
+      try {
+        await toggleTemplate(quoteId, next)
+      } catch (err: any) {
+        setCurrent(!next)
+        setError(err?.message || 'שגיאה בשמירת תבנית')
+      }
       router.refresh()
     })
   }

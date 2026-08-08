@@ -362,8 +362,8 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           {/* Freelancer signature */}
           {(profile as any)?.freelancer_signature && (
             <div className="mt-8 pt-6 border-t border-gray-100">
-              <p className="text-xs text-gray-400 mb-2">חתימת הספק</p>
-              <img src={(profile as any).freelancer_signature} alt="חתימה" className="max-h-16 max-w-[200px] object-contain" />
+              <p className="text-xs text-gray-400 mb-2">{T.provider_signature}</p>
+              <img src={(profile as any).freelancer_signature} alt={T.signature_label} className="max-h-16 max-w-[200px] object-contain" />
               <p className="text-sm font-medium text-gray-700 mt-1">{profile?.business_name}</p>
             </div>
           )}

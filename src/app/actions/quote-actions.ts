@@ -68,9 +68,10 @@ export async function duplicateQuote(quoteId: string) {
     .insert({
       user_id: user.id,
       client_id: original.client_id,
-      title: `${original.title} (עותק)`,
+      title: original.is_template ? original.title : `${original.title} (עותק)`,
       number: nextNumber,
       status: 'draft',
+      is_template: false,
       notes: original.notes,
       preamble: original.preamble,
       valid_until: original.valid_until,

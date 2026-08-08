@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import { Heebo } from 'next/font/google'
+import { cookies } from 'next/headers'
+import { LangProvider } from '@/lib/lang-context'
+import type { Lang } from '@/lib/i18n'
 import './globals.css'
 
 const heebo = Heebo({
@@ -10,14 +13,20 @@ const heebo = Heebo({
 })
 
 export const metadata: Metadata = {
-  title: 'QuoteDock - הצעות מחיר מקצועיות',
-  description: 'צור והפץ הצעות מחיר מקצועיות בדקות',
+  title: 'QuoteDock',
+  description: 'Professional quotes, fast',
 }
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+export default async function RootLayout({ children }: LayoutProps<'/'>) {
+  const cookieStore = await cookies()
+  const lang: Lang = cookieStore.get('qdl')?.value === 'en' ? 'en' : 'he'
+  const dir = lang === 'en' ? 'ltr' : 'rtl'
+
   return (
-    <html lang="he" dir="rtl" className={`h-full ${heebo.variable}`}>
-      <body className="min-h-full antialiased">{children}</body>
+    <html lang={lang} dir={dir} className={`h-full ${heebo.variable}`}>
+      <body className="min-h-full antialiased">
+        <LangProvider lang={lang}>{children}</LangProvider>
+      </body>
     </html>
   )
 }

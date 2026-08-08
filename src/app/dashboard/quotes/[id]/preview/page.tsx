@@ -11,6 +11,7 @@ import CopyLinkButton from '@/components/quotes/copy-link-button'
 import DuplicateQuoteButton from '@/components/quotes/duplicate-quote-button'
 import PrintButton from '@/components/quotes/print-button'
 import DeleteQuoteButton from '@/components/quotes/delete-quote-button'
+import TemplateToggleButton from '@/components/quotes/template-toggle-button'
 import { Markdown } from '@/components/ui/markdown'
 
 export default async function QuotePreviewPage({ params }: PageProps<'/dashboard/quotes/[id]/preview'>) {

@@ -189,13 +189,13 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           <div className="flex justify-end mb-6">
             <div className="w-64 flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">סכום ביניים</span>
+                <span className="text-gray-600">{T.subtotal}</span>
                 <span>{formatCurrency(subtotal, currency)}</span>
               </div>
               {quote.discount > 0 && (
                 <div className="flex justify-between text-red-500">
                   <span>
-                    {(quote as any).discount_reason ? `הנחה — ${(quote as any).discount_reason}` : 'הנחה'}
+                    {(quote as any).discount_reason ? `${T.discount} — ${(quote as any).discount_reason}` : T.discount}
                     {(quote as any).discount_type !== 'fixed' && ` (${quote.discount}%)`}
                   </span>
                   <span>-{formatCurrency(discountAmount, currency)}</span>
@@ -203,17 +203,17 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
               )}
               {quote.include_vat && vatRate > 0 && (
                 <div className="flex justify-between text-gray-600">
-                  <span>מע&quot;מ ({vatRate}%)</span>
+                  <span>{T.vat} ({vatRate}%)</span>
                   <span>{formatCurrency(vatAmount, currency)}</span>
                 </div>
               )}
               {vatRate === 0 && (
                 <div className="flex justify-between text-gray-500 text-xs">
-                  <span>פטור ממע&quot;מ</span>
+                  <span>{T.vat_exempt}</span>
                 </div>
               )}
               <div className="flex justify-between border-t-2 border-gray-200 pt-3 font-black text-xl">
-                <span>סה&quot;כ לתשלום</span>
+                <span>{T.grand_total}</span>
                 <span className="text-indigo-600">{formatCurrency(total, currency)}</span>
               </div>
             </div>

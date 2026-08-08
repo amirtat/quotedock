@@ -456,6 +456,29 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
           </CardContent>
         </Card>
 
+        <Card>
+          <CardHeader>
+            <CardTitle>תבנית הודעת שיתוף</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            <p className="text-xs text-gray-500">
+              הטקסט שיופיע בחלון השיתוף בעת שליחת הצעה. ניתן להשתמש ב:
+              <span className="font-mono bg-gray-100 rounded px-1 mx-1 text-gray-700">{'{{שם_פרטי}}'}</span>
+              <span className="font-mono bg-gray-100 rounded px-1 mx-1 text-gray-700">{'{{שם_מלא}}'}</span>
+              <span className="font-mono bg-gray-100 rounded px-1 mx-1 text-gray-700">{'{{כותרת}}'}</span>
+              <span className="font-mono bg-gray-100 rounded px-1 mx-1 text-gray-700">{'{{לינק}}'}</span>
+            </p>
+            <textarea
+              value={form.share_message_template}
+              onChange={(e) => setForm({ ...form, share_message_template: e.target.value })}
+              rows={12}
+              placeholder={`היי {{שם_פרטי}},\n\nהצעת המחיר זמינה כאן:\n{{לינק}}`}
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm text-gray-800 leading-relaxed resize-none focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors font-mono"
+              dir="rtl"
+            />
+          </CardContent>
+        </Card>
+
         <div className="flex items-center gap-3">
           <Button type="submit" loading={saving}>שמור הגדרות</Button>
           {saved && <span className="text-sm text-green-600 font-medium">נשמר בהצלחה ✓</span>}

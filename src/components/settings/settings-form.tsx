@@ -11,7 +11,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Upload, X, RotateCcw } from 'lucide-react'
 import { useT } from '@/lib/lang-context'
-import { setLangCookie } from '@/app/actions/lang-actions'
 
 function SignaturePad({ onChange, T }: { onChange: (dataUrl: string | null) => void; T: ReturnType<typeof useT> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -123,7 +122,6 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     show_quantity_default: profile?.show_quantity_default ?? false,
     share_message_template: profile?.share_message_template || '',
     quote_items_header: profile?.quote_items_header || '',
-    language: (profile as any)?.language || 'he',
   })
   const [logoUrl, setLogoUrl] = useState<string | null>(profile?.logo_url || null)
   const [logoUploading, setLogoUploading] = useState(false)
@@ -237,7 +235,6 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     if (error) {
       setSaveError(error.message)
     } else {
-      await setLangCookie(form.language as 'he' | 'en')
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
       router.refresh()

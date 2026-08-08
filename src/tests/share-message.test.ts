@@ -57,3 +57,39 @@ describe('share message placeholder replacement', () => {
     expect(result).toBe('{{לא_קיים}}')
   })
 })
+
+describe('share message — English placeholders', () => {
+  const url = 'https://quotedock.vercel.app/q/abc123'
+
+  it('replaces {{first_name}} with first name', () => {
+    const result = applyTemplate('Hi {{first_name}},', { firstName: 'Danny', fullName: 'Danny Levy', title: 'Project', url })
+    expect(result).toBe('Hi Danny,')
+  })
+
+  it('replaces {{full_name}} with full name', () => {
+    const result = applyTemplate('Hello {{full_name}}', { firstName: 'Danny', fullName: 'Danny Levy', title: 'Project', url })
+    expect(result).toBe('Hello Danny Levy')
+  })
+
+  it('replaces {{title}} with quote title', () => {
+    const result = applyTemplate('Quote: {{title}}', { firstName: '', fullName: '', title: 'Website Design', url })
+    expect(result).toBe('Quote: Website Design')
+  })
+
+  it('replaces {{link}} with url', () => {
+    const result = applyTemplate('{{link}}', { firstName: '', fullName: '', title: '', url })
+    expect(result).toBe(url)
+  })
+
+  it('replaces multiple English placeholders in one template', () => {
+    const template = 'Hi {{first_name}},\n\nThe quote is here:\n{{link}}'
+    const result = applyTemplate(template, { firstName: 'Roni', fullName: 'Roni Cohen', title: 'App', url })
+    expect(result).toBe(`Hi Roni,\n\nThe quote is here:\n${url}`)
+  })
+
+  it('Hebrew and English placeholders can coexist in same template', () => {
+    const template = '{{שם_פרטי}} / {{first_name}}'
+    const result = applyTemplate(template, { firstName: 'Dana', fullName: '', title: '', url: '' })
+    expect(result).toBe('Dana / Dana')
+  })
+})

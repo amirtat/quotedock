@@ -332,7 +332,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           {/* Notes */}
           {quote.notes && (
             <div className="pt-6 border-t border-gray-100">
-              <p className="text-xs font-medium text-gray-500 uppercase mb-2">הערות</p>
+              <p className="text-xs font-medium text-gray-500 uppercase mb-2">{T.notes}</p>
               <Markdown>{quote.notes}</Markdown>
             </div>
           )}

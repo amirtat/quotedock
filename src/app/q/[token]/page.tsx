@@ -255,18 +255,18 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           {/* Optional items */}
           {optionalItems.length > 0 && (
             <div className="mb-6 pt-4 border-t border-dashed border-amber-200">
-              <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-3">תוספות אופציונליות</p>
+              <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-3">{T.optional_items}</p>
               <div className="flex flex-col gap-2">
                 {optionalItems.map((item: any, i: number) => (
                   <div key={i} className="flex justify-between items-start p-3 rounded-lg border border-amber-100 bg-amber-50/40">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <p className="font-medium text-gray-900">{item.name}</p>
-                        <span className="text-xs bg-amber-100 text-amber-700 border border-amber-200 rounded-full px-2 py-0.5 shrink-0">אופציונלי</span>
+                        <span className="text-xs bg-amber-100 text-amber-700 border border-amber-200 rounded-full px-2 py-0.5 shrink-0">{T.optional}</span>
                       </div>
                       {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
                       {item.item_type === 'recurring' && item.recurring_interval && (
-                        <p className="text-xs text-gray-400 mt-0.5">{intervalLabel(item.recurring_interval)}</p>
+                        <p className="text-xs text-gray-400 mt-0.5">{intervalLabel(item.recurring_interval, lang)}</p>
                       )}
                     </div>
                     <p className="font-medium text-gray-700 shrink-0 text-left">{formatCurrency(itemLineTotal(item as any), currency)}</p>

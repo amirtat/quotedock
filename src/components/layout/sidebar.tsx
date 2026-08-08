@@ -13,11 +13,13 @@ import {
   LogOut,
   Plus,
   HelpCircle,
+  LayoutTemplate,
 } from 'lucide-react'
 
 const navItems = [
   { href: '/dashboard', label: 'לוח בקרה', icon: LayoutDashboard, exact: true },
   { href: '/dashboard/quotes', label: 'הצעות מחיר', icon: FileText },
+  { href: '/dashboard/templates', label: 'תבניות', icon: LayoutTemplate },
   { href: '/dashboard/clients', label: 'לקוחות', icon: Users },
   { href: '/dashboard/services', label: 'שירותים', icon: Briefcase },
   { href: '/dashboard/settings', label: 'הגדרות', icon: Settings },

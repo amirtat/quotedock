@@ -116,5 +116,17 @@ export async function duplicateQuote(quoteId: string) {
     )
   }
 
+  if (sourceSections && sourceSections.length > 0) {
+    await supabase.from('quote_sections').insert(
+      sourceSections.map((s) => ({
+        quote_id: newQuote.id,
+        title: s.title,
+        content: s.content,
+        position: s.position,
+        sort_order: s.sort_order,
+      }))
+    )
+  }
+
   redirect(`/dashboard/quotes/${newQuote.id}`)
 }

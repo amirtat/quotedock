@@ -487,26 +487,6 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>{T.language_setting}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex gap-3">
-              {(['he', 'en'] as const).map((l) => (
-                <button
-                  key={l}
-                  type="button"
-                  onClick={() => setForm({ ...form, language: l })}
-                  className={`text-sm px-4 py-1.5 rounded-full border transition-colors ${form.language === l ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-500 border-gray-200 hover:border-gray-400'}`}
-                >
-                  {l === 'he' ? T.language_he : T.language_en}
-                </button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
             <CardTitle>{T.share_template}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">

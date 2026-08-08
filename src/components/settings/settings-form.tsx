@@ -133,6 +133,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
   const [freelancerSignature, setFreelancerSignature] = useState<string | null>(profile?.freelancer_signature || null)
   const [sigUploading, setSigUploading] = useState(false)
   const sigFileRef = useRef<HTMLInputElement>(null)
+  const shareTemplateRef = useRef<HTMLTextAreaElement>(null)
   const [canvasSig, setCanvasSig] = useState<string | null>(null)
 
   async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -206,6 +207,19 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     await supabase.from('profiles').update({ freelancer_signature: null }).eq('id', userId)
     setFreelancerSignature(null)
     setCanvasSig(null)
+  }
+
+  function insertPlaceholder(placeholder: string) {
+    const el = shareTemplateRef.current
+    if (!el) return
+    const start = el.selectionStart ?? form.share_message_template.length
+    const end = el.selectionEnd ?? start
+    const newValue = form.share_message_template.slice(0, start) + placeholder + form.share_message_template.slice(end)
+    setForm({ ...form, share_message_template: newValue })
+    requestAnimationFrame(() => {
+      el.selectionStart = el.selectionEnd = start + placeholder.length
+      el.focus()
+    })
   }
 
   async function handleSave(e: React.FormEvent) {
@@ -461,14 +475,23 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
             <CardTitle>תבנית הודעת שיתוף</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
-            <p className="text-xs text-gray-500">
-              הטקסט שיופיע בחלון השיתוף בעת שליחת הצעה. ניתן להשתמש ב:
-              <span className="font-mono bg-gray-100 rounded px-1 mx-1 text-gray-700">{'{{שם_פרטי}}'}</span>
-              <span className="font-mono bg-gray-100 rounded px-1 mx-1 text-gray-700">{'{{שם_מלא}}'}</span>
-              <span className="font-mono bg-gray-100 rounded px-1 mx-1 text-gray-700">{'{{כותרת}}'}</span>
-              <span className="font-mono bg-gray-100 rounded px-1 mx-1 text-gray-700">{'{{לינק}}'}</span>
-            </p>
+            <div className="flex flex-col gap-1.5">
+              <p className="text-xs text-gray-500">לחץ על placeholder להכנסה בנקודת הסמן:</p>
+              <div className="flex flex-wrap gap-1.5">
+                {[['{{שם_פרטי}}', 'שם פרטי'], ['{{שם_מלא}}', 'שם מלא'], ['{{כותרת}}', 'כותרת ההצעה'], ['{{לינק}}', 'לינק להצעה']].map(([ph, label]) => (
+                  <button
+                    key={ph}
+                    type="button"
+                    onClick={() => insertPlaceholder(ph)}
+                    className="font-mono text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded px-2 py-1 transition-colors"
+                  >
+                    {ph}
+                  </button>
+                ))}
+              </div>
+            </div>
             <textarea
+              ref={shareTemplateRef}
               value={form.share_message_template}
               onChange={(e) => setForm({ ...form, share_message_template: e.target.value })}
               rows={12}

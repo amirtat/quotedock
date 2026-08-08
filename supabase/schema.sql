@@ -236,6 +236,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS freelancer_signature TEXT;
 -- ALTER TABLE quote_items ADD COLUMN IF NOT EXISTS discount_percent DECIMAL(5,2) DEFAULT 0;
 
+-- Migration: share message template (run if upgrading from earlier schema)
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS share_message_template TEXT;
+
 -- Helper: get next quote number for a user
 CREATE OR REPLACE FUNCTION get_next_quote_number(p_user_id UUID)
 RETURNS TEXT AS $$

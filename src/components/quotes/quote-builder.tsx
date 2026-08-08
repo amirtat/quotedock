@@ -47,6 +47,7 @@ interface QuoteBuilderProps {
   initialAttachments?: QuoteAttachment[]
   initialSections?: QuoteSection[]
   showQuantityDefault?: boolean
+  shareMessageTemplate?: string | null
 }
 
 type ItemRow = Omit<QuoteItem, 'id' | 'quote_id'> & { id?: string; _key: string }

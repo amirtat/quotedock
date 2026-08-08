@@ -18,8 +18,10 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
 
   if (!quote) notFound()
 
-  // Mark as viewed if first time
-  if (quote.status === 'sent' && !quote.viewed_at) {
+  // Mark as viewed if first time — skip if the owner is viewing
+  const { data: { user } } = await supabase.auth.getUser()
+  const isOwner = user?.id === quote.user_id
+  if (!isOwner && quote.status === 'sent' && !quote.viewed_at) {
     await supabase
       .from('quotes')
       .update({ status: 'viewed', viewed_at: new Date().toISOString() })

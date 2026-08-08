@@ -147,23 +147,38 @@ CREATE TABLE faqs (
   question TEXT NOT NULL,
   answer TEXT NOT NULL,
   sort_order INTEGER DEFAULT 0,
+  lang TEXT NOT NULL DEFAULT 'he',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "FAQs are publicly readable" ON faqs FOR SELECT USING (true);
 
-INSERT INTO faqs (question, answer, sort_order) VALUES
-  ('איך שולחים הצעת מחיר ללקוח?', 'לוחצים על "תצוגה מקדימה" בהצעה ואז על "העתק קישור". שולחים את הקישור ללקוח — הוא רואה עמוד נקי ללא צורך בהרשמה.', 1),
-  ('מה ההבדל בין סטטוס "נשלחה" ל"נצפתה"?', '"נצפתה" אומר שהלקוח פתח את הקישור. השינוי קורה אוטומטית בפעם הראשונה שהלקוח פותח את ההצעה.', 2),
-  ('האם הלקוח יכול לחתום דיגיטלית?', 'כן. בתחתית עמוד ההצעה הלקוח יכול לאשר, לדחות, ולחתום חתימה דיגיטלית. אתה מקבל עדכון בזמן אמת.', 3),
-  ('אני עוסק זעיר — האם יש תמיכה בפטור ממע"מ?', 'כן. בהגדרות ← "הגדרות מחירים" ← סמנו "עוסק זעיר (פטור ממע"מ)". ההצעות יציגו אוטומטית "פטור ממע"מ" ללא שורת מע"מ.', 4),
-  ('איך מוסיפים לוגו להצעות?', 'בהגדרות ← "פרטי העסק" ← "העלה לוגו". הלוגו יופיע אוטומטית בכל ההצעות שתשלחו.', 5),
-  ('האם ניתן לשלוח הצעה שוב לאחר שנשלחה?', 'כן, הקישור קבוע ותמיד פעיל. ניתן לשנות את תוכן ההצעה ואז לשלוח את אותו קישור מחדש.', 6),
-  ('האם הנתונים שלי מאובטחים?', 'כן. הנתונים מאוחסנים ב-Supabase עם Row Level Security — אך ורק אתה רואה את ההצעות והלקוחות שלך.', 7),
-  ('האם יש מגבלה על מספר ההצעות?', 'בשלב הנוכחי אין מגבלה על מספר ההצעות, הלקוחות, או השירותים.', 8),
-  ('מה עושה "שירותים" בתפריט?', 'שירותים הם פריטים שמורים שאפשר להוסיף להצעה בלחיצה — חוסך הקלדה חוזרת של שמות ומחירים שגרתיים.', 9),
-  ('האם ניתן לשנות את המטבע?', 'כן, בהגדרות ← "הגדרות מחירים" ← שדה מטבע. ניתן לבחור בין ₪ שקל, $ דולר, ו-€ אירו.', 10);
+INSERT INTO faqs (question, answer, sort_order, lang) VALUES
+  -- Hebrew
+  ('האם הלקוח צריך חשבון?', 'לא. הלקוח מקבל קישור ויכול לצפות בהצעה, לאשר ולחתום — הכל ללא הרשמה.', 0, 'he'),
+  ('איך שולחים הצעת מחיר ללקוח?', 'לוחצים על "תצוגה מקדימה" בהצעה ואז על "העתק קישור". שולחים את הקישור ללקוח — הוא רואה עמוד נקי ללא צורך בהרשמה.', 1, 'he'),
+  ('מה ההבדל בין סטטוס "נשלחה" ל"נצפתה"?', '"נצפתה" אומר שהלקוח פתח את הקישור. השינוי קורה אוטומטית בפעם הראשונה שהלקוח פותח את ההצעה.', 2, 'he'),
+  ('האם הלקוח יכול לחתום דיגיטלית?', 'כן. בתחתית עמוד ההצעה הלקוח יכול לאשר, לדחות, ולחתום חתימה דיגיטלית. אתה מקבל עדכון בזמן אמת.', 3, 'he'),
+  ('אני עוסק זעיר — האם יש תמיכה בפטור ממע"מ?', 'כן. בהגדרות ← "הגדרות מחירים" ← סמנו "עוסק זעיר (פטור ממע"מ)". ההצעות יציגו אוטומטית "פטור ממע"מ" ללא שורת מע"מ.', 4, 'he'),
+  ('איך מוסיפים לוגו להצעות?', 'בהגדרות ← "פרטי העסק" ← "העלה לוגו". הלוגו יופיע אוטומטית בכל ההצעות שתשלחו.', 5, 'he'),
+  ('האם ניתן לשלוח הצעה שוב לאחר שנשלחה?', 'כן, הקישור קבוע ותמיד פעיל. ניתן לשנות את תוכן ההצעה ואז לשלוח את אותו קישור מחדש.', 6, 'he'),
+  ('האם הנתונים שלי מאובטחים?', 'כן. הנתונים מאוחסנים ב-Supabase עם Row Level Security — אך ורק אתה רואה את ההצעות והלקוחות שלך.', 7, 'he'),
+  ('האם יש מגבלה על מספר ההצעות?', 'בשלב הנוכחי אין מגבלה על מספר ההצעות, הלקוחות, או השירותים.', 8, 'he'),
+  ('מה עושה "שירותים" בתפריט?', 'שירותים הם פריטים שמורים שאפשר להוסיף להצעה בלחיצה — חוסך הקלדה חוזרת של שמות ומחירים שגרתיים.', 9, 'he'),
+  ('האם ניתן לשנות את המטבע?', 'כן, בהגדרות ← "הגדרות מחירים" ← שדה מטבע. ניתן לבחור בין ₪ שקל, $ דולר, ו-€ אירו.', 10, 'he'),
+  -- English
+  ('Does the client need an account?', 'No. The client receives a link and can view the quote, accept it, and sign — all without registering.', 0, 'en'),
+  ('How do I send a quote to a client?', 'Click "Preview" on the quote, then "Copy link". Send the link to your client — they see a clean page with no sign-up required.', 1, 'en'),
+  ('What''s the difference between "Sent" and "Viewed" status?', '"Viewed" means the client opened the link. It updates automatically the first time they open the quote.', 2, 'en'),
+  ('Can the client sign digitally?', 'Yes. At the bottom of the quote page, the client can accept, decline, and sign digitally. You get a real-time update.', 3, 'en'),
+  ('I''m self-employed — is VAT exemption supported?', 'Yes. In Settings → "Pricing Settings" → check "Small business (VAT exempt)". Quotes will automatically show "VAT exempt" with no VAT line.', 4, 'en'),
+  ('How do I add a logo to quotes?', 'In Settings → "Business Details" → "Upload logo". The logo will appear automatically on all quotes you send.', 5, 'en'),
+  ('Can I resend a quote after it''s been sent?', 'Yes, the link is fixed and always active. You can edit the quote content and resend the same link.', 6, 'en'),
+  ('Is my data secure?', 'Yes. Data is stored in Supabase with Row Level Security — only you can see your quotes and clients.', 7, 'en'),
+  ('Is there a limit on the number of quotes?', 'Currently there is no limit on the number of quotes, clients, or services.', 8, 'en'),
+  ('What does "Services" in the menu do?', 'Services are saved items you can quickly add to a quote — a shortcut that saves names and prices you use repeatedly.', 9, 'en'),
+  ('Can I change the currency?', 'Yes. In Settings → "Pricing Settings" → Currency field. You can choose between ₪ Shekel, $ Dollar, and € Euro.', 10, 'en');
 
 -- App-wide configuration (editable via Supabase dashboard or settings UI)
 CREATE TABLE app_config (

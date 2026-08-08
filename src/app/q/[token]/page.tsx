@@ -160,10 +160,10 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           <table className="hidden sm:table w-full text-sm mb-6">
             <thead>
               <tr className="border-b-2 border-gray-200">
-                <th className="text-right py-3 font-semibold text-gray-700">פריט</th>
-                {showQuantity && <th className="text-center py-3 font-semibold text-gray-700 w-20">כמות</th>}
-                <th className="text-center py-3 font-semibold text-gray-700 w-28">מחיר יחידה</th>
-                <th className="text-left py-3 font-semibold text-gray-700 w-28">סה&quot;כ</th>
+                <th className="text-right py-3 font-semibold text-gray-700">{T.item_col}</th>
+                {showQuantity && <th className="text-center py-3 font-semibold text-gray-700 w-20">{T.quantity}</th>}
+                <th className="text-center py-3 font-semibold text-gray-700 w-28">{T.unit_price}</th>
+                <th className="text-left py-3 font-semibold text-gray-700 w-28">{T.total}</th>
               </tr>
             </thead>
             <tbody>

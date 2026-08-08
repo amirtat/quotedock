@@ -32,29 +32,17 @@ function WhatsAppIcon() {
   )
 }
 
-export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clientName, clientEmail, onClose }: ShareDialogProps) {
+export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clientName, clientEmail, messageTemplate, onClose }: ShareDialogProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
 
   const firstName = clientName?.split(' ')[0] || ''
-  const defaultMessage = [
-    firstName ? `היי ${firstName},` : 'היי,',
-    '',
-    'שמח לשלוח לכם את הצעת המחיר לפרויקט.',
-    'הפרויקט מעניין אותי מאוד, ואשמח לקחת בו חלק ולהפוך את הרעיון לפתרון מלא, חכם ואוטומטי.',
-    '',
-    'הצעת המחיר זמינה כאן:',
-    quoteUrl,
-    'להצעה מצורפים שני מסמכים:',
-    'דוח אפיון מפורט כולל התהליך המלא, הסטאק הטכנולוגי המוצע ותחזית העלויות',
-    'תרשים זרימה ויזואלי של המערכת',
-    '',
-    'אשלח גם בוואטסאפ הודעה עם קצת רקע על ההצעה ועל שיתוף הפעולה שאני מציע.',
-    '',
-    'אמיר טטרסקי',
-    'TripleA.I',
-    '052-3450000',
-  ].join('\n')
+  const template = messageTemplate || FALLBACK_TEMPLATE
+  const defaultMessage = template
+    .replace(/\{\{שם_פרטי\}\}/g, firstName || clientName || '')
+    .replace(/\{\{שם_מלא\}\}/g, clientName || '')
+    .replace(/\{\{כותרת\}\}/g, quoteTitle)
+    .replace(/\{\{לינק\}\}/g, quoteUrl)
 
   const [message, setMessage] = useState(defaultMessage)
 

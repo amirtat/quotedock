@@ -45,6 +45,8 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   const milestones = milestonesResult.data || []
   const attachments = attachmentsResult.data || []
   const sections = sectionsResult.data || []
+  const lang = getLang(profile?.language || 'he')
+  const T = t[lang]
   const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const { subtotal, discountAmount, vatAmount, total } = calcTotal(items as any, quote.discount, vatRate, quote.include_vat, (quote as any).discount_type || 'percent')

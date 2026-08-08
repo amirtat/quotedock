@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
-import { useT } from '@/lib/lang-context'
+import { useT, useLang } from '@/lib/lang-context'
+import { setLangCookie } from '@/app/actions/lang-actions'
 import {
   LayoutDashboard,
   FileText,

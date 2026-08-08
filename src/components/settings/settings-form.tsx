@@ -458,6 +458,15 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                 />
               </div>
             </div>
+            <div className="flex flex-col gap-1.5">
+              <Label>כותרת סעיף ההצעה</Label>
+              <p className="text-xs text-gray-400">הכותרת שתופיע בין הפסקאות הפותחות לבין פריטי ההצעה (למשל: ״ההצעה״, ״פירוט השירותים״)</p>
+              <Input
+                value={form.quote_items_header}
+                onChange={(e) => setForm({ ...form, quote_items_header: e.target.value })}
+                placeholder="ההצעה"
+              />
+            </div>
             <div className="flex items-center gap-2 pt-2">
               <Checkbox
                 id="show-qty"

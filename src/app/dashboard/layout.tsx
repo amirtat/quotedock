@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 import { Sidebar } from '@/components/layout/sidebar'
+import type { Lang } from '@/lib/i18n'
 
 export default async function DashboardLayout({ children }: LayoutProps<'/dashboard'>) {
   const supabase = await createClient()
@@ -12,9 +14,16 @@ export default async function DashboardLayout({ children }: LayoutProps<'/dashbo
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('business_name, email, logo_url')
+    .select('business_name, email, logo_url, language')
     .eq('id', user.id)
     .single()
+
+  // Keep lang cookie in sync with profile setting
+  const lang: Lang = profile?.language === 'en' ? 'en' : 'he'
+  const cookieStore = await cookies()
+  if (cookieStore.get('qdl')?.value !== lang) {
+    cookieStore.set('qdl', lang, { path: '/', maxAge: 60 * 60 * 24 * 365 })
+  }
 
   return (
     <div className="flex min-h-screen">

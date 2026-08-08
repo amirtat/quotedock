@@ -86,7 +86,7 @@ export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clien
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              rows={8}
+              rows={13}
               className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm text-gray-800 leading-relaxed resize-none focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors"
               dir="rtl"
             />

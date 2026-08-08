@@ -317,6 +317,7 @@ export function QuoteBuilder({
         quoteTitle={title}
         clientName={selectedClient?.name}
         clientEmail={selectedClient?.email || undefined}
+        messageTemplate={shareMessageTemplate}
         onClose={() => setShareData(null)}
       />
     )}

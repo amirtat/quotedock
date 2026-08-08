@@ -119,6 +119,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     default_quote_validity_days: profile?.default_quote_validity_days ?? 30,
     show_quantity_default: profile?.show_quantity_default ?? false,
     share_message_template: profile?.share_message_template || '',
+    quote_items_header: profile?.quote_items_header || '',
   })
   const [logoUrl, setLogoUrl] = useState<string | null>(profile?.logo_url || null)
   const [logoUploading, setLogoUploading] = useState(false)

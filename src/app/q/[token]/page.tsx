@@ -222,7 +222,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           {/* Recurring items */}
           {recurringItems.length > 0 && (
             <div className="mb-6 pt-4 border-t border-gray-100">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">תשלומים חוזרים</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">{T.recurring_items}</p>
               <div className="sm:hidden flex flex-col divide-y divide-gray-100">
                 {recurringItems.map((item: any, i: number) => (
                   <div key={i} className="py-3 flex justify-between items-start gap-3">

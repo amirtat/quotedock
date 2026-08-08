@@ -3,6 +3,7 @@
  */
 import { describe, it, expect } from 'vitest'
 
+// Mirrors the full replacement logic in share-dialog.tsx (Hebrew + English placeholders)
 function applyTemplate(template: string, { firstName, fullName, title, url }: {
   firstName: string; fullName: string; title: string; url: string
 }): string {
@@ -11,6 +12,10 @@ function applyTemplate(template: string, { firstName, fullName, title, url }: {
     .replace(/\{\{שם_מלא\}\}/g, fullName)
     .replace(/\{\{כותרת\}\}/g, title)
     .replace(/\{\{לינק\}\}/g, url)
+    .replace(/\{\{first_name\}\}/g, firstName)
+    .replace(/\{\{full_name\}\}/g, fullName)
+    .replace(/\{\{title\}\}/g, title)
+    .replace(/\{\{link\}\}/g, url)
 }
 
 describe('share message placeholder replacement', () => {

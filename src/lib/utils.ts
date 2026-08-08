@@ -45,14 +45,15 @@ export function calcTotal(
   return { subtotal, discountAmount, vatAmount, total, recurringSubtotal }
 }
 
-const INTERVAL_LABELS: Record<string, string> = {
-  monthly: 'חודשי',
-  quarterly: 'רבעוני',
-  yearly: 'שנתי',
+const INTERVAL_LABELS: Record<string, Record<Lang, string>> = {
+  monthly: { he: 'חודשי', en: 'Monthly' },
+  quarterly: { he: 'רבעוני', en: 'Quarterly' },
+  yearly: { he: 'שנתי', en: 'Yearly' },
 }
 
-export function intervalLabel(interval: string | null): string {
-  return interval ? (INTERVAL_LABELS[interval] || interval) : 'חודשי'
+export function intervalLabel(interval: string | null, lang: Lang = 'he'): string {
+  if (!interval) return INTERVAL_LABELS.monthly[lang]
+  return INTERVAL_LABELS[interval]?.[lang] ?? interval
 }
 
 export const FALLBACK_VAT_RATE = 18

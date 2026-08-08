@@ -14,6 +14,7 @@ export interface Profile {
   default_quote_validity_days: number
   show_quantity_default: boolean
   freelancer_signature: string | null
+  share_message_template: string | null
   created_at: string
 }
 

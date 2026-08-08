@@ -62,6 +62,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
           <DeleteQuoteButton quoteId={id} />
         </div>
         <div className="flex items-center gap-2">
+          <TemplateToggleButton quoteId={id} isTemplate={!!(quote as any).is_template} />
           <PrintButton />
           <DuplicateQuoteButton quoteId={id} />
           <CopyLinkButton url={publicUrl} />

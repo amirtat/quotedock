@@ -66,12 +66,12 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
         {/* Status banner */}
         {isAccepted && (
           <div className="mb-4 rounded-xl bg-green-50 border border-green-200 p-4 text-center text-green-700 font-medium">
-            ✓ ההצעה אושרה — תודה!
+            {T.quote_accepted_thanks}
           </div>
         )}
         {isDeclined && (
           <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-4 text-center text-red-700 font-medium">
-            ההצעה נדחתה
+            {T.quote_declined}
           </div>
         )}
 

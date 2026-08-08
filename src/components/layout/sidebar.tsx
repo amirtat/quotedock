@@ -62,8 +62,8 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
 
   return (
     <aside className="w-56 min-h-screen bg-obsidian flex flex-col shrink-0 select-none">
-      {/* Logo */}
-      <div className="px-5 py-5">
+      {/* Logo + language toggle */}
+      <div className="px-5 py-5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-lg bg-saffron flex items-center justify-center shrink-0">
             <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -71,6 +71,22 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
             </svg>
           </div>
           <span className="text-white font-bold text-[15px] tracking-tight">QuoteDock</span>
+        </div>
+        <div className="flex items-center gap-1">
+          {([['he', '🇮🇱', 'עב'], ['en', '🇬🇧', 'EN']] as const).map(([l, flag, label]) => (
+            <button
+              key={l}
+              onClick={l !== lang ? handleLangSwitch : undefined}
+              className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-xs transition-colors ${
+                l === lang
+                  ? 'text-white/80 bg-obsidian-700'
+                  : 'text-white/30 hover:text-white/60'
+              }`}
+            >
+              <span>{flag}</span>
+              <span className="font-medium">{label}</span>
+            </button>
+          ))}
         </div>
       </div>
 

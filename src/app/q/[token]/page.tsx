@@ -229,7 +229,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-gray-900">{item.name}</p>
                       {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
-                      <p className="text-xs text-gray-400 mt-1">{intervalLabel(item.recurring_interval)}</p>
+                      <p className="text-xs text-gray-400 mt-1">{intervalLabel(item.recurring_interval, lang)}</p>
                     </div>
                     <p className="font-semibold text-gray-900 shrink-0">{formatCurrency(itemLineTotal(item as any), currency)}</p>
                   </div>
@@ -243,7 +243,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                         <p className="font-medium text-gray-900">{item.name}</p>
                         {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
                       </td>
-                      <td className="py-3 text-left text-gray-500 text-xs w-24">{intervalLabel(item.recurring_interval)}</td>
+                      <td className="py-3 text-left text-gray-500 text-xs w-24">{intervalLabel(item.recurring_interval, lang)}</td>
                       <td className="py-3 text-left font-medium w-28">{formatCurrency(itemLineTotal(item as any), currency)}</td>
                     </tr>
                   ))}

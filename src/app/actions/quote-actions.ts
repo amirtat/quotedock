@@ -131,3 +131,17 @@ export async function duplicateQuote(quoteId: string) {
 
   redirect(`/dashboard/quotes/${newQuote.id}`)
 }
+
+export async function toggleTemplate(quoteId: string, isTemplate: boolean) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Unauthorized')
+
+  const { error } = await supabase
+    .from('quotes')
+    .update({ is_template: isTemplate })
+    .eq('id', quoteId)
+    .eq('user_id', user.id)
+
+  if (error) throw new Error(error.message)
+}

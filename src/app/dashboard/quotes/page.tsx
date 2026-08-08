@@ -20,7 +20,7 @@ export default async function QuotesPage() {
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
-  const allQuotes: Quote[] = quotes || []
+  const allQuotes: Quote[] = (quotes || []).filter(q => !q.is_template)
 
   return (
     <div className="p-6 max-w-5xl mx-auto">

@@ -36,8 +36,8 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/auth/login', request.url))
   }
 
-  // Redirect authenticated users away from auth pages
-  if (user && (pathname === '/auth/login' || pathname === '/auth/signup')) {
+  // Redirect authenticated users away from auth pages and landing page
+  if (user && (pathname === '/auth/login' || pathname === '/auth/signup' || pathname === '/')) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 

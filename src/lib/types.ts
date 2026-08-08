@@ -15,6 +15,7 @@ export interface Profile {
   show_quantity_default: boolean
   freelancer_signature: string | null
   share_message_template: string | null
+  quote_items_header: string | null
   created_at: string
 }
 

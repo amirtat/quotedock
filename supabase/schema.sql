@@ -236,6 +236,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS freelancer_signature TEXT;
 -- ALTER TABLE quote_items ADD COLUMN IF NOT EXISTS discount_percent DECIMAL(5,2) DEFAULT 0;
 
+-- Migration: quote templates (run if upgrading from earlier schema)
+-- ALTER TABLE quotes ADD COLUMN IF NOT EXISTS is_template BOOLEAN DEFAULT false;
+
 -- Migration: share message template + quote items header (run if upgrading from earlier schema)
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS share_message_template TEXT;
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS quote_items_header TEXT;

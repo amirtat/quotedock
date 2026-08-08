@@ -1,18 +1,27 @@
 import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
+import type { Lang } from '@/lib/i18n'
 
 export default async function FaqPage() {
+  const cookieStore = await cookies()
+  const lang: Lang = cookieStore.get('qdl')?.value === 'en' ? 'en' : 'he'
+
   const supabase = await createClient()
   const { data: faqs } = await supabase
     .from('faqs')
     .select('question, answer')
+    .eq('lang', lang)
     .order('sort_order')
+
+  const title = lang === 'en' ? 'FAQ' : 'שאלות נפוצות'
+  const subtitle = lang === 'en' ? 'Everything you need to know about QuoteDock' : 'כל מה שצריך לדעת על QuoteDock'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="mb-10 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">שאלות נפוצות</h1>
-          <p className="text-gray-500">כל מה שצריך לדעת על QuoteDock</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{title}</h1>
+          <p className="text-gray-500">{subtitle}</p>
         </div>
 
         <div className="flex flex-col gap-3">

@@ -1,9 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { formatCurrency, calcTotal, STATUS_LABELS, intervalLabel, itemLineTotal } from '@/lib/utils'
+import { formatCurrency, calcTotal, intervalLabel, itemLineTotal } from '@/lib/utils'
 import { format } from 'date-fns'
 import PublicQuoteActions from '@/components/quotes/public-quote-actions'
 import { Markdown } from '@/components/ui/markdown'
+import { t, getLang } from '@/lib/i18n'
 
 export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'>) {
   const { token } = await params

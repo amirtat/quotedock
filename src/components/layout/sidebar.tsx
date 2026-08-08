@@ -140,13 +140,22 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
             <p className="text-white/30 text-[10px] truncate">{email}</p>
           </div>
         </div>
-        <button
-          onClick={handleLogout}
-          className="flex w-full items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/30 hover:text-white/70 hover:bg-obsidian-800 transition-colors mt-1"
-        >
-          <LogOut className="h-3.5 w-3.5 shrink-0" />
-          {T.logout}
-        </button>
+        <div className="flex items-center gap-1 mt-1">
+          <button
+            onClick={handleLogout}
+            className="flex flex-1 items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/30 hover:text-white/70 hover:bg-obsidian-800 transition-colors"
+          >
+            <LogOut className="h-3.5 w-3.5 shrink-0" />
+            {T.logout}
+          </button>
+          <button
+            onClick={handleLangSwitch}
+            className="px-2 py-2 rounded-lg text-xs font-medium text-white/30 hover:text-white/70 hover:bg-obsidian-800 transition-colors shrink-0"
+            title={lang === 'he' ? 'Switch to English' : 'עבור לעברית'}
+          >
+            {lang === 'he' ? 'EN' : 'עב'}
+          </button>
+        </div>
       </div>
     </aside>
   )

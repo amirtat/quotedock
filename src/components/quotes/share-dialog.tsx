@@ -28,14 +28,24 @@ export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clien
   const router = useRouter()
   const [copied, setCopied] = useState(false)
 
+  const firstName = clientName?.split(' ')[0] || ''
   const defaultMessage = [
-    clientName ? `שלום ${clientName},` : 'שלום,',
+    firstName ? `היי ${firstName},` : 'היי,',
     '',
-    `צירפתי הצעת מחיר עבור ${quoteTitle}.`,
-    'ניתן לצפות בה ולאשרה בקישור:',
+    'שמח לשלוח לכם את הצעת המחיר לפרויקט.',
+    'הפרויקט מעניין אותי מאוד, ואשמח לקחת בו חלק ולהפוך את הרעיון לפתרון מלא, חכם ואוטומטי.',
+    '',
+    'הצעת המחיר זמינה כאן:',
     quoteUrl,
+    'להצעה מצורפים שני מסמכים:',
+    'דוח אפיון מפורט כולל התהליך המלא, הסטאק הטכנולוגי המוצע ותחזית העלויות',
+    'תרשים זרימה ויזואלי של המערכת',
     '',
-    'לכל שאלה אני כאן.',
+    'אשלח גם בוואטסאפ הודעה עם קצת רקע על ההצעה ועל שיתוף הפעולה שאני מציע.',
+    '',
+    'אמיר טטרסקי',
+    'TripleA.I',
+    '052-3450000',
   ].join('\n')
 
   const [message, setMessage] = useState(defaultMessage)

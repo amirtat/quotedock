@@ -87,7 +87,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
               </p>
               {quote.valid_until && (
                 <p className="text-sm text-gray-500 mt-1">
-                  בתוקף עד: {format(new Date(quote.valid_until), 'dd/MM/yyyy')}
+                  {T.valid_through}: {format(new Date(quote.valid_until), 'dd/MM/yyyy')}
                 </p>
               )}
             </div>

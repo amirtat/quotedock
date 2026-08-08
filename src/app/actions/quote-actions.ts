@@ -46,6 +46,12 @@ export async function duplicateQuote(quoteId: string) {
     .eq('quote_id', quoteId)
     .order('sort_order')
 
+  const { data: sourceSections } = await supabase
+    .from('quote_sections')
+    .select('*')
+    .eq('quote_id', quoteId)
+    .order('sort_order')
+
   // Get next quote number
   const [{ count }, profileResult] = await Promise.all([
     supabase.from('quotes').select('id', { count: 'exact', head: true }).eq('user_id', user.id),

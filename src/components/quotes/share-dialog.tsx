@@ -6,6 +6,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button'
 import { Check, Copy, Mail } from 'lucide-react'
 
+const FALLBACK_TEMPLATE = `היי {{שם_פרטי}},
+
+הצעת המחיר זמינה כאן:
+{{לינק}}
+
+לכל שאלה אני כאן.`
+
 interface ShareDialogProps {
   open: boolean
   quoteId: string
@@ -13,6 +20,7 @@ interface ShareDialogProps {
   quoteTitle: string
   clientName?: string
   clientEmail?: string
+  messageTemplate?: string | null
   onClose: () => void
 }
 

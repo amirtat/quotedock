@@ -96,6 +96,7 @@ export function QuoteBuilder({
   initialAttachments = [],
   initialSections = [],
   showQuantityDefault = false,
+  shareMessageTemplate,
 }: QuoteBuilderProps) {
   const router = useRouter()
   const [deleting, startDelete] = useTransition()

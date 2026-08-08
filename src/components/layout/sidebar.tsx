@@ -29,6 +29,16 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const T = useT()
+  const lang = useLang()
+
+  async function handleLangSwitch() {
+    const next = lang === 'he' ? 'en' : 'he'
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) await supabase.from('profiles').update({ language: next }).eq('id', user.id)
+    await setLangCookie(next)
+    router.refresh()
+  }
 
   const navItems = [
     { href: '/dashboard', label: T.dashboard, icon: LayoutDashboard, exact: true },

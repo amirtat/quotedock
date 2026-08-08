@@ -173,8 +173,8 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                     <p className="font-medium text-gray-900">{item.name}</p>
                     {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
                     {item.discount_percent === 100
-                      ? <p className="text-xs text-green-600 mt-0.5 font-medium">ללא עלות</p>
-                      : item.discount_percent > 0 && <p className="text-xs text-green-600 mt-0.5">הנחה {item.discount_percent}%</p>
+                      ? <p className="text-xs text-green-600 mt-0.5 font-medium">{T.free}</p>
+                      : item.discount_percent > 0 && <p className="text-xs text-green-600 mt-0.5">{T.discount} {item.discount_percent}%</p>
                     }
                   </td>
                   {showQuantity && <td className="py-3.5 text-center text-gray-700">{item.quantity}</td>}

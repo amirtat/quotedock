@@ -340,7 +340,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           {/* Attachments */}
           {attachments.length > 0 && (
             <div className="pt-6 border-t border-gray-100">
-              <p className="text-xs font-medium text-gray-500 uppercase mb-3">מסמכים מצורפים</p>
+              <p className="text-xs font-medium text-gray-500 uppercase mb-3">{T.attachments}</p>
               <div className="flex flex-col gap-2">
                 {(attachments as any[]).map((att) => {
                   const isImage = att.file_type?.startsWith('image/')

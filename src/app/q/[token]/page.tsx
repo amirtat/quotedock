@@ -279,7 +279,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           {/* Payment schedule */}
           {milestones.length > 0 && (
             <div className="pt-6 border-t border-gray-100">
-              <p className="text-xs font-medium text-gray-500 uppercase mb-3">לוח תשלומים</p>
+              <p className="text-xs font-medium text-gray-500 uppercase mb-3">{T.payment_schedule}</p>
               <div className="flex flex-col gap-1.5">
                 {milestones.map((m: any, i: number) => (
                   <div key={i} className="flex items-center justify-between text-sm py-1.5 border-b border-gray-50 last:border-0">

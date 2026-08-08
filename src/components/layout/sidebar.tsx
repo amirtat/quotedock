@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
+import { useT } from '@/lib/lang-context'
 import {
   LayoutDashboard,
   FileText,
@@ -16,15 +17,6 @@ import {
   LayoutTemplate,
 } from 'lucide-react'
 
-const navItems = [
-  { href: '/dashboard', label: 'לוח בקרה', icon: LayoutDashboard, exact: true },
-  { href: '/dashboard/quotes', label: 'הצעות מחיר', icon: FileText },
-  { href: '/dashboard/templates', label: 'תבניות', icon: LayoutTemplate },
-  { href: '/dashboard/clients', label: 'לקוחות', icon: Users },
-  { href: '/dashboard/services', label: 'שירותים', icon: Briefcase },
-  { href: '/dashboard/settings', label: 'הגדרות', icon: Settings },
-]
-
 interface SidebarProps {
   businessName?: string | null
   email?: string | null
@@ -35,6 +27,16 @@ interface SidebarProps {
 export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
+  const T = useT()
+
+  const navItems = [
+    { href: '/dashboard', label: T.dashboard, icon: LayoutDashboard, exact: true },
+    { href: '/dashboard/quotes', label: T.quotes, icon: FileText },
+    { href: '/dashboard/templates', label: T.templates, icon: LayoutTemplate },
+    { href: '/dashboard/clients', label: T.clients, icon: Users },
+    { href: '/dashboard/services', label: T.services, icon: Briefcase },
+    { href: '/dashboard/settings', label: T.settings, icon: Settings },
+  ]
 
   async function handleLogout() {
     const supabase = createClient()
@@ -68,7 +70,7 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
           className="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-saffron text-white text-sm font-medium hover:bg-saffron-600 transition-colors"
         >
           <Plus className="h-4 w-4 shrink-0" />
-          הצעה חדשה
+          {T.new_quote}
         </Link>
       </div>
 
@@ -108,7 +110,7 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
           className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/30 hover:text-white/70 hover:bg-obsidian-800 transition-colors"
         >
           <HelpCircle className="h-4 w-4 shrink-0" />
-          שאלות נפוצות
+          {T.faq}
         </Link>
       </div>
 
@@ -123,7 +125,7 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-white text-xs font-medium truncate">{businessName || 'העסק שלי'}</p>
+            <p className="text-white text-xs font-medium truncate">{businessName || T.business_name}</p>
             <p className="text-white/30 text-[10px] truncate">{email}</p>
           </div>
         </div>
@@ -132,7 +134,7 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
           className="flex w-full items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/30 hover:text-white/70 hover:bg-obsidian-800 transition-colors mt-1"
         >
           <LogOut className="h-3.5 w-3.5 shrink-0" />
-          יציאה
+          {T.logout}
         </button>
       </div>
     </aside>

@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
+import { useT } from '@/lib/lang-context'
 
 interface NoteTemplatesManagerProps {
   initialTemplates: NoteTemplate[]
@@ -19,6 +20,7 @@ interface NoteTemplatesManagerProps {
 const emptyForm = { title: '', content: '' }
 
 export function NoteTemplatesManager({ initialTemplates, userId }: NoteTemplatesManagerProps) {
+  const T = useT()
   const [templates, setTemplates] = useState(initialTemplates)
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<NoteTemplate | null>(null)
@@ -68,7 +70,7 @@ export function NoteTemplatesManager({ initialTemplates, userId }: NoteTemplates
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('למחוק טקסט קבוע זה?')) return
+    if (!confirm(T.confirm_delete)) return
     const supabase = createClient()
     await supabase.from('note_templates').delete().eq('id', id)
     setTemplates(prev => prev.filter(t => t.id !== id))
@@ -78,17 +80,17 @@ export function NoteTemplatesManager({ initialTemplates, userId }: NoteTemplates
     <div>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-sm font-medium text-gray-900">טקסטים קבועים לשימוש חוזר בהערות</p>
-          <p className="text-xs text-gray-500 mt-0.5">כשתפתח הצעה, תוכל להוסיף טקסטים אלה בלחיצה אחת</p>
+          <p className="text-sm font-medium text-gray-900">{T.note_templates_subtitle}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{T.note_templates_hint}</p>
         </div>
         <Button size="sm" onClick={openNew}>
           <Plus className="h-4 w-4" />
-          הוסף
+          {T.add}
         </Button>
       </div>
 
       {templates.length === 0 ? (
-        <p className="text-sm text-gray-400 text-center py-6">אין טקסטים קבועים עדיין</p>
+        <p className="text-sm text-gray-400 text-center py-6">{T.no_note_templates}</p>
       ) : (
         <div className="flex flex-col gap-2">
           {templates.map(tpl => (
@@ -115,30 +117,28 @@ export function NoteTemplatesManager({ initialTemplates, userId }: NoteTemplates
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editing ? 'עריכת טקסט קבוע' : 'טקסט קבוע חדש'}</DialogTitle>
+            <DialogTitle>{editing ? T.note_template_edit : T.note_template_new}</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label>כותרת (שם קצר)</Label>
+              <Label>{T.note_template_title_label}</Label>
               <Input
                 value={form.title}
                 onChange={e => setForm({ ...form, title: e.target.value })}
-                placeholder="תנאי תשלום סטנדרטיים"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label>תוכן</Label>
+              <Label>{T.content}</Label>
               <Textarea
                 value={form.content}
                 onChange={e => setForm({ ...form, content: e.target.value })}
-                placeholder="תשלום תוך 30 יום מקבלת חשבונית..."
                 rows={4}
               />
             </div>
             {error && <p className="text-sm text-red-600">{error}</p>}
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setOpen(false)}>ביטול</Button>
-              <Button onClick={handleSave} loading={saving}>שמור</Button>
+              <Button variant="outline" onClick={() => setOpen(false)}>{T.cancel}</Button>
+              <Button onClick={handleSave} loading={saving}>{T.save}</Button>
             </div>
           </div>
         </DialogContent>

@@ -10,8 +10,10 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Upload, X, RotateCcw } from 'lucide-react'
+import { useT } from '@/lib/lang-context'
+import { setLangCookie } from '@/app/actions/lang-actions'
 
-function SignaturePad({ onChange }: { onChange: (dataUrl: string | null) => void }) {
+function SignaturePad({ onChange, T }: { onChange: (dataUrl: string | null) => void; T: ReturnType<typeof useT> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const drawing = useRef(false)
   const empty = useRef(true)
@@ -71,10 +73,10 @@ function SignaturePad({ onChange }: { onChange: (dataUrl: string | null) => void
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
-        <Label>חתימה</Label>
+        <Label>{T.signature_label}</Label>
         <button type="button" onClick={clear} className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors">
           <RotateCcw className="h-3 w-3" />
-          נקה
+          {T.clear_signature}
         </button>
       </div>
       <div className="relative border border-gray-200 rounded-xl bg-gray-50 overflow-hidden" style={{ touchAction: 'none' }}>
@@ -93,7 +95,7 @@ function SignaturePad({ onChange }: { onChange: (dataUrl: string | null) => void
         />
         {empty.current && (
           <p className="absolute inset-0 flex items-center justify-center text-sm text-gray-300 pointer-events-none select-none">
-            חתום כאן
+            {T.sign_here}
           </p>
         )}
       </div>
@@ -107,6 +109,7 @@ interface SettingsFormProps {
 }
 
 export function SettingsForm({ profile, userId }: SettingsFormProps) {
+  const T = useT()
   const router = useRouter()
   const [form, setForm] = useState({
     business_name: profile?.business_name || '',
@@ -120,6 +123,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     show_quantity_default: profile?.show_quantity_default ?? false,
     share_message_template: profile?.share_message_template || '',
     quote_items_header: profile?.quote_items_header || '',
+    language: (profile as any)?.language || 'he',
   })
   const [logoUrl, setLogoUrl] = useState<string | null>(profile?.logo_url || null)
   const [logoUploading, setLogoUploading] = useState(false)
@@ -141,7 +145,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     const file = e.target.files?.[0]
     if (!file) return
     if (file.size > 2 * 1024 * 1024) {
-      setLogoError('הקובץ גדול מ-2MB')
+      setLogoError('File exceeds 2MB')
       if (fileInputRef.current) fileInputRef.current.value = ''
       return
     }
@@ -233,6 +237,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
     if (error) {
       setSaveError(error.message)
     } else {
+      await setLangCookie(form.language as 'he' | 'en')
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
       router.refresh()
@@ -242,23 +247,23 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">הגדרות</h1>
-        <p className="text-sm text-gray-500 mt-0.5">פרטי העסק שיופיעו בהצעות המחיר</p>
+        <h1 className="text-xl font-bold text-gray-900">{T.settings}</h1>
+        <p className="text-sm text-gray-500 mt-0.5">{T.settings_subtitle}</p>
       </div>
 
       <form onSubmit={handleSave} className="flex flex-col gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>פרטי העסק</CardTitle>
+            <CardTitle>{T.business_details}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             {/* Logo upload */}
             <div className="flex flex-col gap-1.5">
-              <Label>לוגו העסק</Label>
+              <Label>{T.logo_business}</Label>
               <div className="flex items-center gap-4">
                 {logoUrl ? (
                   <div className="relative w-20 h-20 rounded-xl border border-gray-200 overflow-hidden bg-gray-50 shrink-0">
-                    <img src={logoUrl} alt="לוגו" className="w-full h-full object-contain p-1" />
+                    <img src={logoUrl} alt={T.logo} className="w-full h-full object-contain p-1" />
                     <button
                       type="button"
                       onClick={handleLogoRemove}
@@ -287,44 +292,44 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                     loading={logoUploading}
                     className="text-sm"
                   >
-                    {logoUrl ? 'החלף לוגו' : 'העלה לוגו'}
+                    {logoUrl ? T.replace_logo : T.upload_logo}
                   </Button>
-                  <p className="text-xs text-gray-400">PNG, JPG, SVG עד 2MB</p>
+                  <p className="text-xs text-gray-400">PNG, JPG, SVG — max 2MB</p>
                   {logoError && <p className="text-xs text-red-500">{logoError}</p>}
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <Label>שם העסק</Label>
-              <Input value={form.business_name} onChange={(e) => setForm({ ...form, business_name: e.target.value })} placeholder="הסטודיו שלי" />
+              <Label>{T.business_name}</Label>
+              <Input value={form.business_name} onChange={(e) => setForm({ ...form, business_name: e.target.value })} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <Label>אימייל</Label>
+                <Label>{T.email}</Label>
                 <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} dir="ltr" />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label>טלפון</Label>
+                <Label>{T.phone}</Label>
                 <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} dir="ltr" />
               </div>
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label>כתובת</Label>
-              <Input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="רחוב, עיר" />
+              <Label>{T.address}</Label>
+              <Input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>החתימה שלי</CardTitle>
+            <CardTitle>{T.my_signature}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             {freelancerSignature ? (
               <div className="flex flex-col gap-3">
                 <div className="border border-gray-200 rounded-xl bg-gray-50 p-4 flex items-center justify-center">
-                  <img src={freelancerSignature} alt="חתימה" className="max-h-20 max-w-full object-contain" />
+                  <img src={freelancerSignature} alt={T.signature_label} className="max-h-20 max-w-full object-contain" />
                 </div>
                 <button
                   type="button"
@@ -332,7 +337,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                   className="flex items-center gap-1.5 text-sm text-red-500 hover:text-red-700 transition-colors w-fit"
                 >
                   <X className="h-3.5 w-3.5" />
-                  מחק חתימה
+                  {T.delete_signature}
                 </button>
               </div>
             ) : (
@@ -342,17 +347,17 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                     type="button"
                     onClick={() => setSigMode('draw')}
                     className={`text-sm px-3 py-1 rounded-full border transition-colors ${sigMode === 'draw' ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-500 border-gray-200 hover:border-gray-400'}`}
-                  >ציור</button>
+                  >{T.draw_mode}</button>
                   <button
                     type="button"
                     onClick={() => setSigMode('upload')}
                     className={`text-sm px-3 py-1 rounded-full border transition-colors ${sigMode === 'upload' ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-500 border-gray-200 hover:border-gray-400'}`}
-                  >העלאת קובץ</button>
+                  >{T.upload_file}</button>
                 </div>
 
                 {sigMode === 'draw' ? (
                   <div className="flex flex-col gap-2">
-                    <SignaturePad onChange={setCanvasSig} />
+                    <SignaturePad onChange={setCanvasSig} T={T} />
                     <Button
                       type="button"
                       variant="outline"
@@ -361,7 +366,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                       disabled={!canvasSig}
                       className="w-fit text-sm"
                     >
-                      שמור חתימה
+                      {T.save_signature}
                     </Button>
                   </div>
                 ) : (
@@ -381,9 +386,9 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                       className="w-fit text-sm"
                     >
                       <Upload className="h-4 w-4" />
-                      העלה תמונת חתימה
+                      {T.upload_signature}
                     </Button>
-                    <p className="text-xs text-gray-400">PNG, JPG, SVG — רקע שקוף עדיף</p>
+                    <p className="text-xs text-gray-400">{T.transparent_bg_preferred}</p>
                   </div>
                 )}
               </div>
@@ -393,7 +398,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>הגדרות מחירים</CardTitle>
+            <CardTitle>{T.pricing_settings}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
@@ -403,12 +408,12 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                 onCheckedChange={(checked) => setForm({ ...form, vat_rate: checked ? 0 : 18 })}
               />
               <Label htmlFor="osek-zair" className="cursor-pointer font-normal">
-                עוסק זעיר (פטור ממע&quot;מ)
+                {T.vat_exempt_setting}
               </Label>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <Label>שיעור מע&quot;מ (%)</Label>
+                <Label>{T.vat_rate_pct}</Label>
                 <Input
                   type="number"
                   min="0"
@@ -422,22 +427,22 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label>מטבע</Label>
+                <Label>{T.currency}</Label>
                 <select
                   value={form.currency}
                   onChange={(e) => setForm({ ...form, currency: e.target.value })}
                   className="flex h-9 w-full rounded-lg border border-gray-300 bg-white px-3 py-1 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 >
-                  <option value="ILS">₪ שקל (ILS)</option>
-                  <option value="USD">$ דולר (USD)</option>
-                  <option value="EUR">€ אירו (EUR)</option>
+                  <option value="ILS">{T.currency_ils}</option>
+                  <option value="USD">{T.currency_usd}</option>
+                  <option value="EUR">{T.currency_eur}</option>
                 </select>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <Label>קידומת מספר הצעה</Label>
-                <p className="text-xs text-gray-400">למשל: QD ← QD-2025-001</p>
+                <Label>{T.quote_prefix}</Label>
+                <p className="text-xs text-gray-400">{T.prefix_hint}</p>
                 <Input
                   value={form.quote_number_prefix}
                   onChange={(e) => setForm({ ...form, quote_number_prefix: e.target.value })}
@@ -446,8 +451,8 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label>תוקף הצעה ברירת מחדל (ימים)</Label>
-                <p className="text-xs text-gray-400">מספר הימים עד פקיעת ההצעה</p>
+                <Label>{T.default_validity}</Label>
+                <p className="text-xs text-gray-400">{T.validity_hint}</p>
                 <Input
                   type="number"
                   min="1"
@@ -459,12 +464,12 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
               </div>
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label>כותרת סעיף ההצעה</Label>
-              <p className="text-xs text-gray-400">הכותרת שתופיע בין הפסקאות הפותחות לבין פריטי ההצעה (למשל: ״ההצעה״, ״פירוט השירותים״)</p>
+              <Label>{T.items_header}</Label>
+              <p className="text-xs text-gray-400">{T.items_header_desc}</p>
               <Input
                 value={form.quote_items_header}
                 onChange={(e) => setForm({ ...form, quote_items_header: e.target.value })}
-                placeholder="ההצעה"
+                placeholder={T.items_header_placeholder}
               />
             </div>
             <div className="flex items-center gap-2 pt-2">
@@ -474,7 +479,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                 onCheckedChange={(checked) => setForm({ ...form, show_quantity_default: !!checked })}
               />
               <Label htmlFor="show-qty" className="cursor-pointer font-normal">
-                הצג עמודת כמות בהצעות חדשות
+                {T.show_quantity}
               </Label>
             </div>
           </CardContent>
@@ -482,13 +487,33 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>תבנית הודעת שיתוף</CardTitle>
+            <CardTitle>{T.language_setting}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-3">
+              {(['he', 'en'] as const).map((l) => (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => setForm({ ...form, language: l })}
+                  className={`text-sm px-4 py-1.5 rounded-full border transition-colors ${form.language === l ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-500 border-gray-200 hover:border-gray-400'}`}
+                >
+                  {l === 'he' ? T.language_he : T.language_en}
+                </button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{T.share_template}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
-              <p className="text-xs text-gray-500">לחץ על placeholder להכנסה בנקודת הסמן:</p>
+              <p className="text-xs text-gray-500">{T.placeholder_insert}</p>
               <div className="flex flex-wrap gap-1.5">
-                {[['{{שם_פרטי}}', 'שם פרטי'], ['{{שם_מלא}}', 'שם מלא'], ['{{כותרת}}', 'כותרת ההצעה'], ['{{לינק}}', 'לינק להצעה']].map(([ph, label]) => (
+                {[[T.ph_first_name, T.ph_first_name_label], [T.ph_full_name, T.ph_full_name_label], [T.ph_title, T.ph_title_label], [T.ph_link, T.ph_link_label]].map(([ph, label]) => (
                   <button
                     key={ph}
                     type="button"
@@ -505,7 +530,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
               value={form.share_message_template}
               onChange={(e) => setForm({ ...form, share_message_template: e.target.value })}
               rows={12}
-              placeholder={`היי {{שם_פרטי}},\n\nהצעת המחיר זמינה כאן:\n{{לינק}}`}
+              placeholder={T.share_template_placeholder}
               className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm text-gray-800 leading-relaxed resize-none focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors font-mono"
               dir="rtl"
             />
@@ -513,8 +538,8 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
         </Card>
 
         <div className="flex items-center gap-3">
-          <Button type="submit" loading={saving}>שמור הגדרות</Button>
-          {saved && <span className="text-sm text-green-600 font-medium">נשמר בהצלחה ✓</span>}
+          <Button type="submit" loading={saving}>{T.save_settings}</Button>
+          {saved && <span className="text-sm text-green-600 font-medium">{T.settings_saved}</span>}
           {saveError && <span className="text-sm text-red-600">{saveError}</span>}
         </div>
       </form>

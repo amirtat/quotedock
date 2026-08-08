@@ -5,13 +5,21 @@ import { useRouter } from 'next/navigation'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Check, Copy, Mail } from 'lucide-react'
+import { useT, useLang } from '@/lib/lang-context'
 
-const FALLBACK_TEMPLATE = `היי {{שם_פרטי}},
+const FALLBACK_TEMPLATE_HE = `היי {{שם_פרטי}},
 
 הצעת המחיר זמינה כאן:
 {{לינק}}
 
 לכל שאלה אני כאן.`
+
+const FALLBACK_TEMPLATE_EN = `Hi {{first_name}},
+
+The quote is available here:
+{{link}}
+
+Feel free to reach out with any questions.`
 
 interface ShareDialogProps {
   open: boolean
@@ -33,16 +41,22 @@ function WhatsAppIcon() {
 }
 
 export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clientName, clientEmail, messageTemplate, onClose }: ShareDialogProps) {
+  const T = useT()
+  const lang = useLang()
   const router = useRouter()
   const [copied, setCopied] = useState(false)
 
   const firstName = clientName?.split(' ')[0] || ''
-  const template = messageTemplate || FALLBACK_TEMPLATE
+  const template = messageTemplate || (lang === 'en' ? FALLBACK_TEMPLATE_EN : FALLBACK_TEMPLATE_HE)
   const defaultMessage = template
     .replace(/\{\{שם_פרטי\}\}/g, firstName || clientName || '')
     .replace(/\{\{שם_מלא\}\}/g, clientName || '')
     .replace(/\{\{כותרת\}\}/g, quoteTitle)
     .replace(/\{\{לינק\}\}/g, quoteUrl)
+    .replace(/\{\{first_name\}\}/g, firstName || clientName || '')
+    .replace(/\{\{full_name\}\}/g, clientName || '')
+    .replace(/\{\{title\}\}/g, quoteTitle)
+    .replace(/\{\{link\}\}/g, quoteUrl)
 
   const [message, setMessage] = useState(defaultMessage)
 
@@ -57,7 +71,7 @@ export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clien
   }
 
   function handleEmail() {
-    const subject = encodeURIComponent(`הצעת מחיר — ${quoteTitle}`)
+    const subject = encodeURIComponent(`${T.email_subject_quote} — ${quoteTitle}`)
     const body = encodeURIComponent(message)
     const to = clientEmail || ''
     window.open(`mailto:${to}?subject=${subject}&body=${body}`, '_blank')
@@ -72,13 +86,13 @@ export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clien
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleDone() }}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>שתף את ההצעה</DialogTitle>
+          <DialogTitle>{T.share_quote}</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
           {/* Message editor */}
           <div className="flex flex-col gap-1.5">
-            <p className="text-xs font-medium text-gray-500">הודעה לשליחה</p>
+            <p className="text-xs font-medium text-gray-500">{T.message_to_send}</p>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -95,21 +109,21 @@ export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clien
               className="flex items-center justify-center gap-2.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-medium py-3 text-sm transition-colors"
             >
               <WhatsAppIcon />
-              שלח בווטסאפ
+              {T.send_whatsapp}
             </button>
             <button
               onClick={handleEmail}
               className="flex items-center justify-center gap-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium py-3 text-sm transition-colors"
             >
               <Mail className="h-4 w-4" />
-              שלח במייל
+              {T.send_email}
             </button>
             <button
               onClick={handleCopy}
               className="flex items-center justify-center gap-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium py-3 text-sm transition-colors"
             >
               {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
-              {copied ? 'הועתק!' : 'העתק הודעה'}
+              {copied ? T.copied : T.copy_message}
             </button>
           </div>
 
@@ -117,7 +131,7 @@ export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clien
             onClick={handleDone}
             className="text-sm text-gray-400 hover:text-gray-600 text-center transition-colors"
           >
-            סגור ועבור להצעה
+            {T.close_go_to_quote}
           </button>
         </div>
       </DialogContent>

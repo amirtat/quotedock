@@ -308,4 +308,11 @@ describe('One-time vs. recurring items', () => {
     expect(intervalLabel('yearly')).toBe('שנתי')
     expect(intervalLabel(null)).toBe('חודשי')  // default
   })
+
+  it('intervalLabel returns correct English labels', () => {
+    expect(intervalLabel('monthly', 'en')).toBe('Monthly')
+    expect(intervalLabel('quarterly', 'en')).toBe('Quarterly')
+    expect(intervalLabel('yearly', 'en')).toBe('Yearly')
+    expect(intervalLabel(null, 'en')).toBe('Monthly')
+  })
 })

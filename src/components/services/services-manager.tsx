@@ -11,14 +11,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { formatCurrency } from '@/lib/utils'
 import { Briefcase, Plus, Pencil, Trash2 } from 'lucide-react'
-
-const UNITS = [
-  { value: 'unit', label: 'פריט' },
-  { value: 'hour', label: 'שעה' },
-  { value: 'day', label: 'יום' },
-  { value: 'month', label: 'חודש' },
-  { value: 'project', label: 'פרויקט' },
-]
+import { useT } from '@/lib/lang-context'
 
 interface ServicesManagerProps {
   initialServices: Service[]
@@ -29,6 +22,14 @@ interface ServicesManagerProps {
 const emptyForm = { name: '', description: '', unit_price: 0, unit: 'project' }
 
 export function ServicesManager({ initialServices, userId, currency }: ServicesManagerProps) {
+  const T = useT()
+  const UNITS = [
+    { value: 'unit', label: T.unit_unit },
+    { value: 'hour', label: T.unit_hour },
+    { value: 'day', label: T.unit_day },
+    { value: 'month', label: T.unit_month },
+    { value: 'project', label: T.unit_project },
+  ]
   const [services, setServices] = useState(initialServices)
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<Service | null>(null)
@@ -69,7 +70,7 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('למחוק שירות זה?')) return
+    if (!confirm(T.confirm_delete)) return
     const supabase = createClient()
     await supabase.from('services').delete().eq('id', id)
     setServices((prev) => prev.filter((s) => s.id !== id))
@@ -81,21 +82,21 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">קטלוג שירותים</h1>
-          <p className="text-sm text-gray-500 mt-0.5">שירותים שניתן לשים בהצעות מחיר</p>
+          <h1 className="text-xl font-bold text-gray-900">{T.services_catalog}</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{T.services_subtitle}</p>
         </div>
         <Button onClick={openNew}>
           <Plus className="h-4 w-4" />
-          הוסף שירות
+          {T.add_service}
         </Button>
       </div>
 
       {services.length === 0 ? (
         <div className="text-center py-20">
           <Briefcase className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-lg font-medium text-gray-700 mb-2">אין שירותים בקטלוג</h2>
-          <p className="text-gray-500 text-sm mb-6">הוסף שירותים שחוזרים על עצמם לשימוש מהיר בהצעות</p>
-          <Button onClick={openNew}>הוסף שירות ראשון</Button>
+          <h2 className="text-lg font-medium text-gray-700 mb-2">{T.no_services}</h2>
+          <p className="text-gray-500 text-sm mb-6">{T.no_services_desc}</p>
+          <Button onClick={openNew}>{T.add_service}</Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -117,7 +118,7 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
                   <p className="text-xs text-gray-500 mb-3">{service.description}</p>
                 )}
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-400">לפי {unitLabel(service.unit)}</span>
+                  <span className="text-xs text-gray-400">{T.per} {unitLabel(service.unit)}</span>
                   <span className="font-bold text-indigo-600">{formatCurrency(service.unit_price, currency)}</span>
                 </div>
               </CardContent>
@@ -129,20 +130,20 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editing ? 'עריכת שירות' : 'שירות חדש'}</DialogTitle>
+            <DialogTitle>{editing ? T.edit_service : T.add_service}</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label>שם שירות *</Label>
-              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="עיצוב לוגו" />
+              <Label>{T.service_name} *</Label>
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label>תיאור</Label>
-              <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="תיאור קצר של השירות..." rows={2} />
+              <Label>{T.service_description}</Label>
+              <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <Label>מחיר</Label>
+                <Label>{T.service_price}</Label>
                 <Input
                   type="number" min="0" step="0.01"
                   value={form.unit_price || ''}
@@ -152,7 +153,7 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label>מחיר לפי</Label>
+                <Label>{T.price_per}</Label>
                 <select
                   value={form.unit}
                   onChange={(e) => setForm({ ...form, unit: e.target.value })}
@@ -166,8 +167,8 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
             </div>
             {error && <p className="text-sm text-red-600">{error}</p>}
             <div className="flex justify-end gap-2 mt-2">
-              <Button variant="outline" onClick={() => setOpen(false)}>ביטול</Button>
-              <Button onClick={handleSave} loading={saving}>שמור</Button>
+              <Button variant="outline" onClick={() => setOpen(false)}>{T.cancel}</Button>
+              <Button onClick={handleSave} loading={saving}>{T.save}</Button>
             </div>
           </div>
         </DialogContent>

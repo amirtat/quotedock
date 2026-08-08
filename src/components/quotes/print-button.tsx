@@ -2,8 +2,10 @@
 
 import { Button } from '@/components/ui/button'
 import { Printer } from 'lucide-react'
+import { useT } from '@/lib/lang-context'
 
 export default function PrintButton() {
+  const T = useT()
   function handlePrint() {
     const doc = document.querySelector('.print-doc')
     if (!doc) return window.print()
@@ -31,7 +33,7 @@ export default function PrintButton() {
   return (
     <Button variant="outline" onClick={handlePrint}>
       <Printer className="h-4 w-4" />
-      הדפס / PDF
+      {T.print_pdf}
     </Button>
   )
 }

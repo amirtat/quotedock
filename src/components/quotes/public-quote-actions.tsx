@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CheckCircle, XCircle, RotateCcw } from 'lucide-react'
+import { t, getLang } from '@/lib/i18n'
+import type { Lang } from '@/lib/i18n'
 
-function SignaturePad({ onChange }: { onChange: (dataUrl: string | null) => void }) {
+function SignaturePad({ onChange, T }: { onChange: (dataUrl: string | null) => void; T: typeof t.he | typeof t.en }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const drawing = useRef(false)
   const empty = useRef(true)
@@ -74,10 +76,10 @@ function SignaturePad({ onChange }: { onChange: (dataUrl: string | null) => void
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
-        <Label>חתימה *</Label>
+        <Label>{T.signature_label} *</Label>
         <button type="button" onClick={clear} className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors">
           <RotateCcw className="h-3 w-3" />
-          נקה
+          {T.clear_signature}
         </button>
       </div>
       <div className="relative border border-gray-200 rounded-xl bg-gray-50 overflow-hidden" style={{ touchAction: 'none' }}>
@@ -95,14 +97,15 @@ function SignaturePad({ onChange }: { onChange: (dataUrl: string | null) => void
           onTouchEnd={stopDraw}
         />
         <p className="absolute inset-0 flex items-center justify-center text-sm text-gray-300 pointer-events-none select-none" style={{ display: empty.current ? undefined : 'none' }}>
-          חתום כאן
+          {T.sign_here}
         </p>
       </div>
     </div>
   )
 }
 
-export default function PublicQuoteActions({ quoteId }: { quoteId: string }) {
+export default function PublicQuoteActions({ quoteId, lang = 'he' }: { quoteId: string; lang?: Lang }) {
+  const T = t[getLang(lang)]
   const [step, setStep] = useState<'idle' | 'signing'>('idle')
   const [action, setAction] = useState<'accepted' | 'declined' | null>(null)
   const [signerName, setSignerName] = useState('')
@@ -120,8 +123,8 @@ export default function PublicQuoteActions({ quoteId }: { quoteId: string }) {
   }
 
   async function handleAccept() {
-    if (!signerName.trim()) return setError('נא להזין שם מלא')
-    if (!signatureData) return setError('נא לחתום בשדה החתימה')
+    if (!signerName.trim()) return setError(T.error_full_name)
+    if (!signatureData) return setError(T.error_signature)
     setError('')
     setSaving(true)
     const supabase = createClient()
@@ -141,8 +144,8 @@ export default function PublicQuoteActions({ quoteId }: { quoteId: string }) {
     return (
       <div className="mt-4 bg-white rounded-2xl border border-gray-200 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <p className="font-medium text-gray-900">מה דעתך על ההצעה?</p>
-          <p className="text-sm text-gray-500 mt-0.5">אשר או דחה את ההצעה</p>
+          <p className="font-medium text-gray-900">{T.what_do_you_think}</p>
+          <p className="text-sm text-gray-500 mt-0.5">{T.accept_or_decline}</p>
         </div>
         <div className="flex gap-3">
           <Button
@@ -152,14 +155,14 @@ export default function PublicQuoteActions({ quoteId }: { quoteId: string }) {
             className="text-red-600 border-red-200 hover:bg-red-50"
           >
             <XCircle className="h-4 w-4" />
-            דחה הצעה
+            {T.decline_quote}
           </Button>
           <Button
             onClick={() => { setStep('signing'); setAction('accepted') }}
             className="bg-green-600 hover:bg-green-700"
           >
             <CheckCircle className="h-4 w-4" />
-            אשר הצעה
+            {T.accept_quote}
           </Button>
         </div>
       </div>
@@ -168,18 +171,18 @@ export default function PublicQuoteActions({ quoteId }: { quoteId: string }) {
 
   return (
     <div className="mt-4 bg-white rounded-2xl border border-indigo-200 p-6">
-      <h3 className="font-semibold text-gray-900 mb-4">אישור הצעת מחיר</h3>
+      <h3 className="font-semibold text-gray-900 mb-4">{T.confirm_quote_title}</h3>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <Label>שם מלא *</Label>
+          <Label>{T.signer_name} *</Label>
           <Input
             value={signerName}
             onChange={(e) => setSignerName(e.target.value)}
-            placeholder="ישראל ישראלי"
+            placeholder={lang === 'he' ? 'ישראל ישראלי' : 'John Smith'}
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label>אימייל (אופציונלי)</Label>
+          <Label>{T.optional_email}</Label>
           <Input
             type="email"
             value={signerEmail}
@@ -188,13 +191,13 @@ export default function PublicQuoteActions({ quoteId }: { quoteId: string }) {
             dir="ltr"
           />
         </div>
-        <SignaturePad onChange={setSignatureData} />
+        <SignaturePad onChange={setSignatureData} T={T} />
         {error && <p className="text-sm text-red-500">{error}</p>}
         <div className="flex gap-3 mt-2">
-          <Button variant="outline" onClick={() => setStep('idle')}>ביטול</Button>
+          <Button variant="outline" onClick={() => setStep('idle')}>{T.cancel}</Button>
           <Button onClick={handleAccept} loading={saving} className="flex-1 bg-green-600 hover:bg-green-700">
             <CheckCircle className="h-4 w-4" />
-            אני מאשר/ת את ההצעה
+            {T.i_confirm_quote}
           </Button>
         </div>
       </div>

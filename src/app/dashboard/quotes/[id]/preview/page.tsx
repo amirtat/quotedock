@@ -13,6 +13,7 @@ import PrintButton from '@/components/quotes/print-button'
 import DeleteQuoteButton from '@/components/quotes/delete-quote-button'
 import TemplateToggleButton from '@/components/quotes/template-toggle-button'
 import { Markdown } from '@/components/ui/markdown'
+import { t, getLang } from '@/lib/i18n'
 
 export default async function QuotePreviewPage({ params }: PageProps<'/dashboard/quotes/[id]/preview'>) {
   const { id } = await params
@@ -37,6 +38,8 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
   const milestones = milestonesResult.data || []
   const attachments = attachmentsResult.data || []
   const sections = sectionsResult.data || []
+  const lang = getLang(profile?.language || 'he')
+  const T = t[lang]
   const vatRate = profile?.vat_rate ?? 18
   const currency = profile?.currency || 'ILS'
   const statusInfo = STATUS_LABELS[quote.status as QuoteStatus]
@@ -57,7 +60,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         <div className="flex items-center gap-4">
           <Link href={`/dashboard/quotes/${id}`} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
             <ArrowLeft className="h-4 w-4" />
-            חזרה לעריכה
+            {T.back_to_edit}
           </Link>
           <DeleteQuoteButton quoteId={id} />
         </div>
@@ -66,7 +69,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
           <PrintButton />
           <DuplicateQuoteButton quoteId={id} />
           <CopyLinkButton url={publicUrl} />
-          <Badge className={statusInfo.color}>{statusInfo.he}</Badge>
+          <Badge className={statusInfo.color}>{statusInfo[lang]}</Badge>
         </div>
       </div>
 
@@ -82,7 +85,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
             </p>
             {quote.valid_until && (
               <p className="text-gray-500 text-sm">
-                בתוקף עד: {format(new Date(quote.valid_until), 'dd/MM/yyyy')}
+                {T.valid_through}: {format(new Date(quote.valid_until), 'dd/MM/yyyy')}
               </p>
             )}
           </div>
@@ -100,7 +103,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         {/* Client */}
         {(quote as any).client && (
           <div className="mb-8 p-4 bg-gray-50 rounded-xl">
-            <p className="text-xs font-medium text-gray-500 uppercase mb-1">לקוח</p>
+            <p className="text-xs font-medium text-gray-500 uppercase mb-1">{T.client}</p>
             <p className="font-medium text-gray-900">{(quote as any).client.name}</p>
             {(quote as any).client.company && <p className="text-sm text-gray-600">{(quote as any).client.company}</p>}
             {(quote as any).client.email && <p className="text-sm text-gray-500">{(quote as any).client.email}</p>}
@@ -123,7 +126,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
           </div>
         ) : (quote as any).preamble ? (
           <div className="mb-8 p-4 bg-gray-50 rounded-xl border border-gray-100">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">על הפרויקט</p>
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">{T.about_project}</p>
             <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{(quote as any).preamble}</p>
           </div>
         ) : null}
@@ -141,11 +144,11 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                 <p className="font-medium text-gray-900">{item.name}</p>
                 {item.description && <p className="text-gray-600 text-sm mt-0.5 leading-relaxed">{item.description}</p>}
                 {item.discount_percent === 100 ? (
-                  <p className="text-xs text-green-600 mt-1 font-medium">ללא עלות</p>
+                  <p className="text-xs text-green-600 mt-1 font-medium">{T.free}</p>
                 ) : showQuantity && item.quantity !== 1 ? (
-                  <p className="text-xs text-gray-400 mt-1">{item.quantity} × {formatCurrency(item.unit_price, currency)}{item.discount_percent > 0 ? ` (${item.discount_percent}% הנחה)` : ''}</p>
+                  <p className="text-xs text-gray-400 mt-1">{item.quantity} × {formatCurrency(item.unit_price, currency)}{item.discount_percent > 0 ? ` (${item.discount_percent}% ${T.discount})` : ''}</p>
                 ) : (
-                  <p className="text-xs text-gray-400 mt-1">{formatCurrency(item.unit_price, currency)}{item.discount_percent > 0 ? ` (${item.discount_percent}% הנחה)` : ''}</p>
+                  <p className="text-xs text-gray-400 mt-1">{formatCurrency(item.unit_price, currency)}{item.discount_percent > 0 ? ` (${item.discount_percent}% ${T.discount})` : ''}</p>
                 )}
               </div>
               <p className="font-semibold text-gray-900 shrink-0">{formatCurrency(itemLineTotal(item as any), currency)}</p>
@@ -155,10 +158,10 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         <table className="hidden sm:table w-full text-sm mb-6">
           <thead>
             <tr className="border-b-2 border-gray-200">
-              <th className="text-right py-2 font-semibold text-gray-700">פריט</th>
-              {showQuantity && <th className="text-center py-2 font-semibold text-gray-700">כמות</th>}
-              <th className="text-center py-2 font-semibold text-gray-700">מחיר יחידה</th>
-              <th className="text-left py-2 font-semibold text-gray-700">סה&quot;כ</th>
+              <th className="text-right py-2 font-semibold text-gray-700">{T.item_col}</th>
+              {showQuantity && <th className="text-center py-2 font-semibold text-gray-700">{T.quantity}</th>}
+              <th className="text-center py-2 font-semibold text-gray-700">{T.unit_price}</th>
+              <th className="text-left py-2 font-semibold text-gray-700">{T.total}</th>
             </tr>
           </thead>
           <tbody>
@@ -168,8 +171,8 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                   <p className="font-medium text-gray-900">{item.name}</p>
                   {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
                   {item.discount_percent === 100
-                    ? <p className="text-xs text-green-600 mt-0.5 font-medium">ללא עלות</p>
-                    : item.discount_percent > 0 && <p className="text-xs text-green-600 mt-0.5">הנחה {item.discount_percent}%</p>
+                    ? <p className="text-xs text-green-600 mt-0.5 font-medium">{T.free}</p>
+                    : item.discount_percent > 0 && <p className="text-xs text-green-600 mt-0.5">{T.discount} {item.discount_percent}%</p>
                   }
                 </td>
                 {showQuantity && <td className="py-3 text-center text-gray-700">{item.quantity}</td>}
@@ -184,13 +187,13 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         <div className="flex justify-end">
           <div className="w-60 flex flex-col gap-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">סכום ביניים</span>
+              <span className="text-gray-600">{T.subtotal}</span>
               <span>{formatCurrency(subtotal, currency)}</span>
             </div>
             {quote.discount > 0 && (
               <div className="flex justify-between text-red-500">
                 <span>
-                  {(quote as any).discount_reason ? `הנחה — ${(quote as any).discount_reason}` : 'הנחה'}
+                  {(quote as any).discount_reason ? `${T.discount} — ${(quote as any).discount_reason}` : T.discount}
                   {(quote as any).discount_type !== 'fixed' && ` (${quote.discount}%)`}
                 </span>
                 <span>-{formatCurrency(discountAmount, currency)}</span>
@@ -198,17 +201,17 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
             )}
             {quote.include_vat && vatRate > 0 && (
               <div className="flex justify-between text-gray-600">
-                <span>מע&quot;מ ({vatRate}%)</span>
+                <span>{T.vat} ({vatRate}%)</span>
                 <span>{formatCurrency(vatAmount, currency)}</span>
               </div>
             )}
             {vatRate === 0 && (
               <div className="flex justify-between text-gray-500 text-xs">
-                <span>פטור ממע&quot;מ</span>
+                <span>{T.vat_exempt}</span>
               </div>
             )}
             <div className="flex justify-between border-t-2 border-gray-200 pt-2 font-black text-xl">
-              <span>סה&quot;כ לתשלום</span>
+              <span>{T.grand_total}</span>
               <span className="text-indigo-600">{formatCurrency(total, currency)}</span>
             </div>
           </div>
@@ -217,14 +220,14 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         {/* Recurring items */}
         {recurringItems.length > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">תשלומים חוזרים</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">{T.recurring_items}</p>
             <div className="sm:hidden flex flex-col divide-y divide-gray-100">
               {recurringItems.map((item: any, i: number) => (
                 <div key={i} className="py-3 flex justify-between items-start gap-3">
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900">{item.name}</p>
                     {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
-                    <p className="text-xs text-gray-400 mt-1">{intervalLabel(item.recurring_interval)}</p>
+                    <p className="text-xs text-gray-400 mt-1">{intervalLabel(item.recurring_interval, lang)}</p>
                   </div>
                   <p className="font-semibold text-gray-900 shrink-0">{formatCurrency(itemLineTotal(item as any), currency)}</p>
                 </div>
@@ -238,7 +241,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                       <p className="font-medium text-gray-900">{item.name}</p>
                       {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
                     </td>
-                    <td className="py-3 text-left text-gray-500 text-xs w-24">{intervalLabel(item.recurring_interval)}</td>
+                    <td className="py-3 text-left text-gray-500 text-xs w-24">{intervalLabel(item.recurring_interval, lang)}</td>
                     <td className="py-3 text-left font-medium w-28">{formatCurrency(itemLineTotal(item as any), currency)}</td>
                   </tr>
                 ))}
@@ -250,18 +253,18 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         {/* Optional items */}
         {optionalItems.length > 0 && (
           <div className="mt-6 pt-4 border-t border-dashed border-amber-200">
-            <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-3">תוספות אופציונליות</p>
+            <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-3">{T.optional_items}</p>
             <div className="flex flex-col gap-2">
               {optionalItems.map((item: any, i: number) => (
                 <div key={i} className="flex justify-between items-start p-3 rounded-lg border border-amber-100 bg-amber-50/40">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-medium text-gray-900">{item.name}</p>
-                      <span className="text-xs bg-amber-100 text-amber-700 border border-amber-200 rounded-full px-2 py-0.5 shrink-0">אופציונלי</span>
+                      <span className="text-xs bg-amber-100 text-amber-700 border border-amber-200 rounded-full px-2 py-0.5 shrink-0">{T.optional}</span>
                     </div>
                     {item.description && <p className="text-gray-600 text-sm mt-0.5">{item.description}</p>}
                     {item.item_type === 'recurring' && item.recurring_interval && (
-                      <p className="text-xs text-gray-400 mt-0.5">{intervalLabel(item.recurring_interval)}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{intervalLabel(item.recurring_interval, lang)}</p>
                     )}
                   </div>
                   <p className="font-medium text-gray-700 shrink-0 text-left">{formatCurrency(itemLineTotal(item as any), currency)}</p>
@@ -274,7 +277,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         {/* Payment schedule */}
         {milestones.length > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs font-medium text-gray-500 uppercase mb-3">לוח תשלומים</p>
+            <p className="text-xs font-medium text-gray-500 uppercase mb-3">{T.payment_schedule}</p>
             <div className="flex flex-col gap-1.5">
               {milestones.map((m, i) => (
                 <div key={i} className="flex items-center justify-between text-sm py-1.5 border-b border-gray-50 last:border-0">
@@ -293,7 +296,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         {/* Excluded items */}
         {excludedItems.length > 0 && (
           <div className="mt-6 pt-4 border-t border-dashed border-gray-200">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">אינו כלול בהצעה</p>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">{T.excluded}</p>
             <div className="flex flex-col gap-1.5">
               {excludedItems.map((item: any, i: number) => (
                 <div key={i} className="flex items-start gap-2 text-sm text-gray-500">
@@ -327,7 +330,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         {/* Notes */}
         {quote.notes && (
           <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs font-medium text-gray-500 uppercase mb-2">הערות</p>
+            <p className="text-xs font-medium text-gray-500 uppercase mb-2">{T.notes}</p>
             <Markdown>{quote.notes}</Markdown>
           </div>
         )}
@@ -335,7 +338,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         {/* Attachments */}
         {attachments.length > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs font-medium text-gray-500 uppercase mb-3">מסמכים מצורפים</p>
+            <p className="text-xs font-medium text-gray-500 uppercase mb-3">{T.attachments}</p>
             <div className="flex flex-col gap-2">
               {attachments.map((att: any) => {
                 const isImage = att.file_type?.startsWith('image/')
@@ -357,8 +360,8 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
         {/* Freelancer signature */}
         {(profile as any)?.freelancer_signature && (
           <div className="mt-8 pt-6 border-t border-gray-100">
-            <p className="text-xs text-gray-400 mb-2">חתימת הספק</p>
-            <img src={(profile as any).freelancer_signature} alt="חתימה" className="max-h-16 max-w-[200px] object-contain" />
+            <p className="text-xs text-gray-400 mb-2">{T.provider_signature}</p>
+            <img src={(profile as any).freelancer_signature} alt={T.signature_label} className="max-h-16 max-w-[200px] object-contain" />
             <p className="text-sm font-medium text-gray-700 mt-1">{profile?.business_name}</p>
           </div>
         )}
@@ -366,14 +369,14 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
 
       {/* Status timeline — freelancer only, not printed */}
       <div className="no-print mt-4 bg-white rounded-xl border border-gray-200 p-4">
-        <p className="text-xs font-medium text-gray-500 uppercase mb-3">ציר זמן</p>
+        <p className="text-xs font-medium text-gray-500 uppercase mb-3">{T.timeline}</p>
         <div className="flex flex-col gap-2">
           {[
-              { label: 'נוצרה', ts: quote.created_at },
-              { label: 'נשלחה', ts: quote.sent_at },
-              { label: 'נצפתה', ts: quote.viewed_at },
-              { label: 'אושרה', ts: quote.accepted_at },
-              { label: 'נדחתה', ts: quote.declined_at },
+              { label: T.created, ts: quote.created_at },
+              { label: T.sent_status, ts: quote.sent_at },
+              { label: T.viewed_status, ts: quote.viewed_at },
+              { label: T.accepted_status, ts: quote.accepted_at },
+              { label: T.declined_status, ts: quote.declined_at },
             ]
               .filter((e) => e.ts)
               .map((e) => (
@@ -383,14 +386,14 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
                   <span className="text-gray-700 font-mono text-xs">
                     {format(new Date(e.ts!), 'dd/MM/yyyy HH:mm')}
                   </span>
-                  {e.label === 'נצפתה' && quote.sent_at && (
+                  {e.label === T.viewed_status && quote.sent_at && (
                     <span className="text-xs text-gray-400">
-                      ({Math.round((new Date(e.ts!).getTime() - new Date(quote.sent_at).getTime()) / 3600000)} שע' מהשליחה)
+                      ({Math.round((new Date(e.ts!).getTime() - new Date(quote.sent_at).getTime()) / 3600000)} {T.hours_from_send})
                     </span>
                   )}
-                  {(e.label === 'אושרה' || e.label === 'נדחתה') && quote.sent_at && (
+                  {(e.label === T.accepted_status || e.label === T.declined_status) && quote.sent_at && (
                     <span className="text-xs text-gray-400">
-                      ({Math.round((new Date(e.ts!).getTime() - new Date(quote.sent_at).getTime()) / 86400000)} ימים מהשליחה)
+                      ({Math.round((new Date(e.ts!).getTime() - new Date(quote.sent_at).getTime()) / 86400000)} {T.days_from_send})
                     </span>
                   )}
                 </div>

@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Paperclip, X, Download, FileText } from 'lucide-react'
+import { useT } from '@/lib/lang-context'
 
 interface Attachment {
   id: string
@@ -30,6 +31,7 @@ export default function AttachmentsManager({
   userId: string
   initialAttachments?: Attachment[]
 }) {
+  const T = useT()
   const [attachments, setAttachments] = useState<Attachment[]>(initialAttachments)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState('')
@@ -40,8 +42,8 @@ export default function AttachmentsManager({
     if (!file) return
     if (inputRef.current) inputRef.current.value = ''
 
-    if (!ALLOWED.includes(file.type)) return setError('קובץ לא נתמך — PDF ותמונות בלבד')
-    if (file.size > MAX_SIZE) return setError('קובץ גדול מדי — עד 5MB')
+    if (!ALLOWED.includes(file.type)) return setError(T.file_not_supported)
+    if (file.size > MAX_SIZE) return setError(T.file_too_large)
 
     setError('')
     setUploading(true)
@@ -54,7 +56,7 @@ export default function AttachmentsManager({
     if (upErr) {
       const msg = upErr.message.toLowerCase()
       setError(msg.includes('payload') || msg.includes('size') || msg.includes('large')
-        ? 'הקובץ גדול מדי — עד 5MB'
+        ? T.file_too_large
         : upErr.message)
       setUploading(false)
       return
@@ -88,7 +90,7 @@ export default function AttachmentsManager({
   return (
     <div className="bg-white rounded-xl border border-border p-5">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">מסמכים מצורפים</h2>
+        <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">{T.attachments}</h2>
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
@@ -96,7 +98,7 @@ export default function AttachmentsManager({
           className="flex items-center gap-1 text-xs text-saffron hover:text-saffron-600 font-medium transition-colors disabled:opacity-50"
         >
           <Paperclip className="h-3.5 w-3.5" />
-          {uploading ? 'מעלה...' : 'צרף קובץ'}
+          {uploading ? T.uploading : T.attach_file}
         </button>
         <input ref={inputRef} type="file" accept="application/pdf,image/*" className="hidden" onChange={handleUpload} />
       </div>
@@ -104,7 +106,7 @@ export default function AttachmentsManager({
       {error && <p className="text-xs text-danger mb-2">{error}</p>}
 
       {attachments.length === 0 ? (
-        <p className="text-xs text-muted/50 text-center py-3">אין מסמכים מצורפים</p>
+        <p className="text-xs text-muted/50 text-center py-3">{T.no_attachments}</p>
       ) : (
         <div className="flex flex-col gap-2">
           {attachments.map(att => {

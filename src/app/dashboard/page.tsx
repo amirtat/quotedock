@@ -6,6 +6,7 @@ import { formatCurrency, STATUS_LABELS } from '@/lib/utils'
 import { Quote, QuoteStatus } from '@/lib/types'
 import { Plus, ArrowRight, TrendingUp, FileText, Clock, CheckCircle } from 'lucide-react'
 import { format } from 'date-fns'
+import { t, getLang } from '@/lib/i18n'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -14,12 +15,14 @@ export default async function DashboardPage() {
 
   const [quotesResult, profileResult] = await Promise.all([
     supabase.from('quotes').select('*, client:clients(name), items:quote_items(quantity, unit_price)').eq('user_id', user.id).order('created_at', { ascending: false }).limit(20),
-    supabase.from('profiles').select('business_name, currency').eq('id', user.id).single(),
+    supabase.from('profiles').select('business_name, currency, language').eq('id', user.id).single(),
   ])
 
   const quotes: any[] = quotesResult.data || []
   const currency = profileResult.data?.currency || 'ILS'
   const businessName = profileResult.data?.business_name
+  const lang = getLang(profileResult.data?.language || 'he')
+  const T = t[lang]
 
   const accepted = quotes.filter(q => q.status === 'accepted')
   const pending = quotes.filter(q => ['sent', 'viewed'].includes(q.status))
@@ -39,13 +42,13 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="flex items-start justify-between mb-10">
         <div>
-          <p className="text-muted text-sm mb-1">שלום,</p>
-          <h1 className="text-3xl font-bold text-ink">{businessName || 'ברוך הבא'}</h1>
+          <p className="text-muted text-sm mb-1">{T.greeting}</p>
+          <h1 className="text-3xl font-bold text-ink">{businessName || T.welcome}</h1>
         </div>
         <Link href="/dashboard/quotes/new">
           <Button>
             <Plus className="h-4 w-4" />
-            הצעה חדשה
+            {T.new_quote}
           </Button>
         </Link>
       </div>
@@ -53,10 +56,10 @@ export default async function DashboardPage() {
       {/* Stats row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {[
-          { label: 'סה"כ הצעות', value: quotes.length, icon: FileText, color: 'text-ink' },
-          { label: 'ממתינות', value: pending.length, icon: Clock, color: 'text-amber-600' },
-          { label: 'אושרו', value: accepted.length, icon: CheckCircle, color: 'text-success' },
-          { label: 'הכנסות שאושרו', value: formatCurrency(acceptedRevenue, currency), icon: TrendingUp, color: 'text-saffron', large: true },
+          { label: T.total_quotes, value: quotes.length, icon: FileText, color: 'text-ink' },
+          { label: T.pending_short, value: pending.length, icon: Clock, color: 'text-amber-600' },
+          { label: T.accepted_short, value: accepted.length, icon: CheckCircle, color: 'text-success' },
+          { label: T.accepted_revenue, value: formatCurrency(acceptedRevenue, currency), icon: TrendingUp, color: 'text-saffron', large: true },
         ].map((stat) => (
           <div key={stat.label} className="bg-white rounded-xl border border-border p-5 shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
             <div className="flex items-center justify-between mb-3">
@@ -73,9 +76,9 @@ export default async function DashboardPage() {
       {/* Recent quotes */}
       <div className="bg-white rounded-xl border border-border shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-          <h2 className="text-sm font-semibold text-ink uppercase tracking-wide">הצעות אחרונות</h2>
+          <h2 className="text-sm font-semibold text-ink uppercase tracking-wide">{T.recent_quotes}</h2>
           <Link href="/dashboard/quotes" className="flex items-center gap-1 text-sm text-saffron hover:underline">
-            הכל
+            {T.see_all}
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
@@ -85,12 +88,12 @@ export default async function DashboardPage() {
             <div className="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center mx-auto mb-4">
               <FileText className="h-5 w-5 text-muted" />
             </div>
-            <p className="text-ink font-medium mb-1">אין הצעות עדיין</p>
-            <p className="text-muted text-sm mb-5">צור את ההצעה הראשונה שלך</p>
+            <p className="text-ink font-medium mb-1">{T.no_quotes}</p>
+            <p className="text-muted text-sm mb-5">{T.no_quotes_desc}</p>
             <Link href="/dashboard/quotes/new">
               <Button size="sm">
                 <Plus className="h-4 w-4" />
-                צור הצעה
+                {T.new_quote}
               </Button>
             </Link>
           </div>
@@ -113,7 +116,7 @@ export default async function DashboardPage() {
                     <div>
                       <p className="text-sm font-medium text-ink group-hover:text-saffron transition-colors">{quote.title}</p>
                       <p className="text-xs text-muted mt-0.5">
-                        {quote.client?.name || 'ללא לקוח'} · {format(new Date(quote.created_at), 'dd/MM/yy')}
+                        {quote.client?.name || T.no_client} · {format(new Date(quote.created_at), 'dd/MM/yy')}
                       </p>
                     </div>
                   </div>
@@ -121,7 +124,7 @@ export default async function DashboardPage() {
                     {quoteTotal > 0 && (
                       <span className="font-amount text-sm font-medium text-ink">{formatCurrency(quoteTotal, currency)}</span>
                     )}
-                    <Badge variant={statusBadgeVariant[status]}>{statusInfo.he}</Badge>
+                    <Badge variant={statusBadgeVariant[status]}>{statusInfo[lang]}</Badge>
                   </div>
                 </Link>
               )

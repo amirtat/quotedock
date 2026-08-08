@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatCurrency, calcTotal, intervalLabel } from '@/lib/utils'
+import { useT, useLang } from '@/lib/lang-context'
 import { Client, QuoteItem, Quote, Service, NoteTemplate, RecurringInterval, PaymentMilestone, QuoteAttachment, QuoteSection } from '@/lib/types'
 import ShareDialog from '@/components/quotes/share-dialog'
 import { Plus, Trash2, Save, Send, Eye, ArrowLeft, GripVertical } from 'lucide-react'
@@ -98,6 +99,8 @@ export function QuoteBuilder({
   showQuantityDefault = false,
   shareMessageTemplate,
 }: QuoteBuilderProps) {
+  const T = useT()
+  const lang = useLang()
   const router = useRouter()
   const [deleting, startDelete] = useTransition()
   const [saving, setSaving] = useState(false)
@@ -115,7 +118,7 @@ export function QuoteBuilder({
     }
     const oldPreamble = (initialData as any)?.preamble
     if (oldPreamble) {
-      return [{ _key: crypto.randomUUID(), title: 'הקדמה', content: oldPreamble, position: 'start' as const }]
+      return [{ _key: crypto.randomUUID(), title: T.preamble, content: oldPreamble, position: 'start' as const }]
     }
     return []
   })
@@ -205,8 +208,8 @@ export function QuoteBuilder({
   }
 
   async function save(status: 'draft' | 'sent' = 'draft') {
-    if (!title.trim()) return showToast('נא להזין כותרת', 'err')
-    if (items.some(i => !i.name.trim())) return showToast('נא למלא שם לכל הפריטים', 'err')
+    if (!title.trim()) return showToast(T.error_enter_title, 'err')
+    if (items.some(i => !i.name.trim())) return showToast(T.error_item_names, 'err')
 
     setSaving(true)
     const supabase = createClient()
@@ -287,7 +290,7 @@ export function QuoteBuilder({
             sort_order: i,
           }))
         )
-        if (sectionsErr) throw new Error(`שגיאה בשמירת סקשנים: ${sectionsErr.message}`)
+        if (sectionsErr) throw new Error(`${T.save_error}: ${sectionsErr.message}`)
       }
 
       if (status === 'sent') {
@@ -295,11 +298,11 @@ export function QuoteBuilder({
         const publicUrl = `${window.location.origin}/q/${tokenData?.public_token}`
         setShareData({ url: publicUrl, quoteId: currentQuoteId! })
       } else {
-        showToast('נשמר ✓')
+        showToast(T.saved)
         router.push(`/dashboard/quotes/${currentQuoteId}/preview`)
       }
     } catch (err: any) {
-      showToast(err?.message || 'שגיאה בשמירה', 'err')
+      showToast(err?.message || T.save_error, 'err')
     } finally {
       setSaving(false)
     }
@@ -326,13 +329,13 @@ export function QuoteBuilder({
       {editingLocked && (
         <div className="shrink-0 bg-amber-50 border-b border-amber-200 px-6 py-2.5 flex items-center justify-between">
           <p className="text-sm text-amber-800">
-            ⚠️ הצעה זו כבר נשלחה — שינויים ישפיעו על הגרסה שהלקוח רואה
+            {T.quote_sent_warning}
           </p>
           <button
             onClick={() => setEditingLocked(false)}
             className="text-sm font-medium text-amber-700 hover:text-amber-900 underline underline-offset-2 transition-colors"
           >
-            ערוך בכל זאת
+            {T.edit_anyway}
           </button>
         </div>
       )}
@@ -349,11 +352,11 @@ export function QuoteBuilder({
         <div className="flex items-center gap-4">
           <Link href="/dashboard/quotes" className="flex items-center gap-1.5 text-sm text-muted hover:text-ink transition-colors">
             <ArrowLeft className="h-4 w-4" />
-            הצעות
+            {T.quotes}
           </Link>
           <div className="h-4 w-px bg-border" />
           <div>
-            <span className="text-sm font-medium text-ink">{title || 'הצעה חדשה'}</span>
+            <span className="text-sm font-medium text-ink">{title || T.new_quote}</span>
             <span className="text-xs text-muted mr-2 font-mono">{initialData?.number || nextNumber}</span>
           </div>
         </div>
@@ -362,30 +365,30 @@ export function QuoteBuilder({
             <Link href={`/dashboard/quotes/${quoteId}/preview`}>
               <Button variant="ghost" size="sm">
                 <Eye className="h-4 w-4" />
-                תצוגה מקדימה
+                {T.preview}
               </Button>
             </Link>
           )}
           {quoteId && (
             <button
               onClick={() => {
-                if (!confirm('למחוק את ההצעה לצמיתות?')) return
+                if (!confirm(T.confirm_delete_quote)) return
                 startDelete(() => deleteQuote(quoteId))
               }}
               disabled={deleting}
               className="flex items-center gap-1 text-sm text-muted hover:text-danger transition-colors disabled:opacity-50 px-2 py-1"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              {deleting ? 'מוחק...' : 'מחק'}
+              {deleting ? T.deleting : T.delete}
             </button>
           )}
           <Button variant="outline" size="sm" onClick={() => save('draft')} loading={saving} disabled={editingLocked}>
             <Save className="h-4 w-4" />
-            שמור טיוטה
+            {T.save_draft}
           </Button>
           <Button size="sm" onClick={() => save('sent')} loading={saving} disabled={editingLocked}>
             <Send className="h-4 w-4" />
-            שמור ושלח
+            {T.save_send}
           </Button>
         </div>
       </div>
@@ -400,29 +403,29 @@ export function QuoteBuilder({
             <div className="bg-white rounded-xl border border-border p-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2 flex flex-col gap-1.5">
-                  <Label htmlFor="title">כותרת הצעה *</Label>
+                  <Label htmlFor="title">{T.quote_title_label} *</Label>
                   <input
                     id="title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="עיצוב אתר אינטרנט"
+                    placeholder={T.quote_title_placeholder}
                     className="flex h-10 w-full rounded-lg border-0 bg-transparent px-0 text-xl font-bold text-ink placeholder:text-muted/40 focus:outline-none"
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>לקוח</Label>
+                  <Label>{T.client}</Label>
                   <Select value={clientId} onValueChange={setClientId}>
                     <SelectTrigger>
-                      <SelectValue placeholder="בחר לקוח" />
+                      <SelectValue placeholder={T.select_client} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">ללא לקוח</SelectItem>
+                      <SelectItem value="">{T.no_client}</SelectItem>
                       {clients.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="validUntil">בתוקף עד</Label>
+                  <Label htmlFor="validUntil">{T.valid_until}</Label>
                   <Input id="validUntil" type="date" value={validUntil} onChange={(e) => setValidUntil(e.target.value)} dir="ltr" />
                 </div>
               </div>
@@ -431,13 +434,13 @@ export function QuoteBuilder({
             {/* Start sections */}
             <div className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">חלקי פתיח</h2>
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">{T.section_start}</h2>
                 <button type="button" onClick={() => addSection('start')} className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1 pointer-events-auto">
-                  <Plus className="h-3.5 w-3.5" /> הוסף חלק
+                  <Plus className="h-3.5 w-3.5" /> {T.add_section}
                 </button>
               </div>
               {sections.filter(s => s.position === 'start').length === 0 ? (
-                <p className="text-sm text-muted text-center py-3">הוסף חלקי פתיח להצעה — תיאור פרויקט, רקע, מטרות וכדומה</p>
+                <p className="text-sm text-muted text-center py-3">{T.section_start_hint}</p>
               ) : (
                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleSectionDragEnd(e, 'start')}>
                   <SortableContext items={sections.filter(s => s.position === 'start').map(s => s._key)} strategy={verticalListSortingStrategy}>
@@ -448,10 +451,10 @@ export function QuoteBuilder({
                             <div className="flex flex-col gap-1.5 p-3 rounded-lg border border-border bg-gray-50/50">
                               <div className="flex items-center gap-2">
                                 {dragHandle}
-                                <Input value={sec.title} onChange={(e) => updateSection(sec._key, 'title', e.target.value)} placeholder="כותרת (על הפרויקט, רקע...)" className="flex-1 text-sm font-medium" />
+                                <Input value={sec.title} onChange={(e) => updateSection(sec._key, 'title', e.target.value)} placeholder={T.section_start_title_placeholder} className="flex-1 text-sm font-medium" />
                                 <button type="button" onClick={() => removeSection(sec._key)} className="p-1.5 text-gray-400 hover:text-red-500 rounded hover:bg-red-50 shrink-0"><Trash2 className="h-3.5 w-3.5" /></button>
                               </div>
-                              <Textarea value={sec.content} onChange={(e) => updateSection(sec._key, 'content', e.target.value)} placeholder={"תומך Markdown: **מודגש**, *נטוי*, - בולטים, 1. ממוספר"} rows={3} />
+                              <Textarea value={sec.content} onChange={(e) => updateSection(sec._key, 'content', e.target.value)} placeholder={T.markdown_hint} rows={3} />
                             </div>
                           )}
                         </SortableItemRow>
@@ -465,22 +468,22 @@ export function QuoteBuilder({
             {/* Items */}
             <div className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">פריטים</h2>
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">{T.items_section}</h2>
                 <button
                   type="button"
                   onClick={() => setShowQuantity((p: boolean) => !p)}
                   className="text-xs text-muted hover:text-ink border border-border rounded px-2 py-0.5 transition-colors pointer-events-auto"
                 >
-                  {showQuantity ? 'הסתר כמות' : 'הצג כמות'}
+                  {showQuantity ? T.hide_quantity_col : T.show_quantity_col}
                 </button>
               </div>
 
               {/* Column headers */}
               <div className="flex gap-2 text-xs text-muted mb-2 px-1">
                 <div className="w-5 shrink-0" />
-                <div className="flex-1">שם / תיאור</div>
-                {showQuantity && <div className="w-20 shrink-0 text-center">כמות</div>}
-                <div className="w-28 shrink-0 text-center">מחיר</div>
+                <div className="flex-1">{T.name_description}</div>
+                {showQuantity && <div className="w-20 shrink-0 text-center">{T.quantity}</div>}
+                <div className="w-28 shrink-0 text-center">{T.unit_price}</div>
                 <div className="w-7 shrink-0" />
               </div>
 
@@ -502,34 +505,34 @@ export function QuoteBuilder({
                                   const matched = services.find(s => s.name === val)
                                   if (matched) fillFromService(item._key, matched.id)
                                 }}
-                                placeholder="שם הפריט"
+                                placeholder={T.item_name}
                               />
                               {services.length > 0 && (
                                 <datalist id={`services-ac-${item._key}`}>
                                   {services.map(s => <option key={s.id} value={s.name} />)}
                                 </datalist>
                               )}
-                              <Input value={item.description || ''} onChange={(e) => updateItem(item._key, 'description', e.target.value)} placeholder="תיאור (אופציונלי)" className="text-xs" />
+                              <Input value={item.description || ''} onChange={(e) => updateItem(item._key, 'description', e.target.value)} placeholder={T.description_optional} className="text-xs" />
                               <div className="flex items-center gap-1 flex-wrap">
                                 <button
                                   type="button"
                                   onClick={() => updateItem(item._key, 'item_type', 'one_time')}
                                   className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'one_time' ? 'bg-ink text-white border-ink' : 'text-muted border-border hover:border-ink'}`}
-                                >חד-פעמי</button>
+                                >{T.one_time}</button>
                                 <button
                                   type="button"
                                   onClick={() => updateItem(item._key, 'item_type', 'recurring')}
                                   className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'recurring' ? 'bg-saffron text-white border-saffron' : 'text-muted border-border hover:border-saffron'}`}
-                                >חוזר</button>
+                                >{T.recurring}</button>
                                 {item.item_type === 'recurring' && (
                                   <select
                                     value={item.recurring_interval || 'monthly'}
                                     onChange={(e) => updateItem(item._key, 'recurring_interval', e.target.value as RecurringInterval)}
                                     className="text-xs text-saffron bg-transparent border-0 p-0 focus:outline-none cursor-pointer"
                                   >
-                                    <option value="monthly">חודשי</option>
-                                    <option value="quarterly">רבעוני</option>
-                                    <option value="yearly">שנתי</option>
+                                    <option value="monthly">{T.monthly}</option>
+                                    <option value="quarterly">{T.quarterly}</option>
+                                    <option value="yearly">{T.yearly}</option>
                                   </select>
                                 )}
                                 <div className="flex items-center gap-1 ms-auto">
@@ -537,12 +540,12 @@ export function QuoteBuilder({
                                     type="button"
                                     onClick={() => updateItem(item._key, 'discount_percent', (item.discount_percent || 0) === 100 ? 0 : 100)}
                                     className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${(item.discount_percent || 0) === 100 ? 'bg-green-100 text-green-700 border-green-200' : 'text-muted border-border hover:border-green-300'}`}
-                                  >ללא עלות</button>
+                                  >{T.free}</button>
                                   <button
                                     type="button"
                                     onClick={() => updateItem(item._key, 'is_optional', !item.is_optional)}
                                     className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.is_optional ? 'bg-amber-100 text-amber-700 border-amber-200' : 'text-muted border-border hover:border-amber-300'}`}
-                                  >אופציונלי</button>
+                                  >{T.optional}</button>
                                 </div>
                               </div>
                             </div>
@@ -553,7 +556,7 @@ export function QuoteBuilder({
                             )}
                             <div className="w-28 shrink-0 flex flex-col gap-1">
                               {(item.discount_percent || 0) === 100 ? (
-                                <div className="h-9 flex items-center justify-center text-xs text-green-600 font-medium bg-green-50 border border-green-100 rounded-lg">ללא עלות</div>
+                                <div className="h-9 flex items-center justify-center text-xs text-green-600 font-medium bg-green-50 border border-green-100 rounded-lg">{T.free}</div>
                               ) : (
                                 <>
                                   <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(item._key, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
@@ -563,7 +566,7 @@ export function QuoteBuilder({
                                     max="99"
                                     step="1"
                                     value={(item.discount_percent || 0) > 0 && (item.discount_percent || 0) < 100 ? item.discount_percent : ''}
-                                    placeholder="הנחה %"
+                                    placeholder={T.item_discount}
                                     onChange={(e) => updateItem(item._key, 'discount_percent', e.target.value === '' ? 0 : Number(e.target.value))}
                                     className="w-full text-center text-xs bg-transparent border border-border/60 rounded px-1 py-0.5 text-muted focus:outline-none focus:border-saffron"
                                     dir="ltr"
@@ -587,14 +590,14 @@ export function QuoteBuilder({
               <div className="flex items-center gap-3 mt-4 px-1">
                 <button type="button" onClick={() => addItem('one_time')} className="flex items-center gap-1.5 text-sm text-saffron hover:text-saffron-600 font-medium transition-colors">
                   <Plus className="h-4 w-4" />
-                  הוסף פריט
+                  {T.add_item}
                 </button>
               </div>
 
               {/* Excluded items section */}
               {items.some(i => i.item_type === 'excluded') && (
                 <div className="mt-5 pt-4 border-t border-dashed border-border">
-                  <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">אינו כלול</p>
+                  <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">{T.not_included_section}</p>
                   <div className="flex flex-col gap-2">
                     {items.filter(i => i.item_type === 'excluded').map((item) => (
                       <div key={item._key} className="flex gap-2 items-center p-2.5 rounded-lg bg-red-50/40 border border-red-100/60">
@@ -602,10 +605,10 @@ export function QuoteBuilder({
                           <Input
                             value={item.name}
                             onChange={(e) => updateItem(item._key, 'name', e.target.value)}
-                            placeholder="מה אינו כלול"
+                            placeholder={T.excluded_placeholder}
                             className="text-sm"
                           />
-                          <Input value={item.description || ''} onChange={(e) => updateItem(item._key, 'description', e.target.value)} placeholder="הסבר (אופציונלי)" className="text-xs" />
+                          <Input value={item.description || ''} onChange={(e) => updateItem(item._key, 'description', e.target.value)} placeholder={T.description_optional} className="text-xs" />
                         </div>
                         <button type="button" onClick={() => removeItem(item._key)} className="p-1 text-muted/50 hover:text-danger transition-colors shrink-0">
                           <Trash2 className="h-3.5 w-3.5" />
@@ -617,21 +620,21 @@ export function QuoteBuilder({
               )}
               <button type="button" onClick={() => addItem('excluded')} className="flex items-center gap-1.5 text-xs text-muted hover:text-danger/70 font-medium transition-colors mt-3 px-1">
                 <Plus className="h-3.5 w-3.5" />
-                הוסף "אינו כלול"
+                {T.add_excluded}
               </button>
 
               {/* Optional items section */}
               {items.some(i => i.is_optional) && (
                 <div className="mt-5 pt-4 border-t border-dashed border-amber-200">
-                  <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-2">תוספות אופציונליות</p>
+                  <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-2">{T.optional_items}</p>
                   <div className="flex flex-col gap-2">
                     {items.filter(i => i.is_optional).map((item) => (
                       <div key={item._key} className="flex gap-2 items-center p-2.5 rounded-lg bg-amber-50/40 border border-amber-100/60">
-                        <div className="flex-1 text-sm font-medium text-gray-700 truncate">{item.name || <span className="text-muted/50">ללא שם</span>}</div>
+                        <div className="flex-1 text-sm font-medium text-gray-700 truncate">{item.name || <span className="text-muted/50">{T.no_name}</span>}</div>
                         {item.item_type === 'recurring' && item.recurring_interval && (
-                          <span className="text-xs text-amber-600 shrink-0">{item.recurring_interval === 'monthly' ? 'חודשי' : item.recurring_interval === 'yearly' ? 'שנתי' : 'רבעוני'}</span>
+                          <span className="text-xs text-amber-600 shrink-0">{intervalLabel(item.recurring_interval, lang)}</span>
                         )}
-                        <button type="button" onClick={() => updateItem(item._key, 'is_optional', false)} className="text-xs text-amber-500 hover:text-amber-700 shrink-0">הסר</button>
+                        <button type="button" onClick={() => updateItem(item._key, 'is_optional', false)} className="text-xs text-amber-500 hover:text-amber-700 shrink-0">{T.remove}</button>
                         <button type="button" onClick={() => removeItem(item._key)} className="p-1 text-muted/50 hover:text-danger transition-colors shrink-0">
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
@@ -645,28 +648,28 @@ export function QuoteBuilder({
             {/* Payment schedule */}
             <div className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">לוח תשלומים</h2>
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">{T.payment_schedule}</h2>
                 <div className="flex items-center gap-2">
-                  <button type="button" onClick={() => applyMilestonePreset([50, 50], ['מקדמה בחתימה', 'יתרה במסירה'])} className="text-xs text-muted hover:text-saffron border border-border rounded px-1.5 py-0.5 transition-colors">50/50</button>
-                  <button type="button" onClick={() => applyMilestonePreset([40, 30, 30], ['מקדמה בחתימה', 'אמצע פרויקט', 'יתרה במסירה'])} className="text-xs text-muted hover:text-saffron border border-border rounded px-1.5 py-0.5 transition-colors">40/30/30</button>
-                  <button type="button" onClick={() => setMilestones(p => [...p, { title: '', percent: 0, due_date: '' }])} className="text-xs text-saffron hover:text-saffron-600 font-medium transition-colors">+ הוסף</button>
+                  <button type="button" onClick={() => applyMilestonePreset([50, 50], [T.milestone_upfront, T.milestone_balance])} className="text-xs text-muted hover:text-saffron border border-border rounded px-1.5 py-0.5 transition-colors">50/50</button>
+                  <button type="button" onClick={() => applyMilestonePreset([40, 30, 30], [T.milestone_upfront, T.milestone_midway, T.milestone_balance])} className="text-xs text-muted hover:text-saffron border border-border rounded px-1.5 py-0.5 transition-colors">40/30/30</button>
+                  <button type="button" onClick={() => setMilestones(p => [...p, { title: '', percent: 0, due_date: '' }])} className="text-xs text-saffron hover:text-saffron-600 font-medium transition-colors">+ {T.add}</button>
                 </div>
               </div>
 
               {milestones.length === 0 ? (
-                <p className="text-xs text-muted/50 text-center py-3">ללא לוח תשלומים — בחר תבנית או הוסף ידנית</p>
+                <p className="text-xs text-muted/50 text-center py-3">{T.no_milestones}</p>
               ) : (
                 <div className="flex flex-col gap-2">
                   <div className="grid grid-cols-12 gap-2 text-xs text-muted px-1 mb-1">
-                    <div className="col-span-5">תיאור</div>
+                    <div className="col-span-5">{T.milestone_title}</div>
                     <div className="col-span-2 text-center">%</div>
-                    <div className="col-span-4 text-center">תאריך יעד</div>
+                    <div className="col-span-4 text-center">{T.milestone_due}</div>
                     <div className="col-span-1" />
                   </div>
                   {milestones.map((m, i) => (
                     <div key={i} className="grid grid-cols-12 gap-2 items-center">
                       <div className="col-span-5">
-                        <Input value={m.title} onChange={e => setMilestones(p => p.map((x, j) => j === i ? { ...x, title: e.target.value } : x))} placeholder="מקדמה בחתימה" />
+                        <Input value={m.title} onChange={e => setMilestones(p => p.map((x, j) => j === i ? { ...x, title: e.target.value } : x))} placeholder={T.milestone_placeholder} />
                       </div>
                       <div className="col-span-2">
                         <Input type="number" min="0" max="100" value={m.percent || ''} onChange={e => setMilestones(p => p.map((x, j) => j === i ? { ...x, percent: Number(e.target.value) } : x))} className="text-center" dir="ltr" />
@@ -683,7 +686,7 @@ export function QuoteBuilder({
                   ))}
                   {milestones.length > 0 && (
                     <div className="flex justify-end mt-1">
-                      {(() => { const sum = milestones.reduce((s, m) => s + m.percent, 0); return sum !== 100 ? <span className="text-xs text-orange-500">סה"כ: {sum}% (חייב להיות 100%)</span> : <span className="text-xs text-green-600">✓ סה"כ: 100%</span> })()}
+                      {(() => { const sum = milestones.reduce((s, m) => s + m.percent, 0); return sum !== 100 ? <span className="text-xs text-orange-500">{T.total}: {sum}% ({T.total_pct_must_be_100})</span> : <span className="text-xs text-green-600">✓ {T.total}: 100%</span> })()}
                     </div>
                   )}
                 </div>
@@ -693,13 +696,13 @@ export function QuoteBuilder({
             {/* End sections */}
             <div className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">חלקי סיום</h2>
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">{T.section_end}</h2>
                 <button type="button" onClick={() => addSection('end')} className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1 pointer-events-auto">
-                  <Plus className="h-3.5 w-3.5" /> הוסף חלק
+                  <Plus className="h-3.5 w-3.5" /> {T.add_section}
                 </button>
               </div>
               {sections.filter(s => s.position === 'end').length === 0 ? (
-                <p className="text-sm text-muted text-center py-3">הוסף חלקי סיום — "איך מתקדמים", תנאים, שלבי תשלום וכדומה</p>
+                <p className="text-sm text-muted text-center py-3">{T.section_end_hint}</p>
               ) : (
                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleSectionDragEnd(e, 'end')}>
                   <SortableContext items={sections.filter(s => s.position === 'end').map(s => s._key)} strategy={verticalListSortingStrategy}>
@@ -710,10 +713,10 @@ export function QuoteBuilder({
                             <div className="flex flex-col gap-1.5 p-3 rounded-lg border border-border bg-gray-50/50">
                               <div className="flex items-center gap-2">
                                 {dragHandle}
-                                <Input value={sec.title} onChange={(e) => updateSection(sec._key, 'title', e.target.value)} placeholder="כותרת (איך מתקדמים, השלבים הבאים...)" className="flex-1 text-sm font-medium" />
+                                <Input value={sec.title} onChange={(e) => updateSection(sec._key, 'title', e.target.value)} placeholder={T.section_end_title_placeholder} className="flex-1 text-sm font-medium" />
                                 <button type="button" onClick={() => removeSection(sec._key)} className="p-1.5 text-gray-400 hover:text-red-500 rounded hover:bg-red-50 shrink-0"><Trash2 className="h-3.5 w-3.5" /></button>
                               </div>
-                              <Textarea value={sec.content} onChange={(e) => updateSection(sec._key, 'content', e.target.value)} placeholder={"תומך Markdown: **מודגש**, *נטוי*, - בולטים, 1. ממוספר"} rows={3} />
+                              <Textarea value={sec.content} onChange={(e) => updateSection(sec._key, 'content', e.target.value)} placeholder={T.markdown_hint} rows={3} />
                             </div>
                           )}
                         </SortableItemRow>
@@ -727,7 +730,7 @@ export function QuoteBuilder({
             {/* Notes */}
             <div className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">הערות</h2>
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide">{T.notes}</h2>
                 {noteTemplates.length > 0 && (
                   <select
                     defaultValue=""
@@ -738,14 +741,14 @@ export function QuoteBuilder({
                     }}
                     className="text-xs text-muted border border-border rounded-lg px-2 py-1 bg-white focus:outline-none focus:border-saffron"
                   >
-                    <option value="" disabled>הוסף טקסט קבוע</option>
+                    <option value="" disabled>{T.add_fixed_text}</option>
                     {noteTemplates.map(t => (
                       <option key={t.id} value={t.id}>{t.title}</option>
                     ))}
                   </select>
                 )}
               </div>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="תנאי תשלום, הערות נוספות..." rows={3} />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={T.notes_placeholder} rows={3} />
             </div>
 
             {/* Attachments */}
@@ -753,8 +756,8 @@ export function QuoteBuilder({
               <AttachmentsManager quoteId={quoteId} userId={userId} initialAttachments={initialAttachments} />
             ) : (
               <div className="bg-white rounded-xl border border-border p-5">
-                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">מסמכים מצורפים</h2>
-                <p className="text-xs text-muted/50 text-center py-2">שמור טיוטה תחילה להוספת מסמכים</p>
+                <h2 className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">{T.attachments}</h2>
+                <p className="text-xs text-muted/50 text-center py-2">{T.save_draft_first}</p>
               </div>
             )}
           </div>
@@ -763,20 +766,20 @@ export function QuoteBuilder({
         {/* Total panel — the signature element */}
         <div className="w-64 bg-obsidian flex flex-col shrink-0 border-r border-obsidian-800">
           <div className="p-5 border-b border-obsidian-700">
-            <p className="text-white/30 text-xs uppercase tracking-wider font-medium">סיכום</p>
+            <p className="text-white/30 text-xs uppercase tracking-wider font-medium">{T.summary}</p>
           </div>
 
           <div className="flex-1 p-5 flex flex-col gap-3">
             {recurringSubtotal > 0 && (
               <div className="flex flex-col gap-1 pb-3 border-b border-obsidian-700">
-                <p className="text-white/30 text-xs uppercase tracking-wider">חוזר</p>
+                <p className="text-white/30 text-xs uppercase tracking-wider">{T.recurring}</p>
                 {(['monthly', 'quarterly', 'yearly'] as const).map(interval => {
                   const intervalItems = (items as unknown as QuoteItem[]).filter(i => i.item_type === 'recurring' && (i.recurring_interval || 'monthly') === interval)
                   const intervalTotal = intervalItems.reduce((s, i) => s + i.quantity * i.unit_price, 0)
                   if (intervalTotal === 0) return null
                   return (
                     <div key={interval} className="flex justify-between text-sm">
-                      <span className="text-saffron/70">{intervalLabel(interval)}</span>
+                      <span className="text-saffron/70">{intervalLabel(interval, lang)}</span>
                       <span className="text-saffron font-amount">{formatCurrency(intervalTotal, currency)}</span>
                     </div>
                   )
@@ -784,7 +787,7 @@ export function QuoteBuilder({
               </div>
             )}
             <div className="flex justify-between text-sm">
-              <span className="text-white/40">סכום ביניים</span>
+              <span className="text-white/40">{T.subtotal}</span>
               <span className="text-white/80 font-amount">{formatCurrency(subtotal, currency)}</span>
             </div>
 
@@ -802,7 +805,7 @@ export function QuoteBuilder({
                     onClick={() => setDiscountType('fixed')}
                     className={`text-xs px-2 py-0.5 rounded transition-colors ${discountType === 'fixed' ? 'bg-saffron text-obsidian-900 font-medium' : 'text-white/40 hover:text-white/60'}`}
                   >₪</button>
-                  <span className="text-white/40 text-sm me-1">הנחה</span>
+                  <span className="text-white/40 text-sm me-1">{T.discount}</span>
                 </div>
                 <input
                   type="number" min="0"
@@ -818,7 +821,7 @@ export function QuoteBuilder({
                   type="text"
                   value={discountReason}
                   onChange={(e) => setDiscountReason(e.target.value)}
-                  placeholder="סיבת הנחה (אופציונלי)"
+                  placeholder={T.discount_reason_placeholder}
                   className="text-xs bg-obsidian-700 text-white/60 border border-obsidian-700 rounded-lg px-2 py-1 focus:outline-none focus:border-saffron placeholder-white/20 w-full"
                 />
               )}
@@ -826,7 +829,7 @@ export function QuoteBuilder({
 
             {discount > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-red-400/70">הנחה{discountReason ? ` (${discountReason})` : ''}</span>
+                <span className="text-red-400/70">{T.discount}{discountReason ? ` (${discountReason})` : ''}</span>
                 <span className="text-red-400 font-amount">-{formatCurrency(discountAmount, currency)}</span>
               </div>
             )}
@@ -834,13 +837,13 @@ export function QuoteBuilder({
             {/* VAT toggle */}
             {vatRate === 0 ? (
               <div className="flex items-center justify-between">
-                <span className="text-white/40 text-sm">פטור ממע"מ</span>
-                <span className="text-white/30 text-xs">עוסק זעיר</span>
+                <span className="text-white/40 text-sm">{T.vat_exempt}</span>
+                <span className="text-white/30 text-xs">{T.small_business_vat}</span>
               </div>
             ) : (
               <>
                 <div className="flex items-center justify-between">
-                  <span className="text-white/40 text-sm">מע"מ {vatRate}%</span>
+                  <span className="text-white/40 text-sm">{T.vat} {vatRate}%</span>
                   <button
                     onClick={() => setIncludeVat(!includeVat)}
                     className={`w-9 h-5 rounded-full transition-colors relative ${includeVat ? 'bg-saffron' : 'bg-obsidian-700'}`}
@@ -850,7 +853,7 @@ export function QuoteBuilder({
                 </div>
                 {includeVat && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-white/40">מע"מ</span>
+                    <span className="text-white/40">{T.vat}</span>
                     <span className="text-white/60 font-amount">{formatCurrency(vatAmount, currency)}</span>
                   </div>
                 )}
@@ -860,7 +863,7 @@ export function QuoteBuilder({
 
           {/* Grand total — the cash register moment */}
           <div className="p-5 border-t border-obsidian-700">
-            <p className="text-white/30 text-xs uppercase tracking-widest mb-2">סה"כ לתשלום</p>
+            <p className="text-white/30 text-xs uppercase tracking-widest mb-2">{T.grand_total}</p>
             <p className="font-amount text-saffron font-bold leading-none" style={{ fontSize: total >= 100000 ? '1.5rem' : '2rem' }}>
               {formatCurrency(total, currency)}
             </p>

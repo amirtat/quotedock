@@ -4,38 +4,39 @@ import { duplicateQuote } from '@/app/actions/quote-actions'
 import { LayoutTemplate, Plus, Copy } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { t, getLang } from '@/lib/i18n'
 
 export default async function TemplatesPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const { data: templates } = await supabase
-    .from('quotes')
-    .select('*, client:clients(name)')
-    .eq('user_id', user.id)
-    .eq('is_template', true)
-    .order('updated_at', { ascending: false })
+  const [templatesResult, profileResult] = await Promise.all([
+    supabase.from('quotes').select('*, client:clients(name)').eq('user_id', user.id).eq('is_template', true).order('updated_at', { ascending: false }),
+    supabase.from('profiles').select('language').eq('id', user.id).single(),
+  ])
 
-  const allTemplates: Quote[] = templates || []
+  const allTemplates: Quote[] = templatesResult.data || []
+  const lang = getLang(profileResult.data?.language || 'he')
+  const T = t[lang]
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">תבניות</h1>
-          <p className="text-sm text-gray-500 mt-0.5">הצעות ששמורות כתבניות לשימוש חוזר</p>
+          <h1 className="text-xl font-bold text-gray-900">{T.templates}</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{T.templates_subtitle}</p>
         </div>
       </div>
 
       {allTemplates.length === 0 ? (
         <div className="text-center py-20">
           <LayoutTemplate className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-lg font-medium text-gray-700 mb-2">אין תבניות עדיין</h2>
-          <p className="text-gray-500 text-sm mb-1">כדי ליצור תבנית — פתח הצעה קיימת</p>
-          <p className="text-gray-500 text-sm mb-6">ולחץ על "שמור כתבנית" בתצוגה המקדימה</p>
+          <h2 className="text-lg font-medium text-gray-700 mb-2">{T.no_templates}</h2>
+          <p className="text-gray-500 text-sm mb-1">{T.no_templates_desc1}</p>
+          <p className="text-gray-500 text-sm mb-6">{T.no_templates_desc2}</p>
           <Link href="/dashboard/quotes">
-            <Button variant="outline">עבור להצעות</Button>
+            <Button variant="outline">{T.go_to_quotes}</Button>
           </Link>
         </div>
       ) : (
@@ -46,13 +47,13 @@ export default async function TemplatesPage() {
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 truncate">{template.title}</p>
                   {(template as any).client?.name && (
-                    <p className="text-xs text-gray-400 mt-0.5">בסיס: {(template as any).client.name}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{T.template_base} {(template as any).client.name}</p>
                   )}
                 </div>
                 <Link
                   href={`/dashboard/quotes/${template.id}`}
                   className="p-1.5 text-gray-300 hover:text-indigo-500 transition-colors rounded-lg hover:bg-indigo-50 shrink-0"
-                  title="ערוך תבנית"
+                  title={T.edit}
                 >
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
@@ -67,7 +68,7 @@ export default async function TemplatesPage() {
                   className="w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 transition-colors"
                 >
                   <Copy className="h-3.5 w-3.5" />
-                  צור הצעה מתבנית זו
+                  {T.create_from_template}
                 </button>
               </form>
             </div>

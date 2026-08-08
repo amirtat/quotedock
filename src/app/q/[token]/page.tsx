@@ -371,16 +371,16 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
 
         {/* Actions / Signature */}
         {isPending && (
-          <PublicQuoteActions quoteId={quote.id} />
+          <PublicQuoteActions quoteId={quote.id} lang={lang} />
         )}
 
         {/* Existing client signature */}
         {signature && (
           <div className="mt-4 bg-white rounded-2xl border border-green-200 p-6">
-            <p className="text-green-700 font-medium mb-3 text-center">✓ ההצעה אושרה ונחתמה</p>
+            <p className="text-green-700 font-medium mb-3 text-center">{T.quote_accepted_signed}</p>
             {signature.signature_data?.startsWith('data:image') && (
               <div className="border border-gray-100 rounded-lg bg-gray-50 p-2 mb-3">
-                <img src={signature.signature_data} alt="חתימה" className="max-h-24 mx-auto" />
+                <img src={signature.signature_data} alt={T.signature_label} className="max-h-24 mx-auto" />
               </div>
             )}
             <p className="text-center text-sm text-gray-600">{signature.signer_name}</p>

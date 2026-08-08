@@ -126,6 +126,11 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
           </div>
         ) : null}
 
+        {/* Items header */}
+        {profile?.quote_items_header && sections.filter((s: any) => s.position === 'start').length > 0 && (
+          <h2 className="text-base font-semibold text-gray-800 mb-4 -mt-2">{profile.quote_items_header}</h2>
+        )}
+
         {/* Items — mobile: cards, desktop: table */}
         <div className="sm:hidden flex flex-col divide-y divide-gray-100 mb-6">
           {oneTimeItems.map((item: any, i: number) => (

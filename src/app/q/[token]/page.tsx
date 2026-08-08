@@ -128,7 +128,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
             </div>
           ) : (quote as any).preamble ? (
             <div className="mb-8 p-4 bg-gray-50 rounded-xl border border-gray-100">
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">על הפרויקט</p>
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">{T.about_project}</p>
               <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{(quote as any).preamble}</p>
             </div>
           ) : null}

@@ -55,6 +55,7 @@ export interface Quote {
   include_vat: boolean
   show_quantity: boolean
   preamble: string | null
+  is_template: boolean
   public_token: string
   viewed_at: string | null
   accepted_at: string | null

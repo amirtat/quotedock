@@ -29,6 +29,7 @@ interface SidebarProps {
   businessName?: string | null
   email?: string | null
   logoUrl?: string | null
+  lang?: string
 }
 
 export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {

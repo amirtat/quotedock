@@ -32,6 +32,7 @@ export default async function DashboardLayout({ children }: LayoutProps<'/dashbo
           businessName={profile?.business_name}
           email={profile?.email || user.email}
           logoUrl={profile?.logo_url}
+          lang={lang}
         />
       </div>
       <main className="flex-1 overflow-auto flex flex-col">

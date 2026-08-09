@@ -764,7 +764,7 @@ export function QuoteBuilder({
         </div>
 
         {/* Total panel — the signature element */}
-        <div className="w-64 bg-obsidian flex flex-col shrink-0 border-r border-obsidian-800">
+        <div className="w-full md:w-64 bg-obsidian flex flex-col shrink-0 md:border-r border-obsidian-800 md:overflow-y-auto">
           <div className="p-5 border-b border-obsidian-700">
             <p className="text-white/30 text-xs uppercase tracking-wider font-medium">{T.summary}</p>
           </div>

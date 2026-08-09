@@ -109,11 +109,11 @@ export default async function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="bg-obsidian px-6 pt-20 pb-28 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight max-w-2xl mx-auto">
+      <section className="bg-obsidian px-4 sm:px-6 pt-12 sm:pt-20 pb-16 sm:pb-28 text-center">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white leading-tight max-w-2xl mx-auto">
           {C.hero_title}
         </h1>
-        <p className="mt-5 text-white/55 text-lg max-w-xl mx-auto leading-relaxed">
+        <p className="mt-5 text-white/55 text-sm sm:text-lg max-w-xl mx-auto leading-relaxed">
           {C.hero_sub}
         </p>
         <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">

@@ -20,6 +20,13 @@
   --color-danger: #DC2626;
 }
 
+:root {
+  --qd-ink: #16213E;
+  --qd-ink-soft: #3A4562;
+  --qd-gold: #E8A400;
+  --qd-gold-text: #5C3D00;
+}
+
 * {
   box-sizing: border-box;
 }

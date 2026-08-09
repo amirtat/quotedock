@@ -137,13 +137,13 @@ export default async function Home() {
         </div>
 
         {/* Product mockup */}
-        <div className="mt-16 max-w-md mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden text-right" dir="rtl">
+        <div className="mt-16 max-w-md mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden text-right" dir={lang === 'he' ? 'rtl' : 'ltr'}>
           {/* Quote header */}
           <div className="px-6 pt-5 pb-4 border-b border-gray-100 flex items-start justify-between gap-4">
             <div>
               <p className="text-[11px] text-gray-400 font-mono mb-1">QD-2025-042</p>
-              <h3 className="text-base font-bold text-gray-900 leading-snug">פיתוח אפליקציית מובייל</h3>
-              <p className="text-xs text-gray-400 mt-0.5">עבור: מיקאל כהן, StartupXYZ</p>
+              <h3 className="text-base font-bold text-gray-900 leading-snug">{C.mockup_title}</h3>
+              <p className="text-xs text-gray-400 mt-0.5">{C.mockup_client}</p>
             </div>
             <div className="w-8 h-8 rounded-lg bg-saffron/10 flex items-center justify-center shrink-0">
               <span className="text-saffron text-xs font-bold">SD</span>
@@ -152,11 +152,7 @@ export default async function Home() {
 
           {/* Items */}
           <div className="px-6 py-4 flex flex-col gap-3">
-            {[
-              { name: 'אפיון UX ומסעות משתמש', price: '₪4,500' },
-              { name: 'עיצוב UI — מסכים מלאים', price: '₪6,000' },
-              { name: 'פיתוח React Native', price: '₪18,000' },
-            ].map(item => (
+            {C.mockup_items.map(item => (
               <div key={item.name} className="flex items-center justify-between text-sm">
                 <span className="font-mono font-medium text-gray-900">{item.price}</span>
                 <span className="text-gray-600">{item.name}</span>
@@ -168,15 +164,15 @@ export default async function Home() {
           <div className="mx-6 pt-3 border-t border-gray-100 pb-1">
             <div className="flex items-center justify-between text-xs text-gray-400 mb-1.5">
               <span className="font-mono">₪28,500</span>
-              <span>סכום ביניים</span>
+              <span>{C.mockup_subtotal_label}</span>
             </div>
             <div className="flex items-center justify-between text-xs text-gray-400 mb-3">
               <span className="font-mono">₪5,130</span>
-              <span>מע"מ 18%</span>
+              <span>{C.mockup_vat_label}</span>
             </div>
             <div className="flex items-center justify-between font-bold">
               <span className="font-mono text-lg text-gray-900">₪33,630</span>
-              <span className="text-sm text-gray-700">סה"כ לתשלום</span>
+              <span className="text-sm text-gray-700">{C.mockup_total_label}</span>
             </div>
           </div>
 
@@ -184,9 +180,9 @@ export default async function Home() {
           <div className="px-6 py-4 flex gap-2">
             <div className="flex-1 bg-green-600 text-white text-sm font-semibold py-2.5 rounded-xl flex items-center justify-center gap-1.5 cursor-default">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              אישור ההצעה
+              {C.mockup_accept}
             </div>
-            <div className="px-4 border border-red-200 text-red-400 text-sm rounded-xl flex items-center cursor-default">דחייה</div>
+            <div className="px-4 border border-red-200 text-red-400 text-sm rounded-xl flex items-center cursor-default">{C.mockup_decline}</div>
           </div>
         </div>
       </section>

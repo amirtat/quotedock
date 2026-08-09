@@ -170,7 +170,7 @@ export default function PublicQuoteActions({ quoteId, lang = 'he' }: { quoteId: 
   }
 
   return (
-    <div className="mt-4 bg-white rounded-2xl border border-indigo-200 p-6">
+    <div className="mt-4 bg-white rounded-2xl border border-indigo-200 p-4 sm:p-6">
       <h3 className="font-semibold text-gray-900 mb-4">{T.confirm_quote_title}</h3>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">

@@ -54,7 +54,33 @@ export default async function QuotesPage() {
       ) : (
         <Card>
           <CardContent className="p-0">
-            <table className="w-full text-sm">
+            {/* Mobile card list */}
+            <div className="sm:hidden divide-y divide-gray-100">
+              {allQuotes.map((quote) => {
+                const statusInfo = STATUS_LABELS[quote.status]
+                const href = `/dashboard/quotes/${quote.id}`
+                return (
+                  <div key={quote.id} className="flex items-center gap-3 px-4 py-3">
+                    <Link href={href} className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 truncate">{quote.title}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 truncate">
+                        {(quote as any).client?.name || '—'} · {format(new Date(quote.created_at), 'dd/MM/yy')}
+                      </p>
+                    </Link>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Badge className={statusInfo.color}>{statusInfo[lang]}</Badge>
+                      <form action={duplicateQuote.bind(null, quote.id)}>
+                        <button type="submit" title={T.duplicate} className="p-1.5 text-gray-300 hover:text-indigo-500 transition-colors rounded-lg hover:bg-indigo-50">
+                          <Copy className="h-4 w-4" />
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            {/* Desktop table */}
+            <table className="hidden sm:table w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100">
                   <th className="text-right px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">{T.quote_title}</th>

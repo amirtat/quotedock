@@ -492,91 +492,102 @@ export function QuoteBuilder({
                     {items.filter(i => !i.is_optional && i.item_type !== 'excluded').map((item) => (
                       <SortableItemRow key={item._key} id={item._key}>
                         {(dragHandle) => (
-                          <div className="flex gap-2 items-start p-3 rounded-lg bg-surface/60 border border-border/60">
-                            {dragHandle}
-                            <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-                              <Input
-                                value={item.name}
-                                list={`services-ac-${item._key}`}
-                                onChange={(e) => {
-                                  const val = e.target.value
-                                  updateItem(item._key, 'name', val)
-                                  const matched = services.find(s => s.name === val)
-                                  if (matched) fillFromService(item._key, matched.id)
-                                }}
-                                placeholder={T.item_name}
-                              />
-                              {services.length > 0 && (
-                                <datalist id={`services-ac-${item._key}`}>
-                                  {services.map(s => <option key={s.id} value={s.name} />)}
-                                </datalist>
-                              )}
-                              <Input value={item.description || ''} onChange={(e) => updateItem(item._key, 'description', e.target.value)} placeholder={T.description_optional} className="text-xs" />
-                              <div className="flex items-center gap-1 flex-wrap">
-                                <button
-                                  type="button"
-                                  onClick={() => updateItem(item._key, 'item_type', 'one_time')}
-                                  className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'one_time' ? 'bg-ink text-white border-ink' : 'text-muted border-border hover:border-ink'}`}
-                                >{T.one_time}</button>
-                                <button
-                                  type="button"
-                                  onClick={() => updateItem(item._key, 'item_type', 'recurring')}
-                                  className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'recurring' ? 'bg-saffron text-white border-saffron' : 'text-muted border-border hover:border-saffron'}`}
-                                >{T.recurring}</button>
-                                {item.item_type === 'recurring' && (
-                                  <select
-                                    value={item.recurring_interval || 'monthly'}
-                                    onChange={(e) => updateItem(item._key, 'recurring_interval', e.target.value as RecurringInterval)}
-                                    className="text-xs text-saffron bg-transparent border-0 p-0 focus:outline-none cursor-pointer"
-                                  >
-                                    <option value="monthly">{T.monthly}</option>
-                                    <option value="quarterly">{T.quarterly}</option>
-                                    <option value="yearly">{T.yearly}</option>
-                                  </select>
+                          <div className="flex flex-col sm:flex-row gap-2 p-3 rounded-lg bg-surface/60 border border-border/60">
+                            {/* Top row: drag + name + delete (mobile) / drag + name (desktop) */}
+                            <div className="flex gap-2 items-start flex-1 min-w-0">
+                              {dragHandle}
+                              <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                                <Input
+                                  value={item.name}
+                                  list={`services-ac-${item._key}`}
+                                  onChange={(e) => {
+                                    const val = e.target.value
+                                    updateItem(item._key, 'name', val)
+                                    const matched = services.find(s => s.name === val)
+                                    if (matched) fillFromService(item._key, matched.id)
+                                  }}
+                                  placeholder={T.item_name}
+                                />
+                                {services.length > 0 && (
+                                  <datalist id={`services-ac-${item._key}`}>
+                                    {services.map(s => <option key={s.id} value={s.name} />)}
+                                  </datalist>
                                 )}
-                                <div className="flex items-center gap-1 ms-auto">
+                                <Input value={item.description || ''} onChange={(e) => updateItem(item._key, 'description', e.target.value)} placeholder={T.description_optional} className="text-xs" />
+                                <div className="flex items-center gap-1 flex-wrap">
                                   <button
                                     type="button"
-                                    onClick={() => updateItem(item._key, 'discount_percent', (item.discount_percent || 0) === 100 ? 0 : 100)}
-                                    className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${(item.discount_percent || 0) === 100 ? 'bg-green-100 text-green-700 border-green-200' : 'text-muted border-border hover:border-green-300'}`}
-                                  >{T.free}</button>
+                                    onClick={() => updateItem(item._key, 'item_type', 'one_time')}
+                                    className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'one_time' ? 'bg-ink text-white border-ink' : 'text-muted border-border hover:border-ink'}`}
+                                  >{T.one_time}</button>
                                   <button
                                     type="button"
-                                    onClick={() => updateItem(item._key, 'is_optional', !item.is_optional)}
-                                    className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.is_optional ? 'bg-amber-100 text-amber-700 border-amber-200' : 'text-muted border-border hover:border-amber-300'}`}
-                                  >{T.optional}</button>
+                                    onClick={() => updateItem(item._key, 'item_type', 'recurring')}
+                                    className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.item_type === 'recurring' ? 'bg-saffron text-white border-saffron' : 'text-muted border-border hover:border-saffron'}`}
+                                  >{T.recurring}</button>
+                                  {item.item_type === 'recurring' && (
+                                    <select
+                                      value={item.recurring_interval || 'monthly'}
+                                      onChange={(e) => updateItem(item._key, 'recurring_interval', e.target.value as RecurringInterval)}
+                                      className="text-xs text-saffron bg-transparent border-0 p-0 focus:outline-none cursor-pointer"
+                                    >
+                                      <option value="monthly">{T.monthly}</option>
+                                      <option value="quarterly">{T.quarterly}</option>
+                                      <option value="yearly">{T.yearly}</option>
+                                    </select>
+                                  )}
+                                  <div className="flex items-center gap-1 ms-auto">
+                                    <button
+                                      type="button"
+                                      onClick={() => updateItem(item._key, 'discount_percent', (item.discount_percent || 0) === 100 ? 0 : 100)}
+                                      className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${(item.discount_percent || 0) === 100 ? 'bg-green-100 text-green-700 border-green-200' : 'text-muted border-border hover:border-green-300'}`}
+                                    >{T.free}</button>
+                                    <button
+                                      type="button"
+                                      onClick={() => updateItem(item._key, 'is_optional', !item.is_optional)}
+                                      className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${item.is_optional ? 'bg-amber-100 text-amber-700 border-amber-200' : 'text-muted border-border hover:border-amber-300'}`}
+                                    >{T.optional}</button>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            {showQuantity && (
-                              <div className="w-20 shrink-0">
-                                <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(item._key, 'quantity', e.target.value)} className="text-center" dir="ltr" />
-                              </div>
-                            )}
-                            <div className="w-28 shrink-0 flex flex-col gap-1">
-                              {(item.discount_percent || 0) === 100 ? (
-                                <div className="h-9 flex items-center justify-center text-xs text-green-600 font-medium bg-green-50 border border-green-100 rounded-lg">{T.free}</div>
-                              ) : (
-                                <>
-                                  <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(item._key, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
-                                  <input
-                                    type="number"
-                                    min="0"
-                                    max="99"
-                                    step="1"
-                                    value={(item.discount_percent || 0) > 0 && (item.discount_percent || 0) < 100 ? item.discount_percent : ''}
-                                    placeholder={T.item_discount}
-                                    onChange={(e) => updateItem(item._key, 'discount_percent', e.target.value === '' ? 0 : Number(e.target.value))}
-                                    className="w-full text-center text-xs bg-transparent border border-border/60 rounded px-1 py-0.5 text-muted focus:outline-none focus:border-saffron"
-                                    dir="ltr"
-                                  />
-                                </>
-                              )}
-                            </div>
-                            <div className="w-7 shrink-0 flex items-center justify-center pt-1">
-                              <button type="button" onClick={() => removeItem(item._key)} className="p-1 text-muted/50 hover:text-danger transition-colors">
+                              {/* Delete — visible inline on mobile */}
+                              <button type="button" onClick={() => removeItem(item._key)} className="sm:hidden p-1 text-muted/50 hover:text-danger transition-colors shrink-0 mt-1">
                                 <Trash2 className="h-3.5 w-3.5" />
                               </button>
+                            </div>
+                            {/* Price + quantity — mobile: full row below, desktop: side columns */}
+                            <div className="flex gap-2 sm:contents">
+                              {showQuantity && (
+                                <div className="flex-1 sm:w-20 sm:flex-none sm:shrink-0">
+                                  <Input type="number" min="0" step="0.01" value={item.quantity} onChange={(e) => updateItem(item._key, 'quantity', e.target.value)} className="text-center" dir="ltr" />
+                                </div>
+                              )}
+                              <div className="flex-1 sm:w-28 sm:flex-none sm:shrink-0 flex flex-col gap-1">
+                                {(item.discount_percent || 0) === 100 ? (
+                                  <div className="h-9 flex items-center justify-center text-xs text-green-600 font-medium bg-green-50 border border-green-100 rounded-lg">{T.free}</div>
+                                ) : (
+                                  <>
+                                    <Input type="number" min="0" step="0.01" value={item.unit_price || ''} placeholder="0" onChange={(e) => updateItem(item._key, 'unit_price', e.target.value === '' ? 0 : Number(e.target.value))} className="text-center" dir="ltr" />
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      max="99"
+                                      step="1"
+                                      value={(item.discount_percent || 0) > 0 && (item.discount_percent || 0) < 100 ? item.discount_percent : ''}
+                                      placeholder={T.item_discount}
+                                      onChange={(e) => updateItem(item._key, 'discount_percent', e.target.value === '' ? 0 : Number(e.target.value))}
+                                      className="w-full text-center text-xs bg-transparent border border-border/60 rounded px-1 py-0.5 text-muted focus:outline-none focus:border-saffron"
+                                      dir="ltr"
+                                    />
+                                  </>
+                                )}
+                              </div>
+                              {/* Delete — desktop only column */}
+                              <div className="hidden sm:flex w-7 shrink-0 items-center justify-center pt-1">
+                                <button type="button" onClick={() => removeItem(item._key)} className="p-1 text-muted/50 hover:text-danger transition-colors">
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
                             </div>
                           </div>
                         )}

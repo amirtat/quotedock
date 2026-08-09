@@ -76,11 +76,20 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
         )}
 
         {/* Quote document */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 sm:p-8">
           {/* Header */}
-          <div className="flex justify-between items-start mb-8">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{quote.title}</h1>
+          <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start mb-8">
+            <div className="flex flex-col items-end sm:items-end gap-1">
+              {profile?.logo_url && (
+                <img src={profile.logo_url} alt={profile?.business_name || ''} className="max-h-16 max-w-[160px] object-contain mb-1" />
+              )}
+              <p className="font-bold text-gray-900 text-lg">{profile?.business_name}</p>
+              {profile?.email && <p className="text-sm text-gray-500">{profile.email}</p>}
+              {profile?.phone && <p className="text-sm text-gray-500">{profile.phone}</p>}
+              {profile?.address && <p className="text-sm text-gray-500">{profile.address}</p>}
+            </div>
+            <div className="border-t border-gray-100 pt-4 sm:border-0 sm:pt-0 sm:text-start">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{quote.title}</h1>
               <p className="text-gray-500 mt-1 font-mono text-sm">{quote.number}</p>
               <p className="text-gray-500 text-sm mt-0.5">
                 {format(new Date(quote.created_at), 'dd/MM/yyyy')}
@@ -90,15 +99,6 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                   {T.valid_through}: {format(new Date(quote.valid_until), 'dd/MM/yyyy')}
                 </p>
               )}
-            </div>
-            <div className="text-left flex flex-col items-end gap-1">
-              {profile?.logo_url && (
-                <img src={profile.logo_url} alt={profile?.business_name || ''} className="max-h-24 max-w-[200px] object-contain mb-2" />
-              )}
-              <p className="font-bold text-gray-900 text-lg">{profile?.business_name}</p>
-              {profile?.email && <p className="text-sm text-gray-500">{profile.email}</p>}
-              {profile?.phone && <p className="text-sm text-gray-500">{profile.phone}</p>}
-              {profile?.address && <p className="text-sm text-gray-500">{profile.address}</p>}
             </div>
           </div>
 

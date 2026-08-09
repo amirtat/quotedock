@@ -61,7 +61,7 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
     : email?.slice(0, 2).toUpperCase() || 'QD'
 
   return (
-    <aside className="w-56 min-h-screen bg-obsidian flex flex-col shrink-0 select-none" dir="ltr">
+    <aside className="hidden md:flex w-56 min-h-screen bg-obsidian flex-col shrink-0 select-none" dir="ltr">
       {/* Logo + language toggle */}
       <div className="px-5 py-5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">

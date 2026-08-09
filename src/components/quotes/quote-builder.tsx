@@ -348,24 +348,23 @@ export function QuoteBuilder({
       )}
 
       {/* Top bar */}
-      <div className="flex items-center justify-between px-6 py-3.5 border-b border-border bg-white shrink-0 sticky top-0 z-30">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard/quotes" className="flex items-center gap-1.5 text-sm text-muted hover:text-ink transition-colors">
+      <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-3.5 border-b border-border bg-white shrink-0 sticky top-0 z-30 gap-2">
+        <div className="flex items-center gap-2 md:gap-4 min-w-0">
+          <Link href="/dashboard/quotes" className="flex items-center gap-1 text-sm text-muted hover:text-ink transition-colors shrink-0">
             <ArrowLeft className="h-4 w-4" />
-            {T.quotes}
+            <span className="hidden sm:inline">{T.quotes}</span>
           </Link>
-          <div className="h-4 w-px bg-border" />
-          <div>
-            <span className="text-sm font-medium text-ink">{title || T.new_quote}</span>
-            <span className="text-xs text-muted mr-2 font-mono">{initialData?.number || nextNumber}</span>
+          <div className="h-4 w-px bg-border hidden sm:block" />
+          <div className="min-w-0 truncate">
+            <span className="text-sm font-medium text-ink truncate">{title || T.new_quote}</span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 shrink-0">
           {quoteId && (
             <Link href={`/dashboard/quotes/${quoteId}/preview`}>
               <Button variant="ghost" size="sm">
                 <Eye className="h-4 w-4" />
-                {T.preview}
+                <span className="hidden sm:inline">{T.preview}</span>
               </Button>
             </Link>
           )}
@@ -379,16 +378,16 @@ export function QuoteBuilder({
               className="flex items-center gap-1 text-sm text-muted hover:text-danger transition-colors disabled:opacity-50 px-2 py-1"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              {deleting ? T.deleting : T.delete}
+              <span className="hidden sm:inline">{deleting ? T.deleting : T.delete}</span>
             </button>
           )}
           <Button variant="outline" size="sm" onClick={() => save('draft')} loading={saving} disabled={editingLocked}>
             <Save className="h-4 w-4" />
-            {T.save_draft}
+            <span className="hidden sm:inline">{T.save_draft}</span>
           </Button>
           <Button size="sm" onClick={() => save('sent')} loading={saving} disabled={editingLocked}>
             <Send className="h-4 w-4" />
-            {T.save_send}
+            <span className="hidden sm:inline">{T.save_send}</span>
           </Button>
         </div>
       </div>

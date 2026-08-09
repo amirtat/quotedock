@@ -12,7 +12,7 @@ export default async function TemplatesPage() {
   if (!user) return null
 
   const [templatesResult, profileResult] = await Promise.all([
-    supabase.from('quotes').select('*, client:clients(name)').eq('user_id', user.id).eq('is_template', true).order('updated_at', { ascending: false }),
+    supabase.from('quotes').select('*, client:clients(name)').eq('user_id', user.id).eq('is_template', true).is('deleted_at', null).order('updated_at', { ascending: false }),
     supabase.from('profiles').select('language').eq('id', user.id).single(),
   ])
 

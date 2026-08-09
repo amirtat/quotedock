@@ -123,7 +123,7 @@ export function ClientsManager({ initialClients, userId }: ClientsManagerProps) 
               <Label>{T.client_name} *</Label>
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid sm:grid-cols-2 grid-cols-1 gap-3">
               <div className="flex flex-col gap-1.5">
                 <Label>{T.client_email}</Label>
                 <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="email@example.com" dir="ltr" />

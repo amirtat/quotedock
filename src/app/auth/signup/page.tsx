@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useLang } from '@/lib/lang-context'
-import { LandingLangToggle } from '@/components/layout/landing-lang-toggle'
 
 const copy = {
   he: {

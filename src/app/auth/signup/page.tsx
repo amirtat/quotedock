@@ -102,11 +102,7 @@ export default function SignupPage() {
       {/* Left: Brand panel */}
       <div className="hidden lg:flex lg:w-2/5 flex-col justify-between p-10">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-saffron flex items-center justify-center">
-            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-          </div>
+          <img src="/brand/mark-primary-inverse.svg" alt="" width={32} height={32} />
           <span className="text-white font-bold text-lg tracking-tight">QuoteDock</span>
         </div>
 

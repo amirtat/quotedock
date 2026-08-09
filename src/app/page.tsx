@@ -28,6 +28,18 @@ const copy = {
     final_sub: 'חינמי לגמרי. ללא כרטיס אשראי.',
     final_cta: 'צור חשבון בחינם',
     faq: 'שאלות נפוצות',
+    mockup_title: 'פיתוח אפליקציית מובייל',
+    mockup_client: 'עבור: מיקאל כהן, StartupXYZ',
+    mockup_items: [
+      { name: 'אפיון UX ומסעות משתמש', price: '₪4,500' },
+      { name: 'עיצוב UI — מסכים מלאים', price: '₪6,000' },
+      { name: 'פיתוח React Native', price: '₪18,000' },
+    ],
+    mockup_subtotal_label: 'סכום ביניים',
+    mockup_vat_label: 'מע"מ 18%',
+    mockup_total_label: 'סה"כ לתשלום',
+    mockup_accept: 'אישור ההצעה',
+    mockup_decline: 'דחייה',
   },
   en: {
     login: 'Sign in',

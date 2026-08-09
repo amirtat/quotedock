@@ -135,7 +135,7 @@ export default async function Home() {
         {/* Product mockup */}
         <div className="mt-16 w-full max-w-md mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden text-right" dir={lang === 'he' ? 'rtl' : 'ltr'}>
           {/* Quote header */}
-          <div className="px-6 pt-5 pb-4 border-b border-gray-100 flex items-start justify-between gap-4">
+          <div className="px-4 sm:px-6 pt-5 pb-4 border-b border-gray-100 flex items-start justify-between gap-4">
             <div>
               <p className="text-[11px] text-gray-400 font-mono mb-1">QD-2025-042</p>
               <h3 className="text-base font-bold text-gray-900 leading-snug">{C.mockup_title}</h3>

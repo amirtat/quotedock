@@ -26,7 +26,7 @@ export default async function FaqPage() {
 
         <div className="flex flex-col gap-3">
           {(faqs || []).map((item, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-200 p-6">
+            <div key={i} className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-6">
               <p className="font-semibold text-gray-900 mb-2">{item.question}</p>
               <p className="text-gray-600 text-sm leading-relaxed">{item.answer}</p>
             </div>

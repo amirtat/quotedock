@@ -231,7 +231,7 @@ export default async function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-obsidian border-t border-obsidian-700 px-6 py-5 flex items-center justify-between text-xs text-white/25">
+      <footer className="bg-obsidian border-t border-obsidian-700 px-4 sm:px-6 py-5 flex items-center justify-between text-xs text-white/25">
         <span>© 2025 QuoteDock</span>
         <Link href="/faq" className="hover:text-white/50 transition-colors">
           {C.faq}

@@ -17,7 +17,7 @@ export default async function FaqPage() {
   const subtitle = lang === 'en' ? 'Everything you need to know about QuoteDock' : 'כל מה שצריך לדעת על QuoteDock'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30 py-8 sm:py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="mb-10 text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">{title}</h1>

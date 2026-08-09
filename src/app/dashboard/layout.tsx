@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { Sidebar } from '@/components/layout/sidebar'
+import { MobileTopbar } from '@/components/layout/mobile-topbar'
 import type { Lang } from '@/lib/i18n'
 
 export default async function DashboardLayout({ children }: LayoutProps<'/dashboard'>) {

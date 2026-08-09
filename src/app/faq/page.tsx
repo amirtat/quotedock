@@ -20,7 +20,7 @@ export default async function FaqPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30 py-8 sm:py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="mb-10 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{title}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{title}</h1>
           <p className="text-gray-500">{subtitle}</p>
         </div>
 

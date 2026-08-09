@@ -147,7 +147,7 @@ export default async function Home() {
           </div>
 
           {/* Items */}
-          <div className="px-6 py-4 flex flex-col gap-3">
+          <div className="px-4 sm:px-6 py-4 flex flex-col gap-3">
             {C.mockup_items.map(item => (
               <div key={item.name} className="flex items-center justify-between text-sm">
                 <span className="font-mono font-medium text-gray-900">{item.price}</span>

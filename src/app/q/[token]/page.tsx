@@ -187,7 +187,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
 
           {/* Totals */}
           <div className="flex justify-end mb-6">
-            <div className="w-64 flex flex-col gap-2 text-sm">
+            <div className="w-full sm:w-64 flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">{T.subtotal}</span>
                 <span>{formatCurrency(subtotal, currency)}</span>

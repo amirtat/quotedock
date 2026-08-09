@@ -182,7 +182,7 @@ export default async function QuotePreviewPage({ params }: PageProps<'/dashboard
 
         {/* Totals */}
         <div className="flex justify-end">
-          <div className="w-60 flex flex-col gap-2 text-sm">
+          <div className="w-full sm:w-60 flex flex-col gap-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">{T.subtotal}</span>
               <span>{formatCurrency(subtotal, currency)}</span>

@@ -477,8 +477,8 @@ export function QuoteBuilder({
                 </button>
               </div>
 
-              {/* Column headers */}
-              <div className="flex gap-2 text-xs text-muted mb-2 px-1">
+              {/* Column headers — desktop only */}
+              <div className="hidden sm:flex gap-2 text-xs text-muted mb-2 px-1">
                 <div className="w-5 shrink-0" />
                 <div className="flex-1">{T.name_description}</div>
                 {showQuantity && <div className="w-20 shrink-0 text-center">{T.quantity}</div>}

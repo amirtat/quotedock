@@ -4,6 +4,7 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { Link2, FileSignature, Languages } from 'lucide-react'
 import type { Lang } from '@/lib/i18n'
+import { LandingLangToggle } from '@/components/layout/landing-lang-toggle'
 
 const copy = {
   he: {

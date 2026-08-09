@@ -301,7 +301,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
               <Label>{T.business_name}</Label>
               <Input value={form.business_name} onChange={(e) => setForm({ ...form, business_name: e.target.value })} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label>{T.email}</Label>
                 <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} dir="ltr" />

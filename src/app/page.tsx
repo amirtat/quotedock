@@ -173,7 +173,7 @@ export default async function Home() {
           </div>
 
           {/* Actions */}
-          <div className="px-6 py-4 flex gap-2">
+          <div className="px-4 sm:px-6 py-4 flex gap-2">
             <div className="flex-1 bg-green-600 text-white text-sm font-semibold py-2.5 rounded-xl flex items-center justify-center gap-1.5 cursor-default">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               {C.mockup_accept}

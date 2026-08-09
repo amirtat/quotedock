@@ -14,7 +14,7 @@ export default async function DashboardPage() {
   if (!user) return null
 
   const [quotesResult, profileResult] = await Promise.all([
-    supabase.from('quotes').select('*, client:clients(name), items:quote_items(quantity, unit_price)').eq('user_id', user.id).is('deleted_at', null).order('created_at', { ascending: false }).limit(20),
+    supabase.from('quotes').select('*, client:clients(name), items:quote_items(quantity, unit_price)').eq('user_id', user.id).eq('is_template', false).is('deleted_at', null).order('created_at', { ascending: false }).limit(20),
     supabase.from('profiles').select('business_name, currency, language').eq('id', user.id).single(),
   ])
 

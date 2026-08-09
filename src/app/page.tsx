@@ -89,7 +89,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-paper">
       {/* Nav */}
-      <nav className="bg-obsidian px-6 py-4 flex items-center justify-between">
+      <nav className="bg-obsidian px-4 sm:px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <img src="/brand/mark-primary-inverse.svg" alt="" width={28} height={28} />
           <span className="text-white font-bold text-[15px] tracking-tight">QuoteDock</span>

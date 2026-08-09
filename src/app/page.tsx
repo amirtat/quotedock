@@ -219,8 +219,8 @@ export default async function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="bg-obsidian px-6 py-24 text-center">
-        <h2 className="text-3xl font-bold text-white mb-3">{C.final_title}</h2>
+      <section className="bg-obsidian px-4 sm:px-6 py-16 sm:py-24 text-center">
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">{C.final_title}</h2>
         <p className="text-white/40 mb-9 text-base">{C.final_sub}</p>
         <Link
           href="/auth/signup"

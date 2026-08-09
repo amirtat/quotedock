@@ -436,7 +436,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label>{T.quote_prefix}</Label>
                 <p className="text-xs text-gray-400">{T.prefix_hint}</p>

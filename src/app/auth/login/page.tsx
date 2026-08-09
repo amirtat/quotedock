@@ -112,7 +112,10 @@ export default function LoginPage() {
       </div>
 
       {/* Right: Form panel */}
-      <div className="flex-1 flex items-center justify-center p-6 bg-paper">
+      <div className="flex-1 flex items-center justify-center p-6 bg-paper relative">
+        <div className="absolute top-4 end-4">
+          <LandingLangToggle lang={lang} />
+        </div>
         <div className="w-full max-w-sm">
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-8 lg:hidden">

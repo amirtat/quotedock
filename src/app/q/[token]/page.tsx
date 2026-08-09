@@ -116,9 +116,9 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           {sections.filter((s: any) => s.position === 'start').length > 0 ? (
             <div className="flex flex-col gap-3 mb-8">
               {sections.filter((s: any) => s.position === 'start').map((sec: any) => (
-                <div key={sec.id} className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex gap-4">
+                <div key={sec.id} className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col sm:flex-row gap-3 sm:gap-4">
                   {sec.title && (
-                    <div className="w-28 shrink-0 pt-0.5 border-l border-gray-200 pl-4">
+                    <div className="shrink-0 pt-0.5 sm:w-28 sm:border-l sm:border-gray-200 sm:pl-4 border-b border-gray-200 pb-2 sm:border-b-0 sm:pb-0">
                       <p className="text-sm font-semibold text-gray-800 leading-snug">{sec.title}</p>
                     </div>
                   )}
@@ -317,9 +317,9 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
           {sections.filter((s: any) => s.position === 'end').length > 0 && (
             <div className="flex flex-col gap-3 mt-8">
               {sections.filter((s: any) => s.position === 'end').map((sec: any) => (
-                <div key={sec.id} className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex gap-4">
+                <div key={sec.id} className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col sm:flex-row gap-3 sm:gap-4">
                   {sec.title && (
-                    <div className="w-28 shrink-0 pt-0.5 border-l border-gray-200 pl-4">
+                    <div className="shrink-0 pt-0.5 sm:w-28 sm:border-l sm:border-gray-200 sm:pl-4 border-b border-gray-200 pb-2 sm:border-b-0 sm:pb-0">
                       <p className="text-sm font-semibold text-gray-800 leading-snug">{sec.title}</p>
                     </div>
                   )}

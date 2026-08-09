@@ -142,7 +142,7 @@ export default function PublicQuoteActions({ quoteId, lang = 'he' }: { quoteId: 
 
   if (step === 'idle') {
     return (
-      <div className="mt-4 bg-white rounded-2xl border border-gray-200 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="mt-4 bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <p className="font-medium text-gray-900">{T.what_do_you_think}</p>
           <p className="text-sm text-gray-500 mt-0.5">{T.accept_or_decline}</p>

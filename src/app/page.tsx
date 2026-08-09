@@ -204,7 +204,7 @@ export default async function Home() {
       </section>
 
       {/* Demo CTA */}
-      <section className="px-6 py-16 bg-saffron-50 border-y border-saffron-100">
+      <section className="px-4 sm:px-6 py-12 sm:py-16 bg-saffron-50 border-y border-saffron-100">
         <div className="max-w-xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-ink mb-2">{C.demo_title}</h2>
           <p className="text-muted mb-7 text-base">{C.demo_sub}</p>

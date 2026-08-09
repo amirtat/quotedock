@@ -184,7 +184,7 @@ export default async function Home() {
       </section>
 
       {/* Features */}
-      <section className="px-6 py-20 max-w-4xl mx-auto">
+      <section className="px-4 sm:px-6 py-12 sm:py-20 max-w-4xl mx-auto">
         <h2 className="text-2xl font-bold text-center text-ink mb-12">{C.features_title}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[

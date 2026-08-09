@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useLang } from '@/lib/lang-context'
-import { LandingLangToggle } from '@/components/layout/landing-lang-toggle'
 
 const copy = {
   he: {
@@ -112,10 +111,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right: Form panel */}
-      <div className="flex-1 flex items-center justify-center p-6 bg-paper relative">
-        <div className="absolute top-4 end-4">
-          <LandingLangToggle lang={lang} />
-        </div>
+      <div className="flex-1 flex items-center justify-center p-6 bg-paper">
         <div className="w-full max-w-sm">
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-8 lg:hidden">

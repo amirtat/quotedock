@@ -107,22 +107,20 @@ export default async function DashboardPage() {
                 <Link
                   key={quote.id}
                   href={`/dashboard/quotes/${quote.id}`}
-                  className="flex items-center justify-between px-6 py-4 hover:bg-surface/50 transition-colors group"
+                  className="flex items-center gap-3 px-4 sm:px-6 py-4 hover:bg-surface/50 transition-colors group"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center shrink-0">
-                      <FileText className="h-4 w-4 text-muted" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-ink group-hover:text-saffron transition-colors">{quote.title}</p>
-                      <p className="text-xs text-muted mt-0.5">
-                        {quote.client?.name || T.no_client} · {format(new Date(quote.created_at), 'dd/MM/yy')}
-                      </p>
-                    </div>
+                  <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center shrink-0">
+                    <FileText className="h-4 w-4 text-muted" />
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-ink group-hover:text-saffron transition-colors truncate">{quote.title}</p>
+                    <p className="text-xs text-muted mt-0.5 truncate">
+                      {quote.client?.name || T.no_client} · {format(new Date(quote.created_at), 'dd/MM/yy')}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
                     {quoteTotal > 0 && (
-                      <span className="font-amount text-sm font-medium text-ink">{formatCurrency(quoteTotal, currency)}</span>
+                      <span className="font-amount text-sm font-medium text-ink hidden sm:inline">{formatCurrency(quoteTotal, currency)}</span>
                     )}
                     <Badge variant={statusBadgeVariant[status]}>{statusInfo[lang]}</Badge>
                   </div>

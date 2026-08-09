@@ -141,7 +141,7 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
               <Label>{T.service_description}</Label>
               <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid sm:grid-cols-2 grid-cols-1 gap-3">
               <div className="flex flex-col gap-1.5">
                 <Label>{T.service_price}</Label>
                 <Input

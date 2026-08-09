@@ -133,7 +133,7 @@ export default async function Home() {
         </div>
 
         {/* Product mockup */}
-        <div className="mt-16 max-w-md mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden text-right" dir={lang === 'he' ? 'rtl' : 'ltr'}>
+        <div className="mt-16 w-full max-w-md mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden text-right" dir={lang === 'he' ? 'rtl' : 'ltr'}>
           {/* Quote header */}
           <div className="px-6 pt-5 pb-4 border-b border-gray-100 flex items-start justify-between gap-4">
             <div>

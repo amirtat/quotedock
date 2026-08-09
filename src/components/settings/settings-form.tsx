@@ -408,7 +408,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                 {T.vat_exempt_setting}
               </Label>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label>{T.vat_rate_pct}</Label>
                 <Input

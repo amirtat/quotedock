@@ -394,9 +394,9 @@ export function QuoteBuilder({
       </div>
 
       {/* Body */}
-      <div className={`flex flex-1 overflow-hidden min-w-0 min-h-0 ${editingLocked ? 'opacity-60 pointer-events-none select-none' : ''}`}>
+      <div className={`flex flex-col md:flex-row flex-1 overflow-auto md:overflow-hidden md:min-h-0 min-w-0 ${editingLocked ? 'opacity-60 pointer-events-none select-none' : ''}`}>
         {/* Main form */}
-        <div className="flex-1 overflow-y-auto bg-surface/40 p-6">
+        <div className="flex-1 md:overflow-y-auto bg-surface/40 p-4 md:p-6">
           <div className="max-w-2xl mx-auto flex flex-col gap-5">
 
             {/* Quote header */}

@@ -75,6 +75,7 @@ export default async function Home() {
           <span className="text-white font-bold text-[15px] tracking-tight">QuoteDock</span>
         </div>
         <div className="flex items-center gap-4">
+          <LandingLangToggle lang={lang} />
           <Link href="/auth/login" className="text-white/50 hover:text-white text-sm transition-colors">
             {C.login}
           </Link>

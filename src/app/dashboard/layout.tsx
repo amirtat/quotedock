@@ -30,7 +30,12 @@ export default async function DashboardLayout({ children }: LayoutProps<'/dashbo
           lang={lang}
         />
       </div>
-      <main className="flex-1 overflow-auto flex flex-col">
+      <MobileTopbar
+        businessName={profile?.business_name}
+        email={profile?.email || user.email}
+        logoUrl={profile?.logo_url}
+      />
+      <main className="flex-1 overflow-auto flex flex-col pt-14 md:pt-0">
         <div className="flex-1">{children}</div>
         <footer className="no-print px-6 py-3 border-t border-border text-center">
           <p className="text-xs text-muted/50">

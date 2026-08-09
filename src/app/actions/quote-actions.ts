@@ -10,7 +10,7 @@ export async function deleteQuote(quoteId: string) {
 
   const { error } = await supabase
     .from('quotes')
-    .delete()
+    .update({ deleted_at: new Date().toISOString() })
     .eq('id', quoteId)
     .eq('user_id', user.id)
 

@@ -16,7 +16,7 @@ export default async function QuotesPage() {
   if (!user) return null
 
   const [quotesResult, profileResult] = await Promise.all([
-    supabase.from('quotes').select('*, client:clients(name)').eq('user_id', user.id).order('created_at', { ascending: false }),
+    supabase.from('quotes').select('*, client:clients(name)').eq('user_id', user.id).is('deleted_at', null).order('created_at', { ascending: false }),
     supabase.from('profiles').select('language').eq('id', user.id).single(),
   ])
 

@@ -62,6 +62,18 @@ const copy = {
     final_sub: 'Completely free. No credit card required.',
     final_cta: 'Create free account',
     faq: 'FAQ',
+    mockup_title: 'Mobile App Development',
+    mockup_client: 'For: Michal Cohen, StartupXYZ',
+    mockup_items: [
+      { name: 'UX Research & User Journeys', price: '₪4,500' },
+      { name: 'UI Design — Full Screens', price: '₪6,000' },
+      { name: 'React Native Development', price: '₪18,000' },
+    ],
+    mockup_subtotal_label: 'Subtotal',
+    mockup_vat_label: 'VAT 18%',
+    mockup_total_label: 'Total due',
+    mockup_accept: 'Approve quote',
+    mockup_decline: 'Decline',
   },
 }
 

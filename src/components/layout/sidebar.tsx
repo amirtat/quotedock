@@ -65,11 +65,7 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
       {/* Logo + language toggle */}
       <div className="px-5 py-5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-saffron flex items-center justify-center shrink-0">
-            <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-          </div>
+          <img src="/brand/mark-primary-inverse.svg" alt="" width={28} height={28} />
           <span className="text-white font-bold text-[15px] tracking-tight">QuoteDock</span>
         </div>
         <div className="flex items-center gap-1">

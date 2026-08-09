@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80" role="img" aria-label="QuoteDock">
+  <g transform="translate(-3.8 5) scale(0.7)">
+    <circle cx="44" cy="42" r="24" fill="none" stroke="#16213E" stroke-width="12"/>
+    <path d="M30 76 L62 76 Q75 76 79 63 L83 66 Q84 88 62 88 L30 88 A6 6 0 0 1 30 76 Z" fill="#E8A400"/>
+  </g>
+  <text x="76" y="52" font-family="Inter, 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="34" font-weight="500" letter-spacing="-0.6">
+    <tspan fill="#16213E">Quote</tspan><tspan fill="#E8A400">Dock</tspan>
+  </text>
+</svg>

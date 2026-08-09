@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" role="img" aria-label="QuoteDock">
+  <rect x="0" y="0" width="100" height="100" rx="22" fill="#16213E"/>
+  <g transform="translate(14.7 14) scale(0.72)">
+    <circle cx="44" cy="42" r="24" fill="none" stroke="#FFFFFF" stroke-width="12"/>
+    <path d="M30 76 L62 76 Q75 76 79 63 L83 66 Q84 88 62 88 L30 88 A6 6 0 0 1 30 76 Z" fill="#E8A400"/>
+  </g>
+</svg>

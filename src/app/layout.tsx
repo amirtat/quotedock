@@ -15,6 +15,11 @@ const heebo = Heebo({
 export const metadata: Metadata = {
   title: 'QuoteDock',
   description: 'Professional quotes, fast',
+  icons: {
+    icon: '/brand/favicon.svg',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
 }
 
 export default async function RootLayout({ children }: LayoutProps<'/'>) {

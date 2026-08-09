@@ -157,7 +157,7 @@ export default async function Home() {
           </div>
 
           {/* Total */}
-          <div className="mx-6 pt-3 border-t border-gray-100 pb-1">
+          <div className="mx-4 sm:mx-6 pt-3 border-t border-gray-100 pb-1">
             <div className="flex items-center justify-between text-xs text-gray-400 mb-1.5">
               <span className="font-mono">₪28,500</span>
               <span>{C.mockup_subtotal_label}</span>

@@ -89,6 +89,7 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
 
   return (
     <div className="p-4 sm:p-6 max-w-4xl mx-auto">
+      {confirmDialog}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-xl font-bold text-gray-900">{T.services_catalog}</h1>

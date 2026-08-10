@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-import { Link2, FileSignature, Languages } from 'lucide-react'
+import { Link2, BellRing, Globe, Package, BarChart2, LayoutTemplate } from 'lucide-react'
 import type { Lang } from '@/lib/i18n'
 import { LandingLangToggle } from '@/components/layout/landing-lang-toggle'
 
@@ -10,20 +10,23 @@ const copy = {
   he: {
     login: 'כניסה',
     signup: 'הרשמה',
-    hero_title: 'הצעות מחיר שהלקוחות אוהבים לקבל',
+    hero_title: 'מהצעה לחתימה, בלינק אחד',
     hero_sub: 'שלח לינק — הלקוח פותח, קורא, ומאשר עם חתימה דיגיטלית. ללא הרשמה.',
     cta_start: 'התחל בחינם',
     cta_demo: 'ראה דמו חי',
-    features_title: 'כל מה שפרילנסר צריך',
-    f1_title: 'לינק חכם',
-    f1_body: 'העתק קישור ושלח ב-WhatsApp, אימייל או SMS. הלקוח לא צריך להירשם.',
-    f2_title: 'חתימה דיגיטלית',
-    f2_body: 'הלקוח מאשר ישירות בעמוד — אתה מקבל עדכון בזמן אמת.',
-    f3_title: 'עברית ואנגלית',
-    f3_body: 'RTL מלא, מע"מ 18%, שקל ישראלי. גם עוסקים זעירים (פטור ממע"מ).',
-    demo_title: 'מה הלקוח שלך רואה',
-    demo_sub: 'עמוד נקי ומקצועי עם הלוגו שלך — ללא הסחות דעת',
-    demo_cta: 'צפה בדמו חי ←',
+    features_title: 'כל מה שעסק צריך כדי לסגור',
+    f1_title: 'הלקוח לא צריך להירשם',
+    f1_body: 'לינק אחד בווטסאפ — נפתח בכל מכשיר, בלי הרשמה.',
+    f2_title: 'תדע ברגע שנחתם',
+    f2_body: 'התראה מיידית ברגע שהלקוח אישר — בלי לרדוף אחרי תשובה.',
+    f3_title: 'בנוי לישראל',
+    f3_body: 'עברית, שקלים, מע"מ ועוסק פטור — בלי מאבק.',
+    f4_title: 'קטלוג שירותים',
+    f4_body: 'שמור את השירותים והמחירים שלך — הוסף לכל הצעה בלחיצה.',
+    f5_title: 'עקוב אחרי כל הצעה',
+    f5_body: 'טיוטה, נשלחה, נצפתה, נחתמה — הכל בדשבורד אחד.',
+    f6_title: 'תבניות לחיסכון בזמן',
+    f6_body: 'בנה הצעה פעם אחת, שמור כתבנית — שלח שוב בשניות.',
     final_title: 'מוכן לשלוח הצעה ראשונה?',
     final_sub: 'חינמי לגמרי. ללא כרטיס אשראי.',
     final_cta: 'צור חשבון בחינם',
@@ -44,20 +47,23 @@ const copy = {
   en: {
     login: 'Sign in',
     signup: 'Sign up',
-    hero_title: 'Quotes your clients love to receive',
+    hero_title: 'From quote to signature, in one link',
     hero_sub: 'Send a link — the client opens it, reads it, and signs digitally. No registration required.',
     cta_start: 'Start for free',
     cta_demo: 'See live demo',
-    features_title: 'Everything a freelancer needs',
-    f1_title: 'Smart link',
-    f1_body: 'Copy a link and send via WhatsApp, email, or SMS. No client sign-up required.',
-    f2_title: 'Digital signature',
-    f2_body: 'Client approves directly on the page — you get a real-time notification.',
-    f3_title: 'Hebrew & English',
-    f3_body: 'Full RTL support, 18% VAT, Israeli Shekel. VAT-exempt freelancers supported.',
-    demo_title: 'See what your client sees',
-    demo_sub: 'A clean, professional page with your logo — no distractions',
-    demo_cta: 'View live demo →',
+    features_title: 'Everything a business needs to close',
+    f1_title: 'No client sign-up needed',
+    f1_body: 'One link on WhatsApp — opens on any device, no registration.',
+    f2_title: 'Know the moment it\'s signed',
+    f2_body: 'Instant notification when your client approves — no chasing needed.',
+    f3_title: 'Built for Israel',
+    f3_body: 'Hebrew, Shekels, VAT and VAT-exempt — no configuration needed.',
+    f4_title: 'Services catalog',
+    f4_body: 'Save your services and prices — add to any quote in one click.',
+    f5_title: 'Track every quote',
+    f5_body: 'Draft, sent, viewed, signed — all in one dashboard.',
+    f6_title: 'Time-saving templates',
+    f6_body: 'Build a quote once, save as template — send again in seconds.',
     final_title: 'Ready to send your first quote?',
     final_sub: 'Completely free. No credit card required.',
     final_cta: 'Create free account',
@@ -172,13 +178,13 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Actions */}
+          {/* Actions — decorative only, not clickable */}
           <div className="px-4 sm:px-6 py-4 flex gap-2">
-            <div className="flex-1 bg-green-600 text-white text-sm font-semibold py-2.5 rounded-xl flex items-center justify-center gap-1.5 cursor-default">
+            <div className="flex-1 bg-green-600/40 text-white text-sm font-semibold py-2.5 rounded-xl flex items-center justify-center gap-1.5 cursor-default select-none">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               {C.mockup_accept}
             </div>
-            <div className="px-4 border border-red-200 text-red-400 text-sm rounded-xl flex items-center cursor-default">{C.mockup_decline}</div>
+            <div className="px-4 border border-red-200/40 text-red-400/40 text-sm rounded-xl flex items-center cursor-default select-none">{C.mockup_decline}</div>
           </div>
         </div>
       </section>
@@ -186,11 +192,14 @@ export default async function Home() {
       {/* Features */}
       <section className="px-4 sm:px-6 py-12 sm:py-20 max-w-4xl mx-auto">
         <h2 className="text-2xl font-bold text-center text-ink mb-12">{C.features_title}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {[
             { Icon: Link2, title: C.f1_title, body: C.f1_body },
-            { Icon: FileSignature, title: C.f2_title, body: C.f2_body },
-            { Icon: Languages, title: C.f3_title, body: C.f3_body },
+            { Icon: BellRing, title: C.f2_title, body: C.f2_body },
+            { Icon: Globe, title: C.f3_title, body: C.f3_body },
+            { Icon: Package, title: C.f4_title, body: C.f4_body },
+            { Icon: BarChart2, title: C.f5_title, body: C.f5_body },
+            { Icon: LayoutTemplate, title: C.f6_title, body: C.f6_body },
           ].map(({ Icon, title, body }) => (
             <div key={title} className="bg-white rounded-2xl border border-border p-6">
               <div className="w-10 h-10 rounded-xl bg-saffron-50 flex items-center justify-center mb-4">
@@ -203,36 +212,30 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Demo CTA */}
-      <section className="px-4 sm:px-6 py-12 sm:py-16 bg-saffron-50 border-y border-saffron-100">
-        <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-ink mb-2">{C.demo_title}</h2>
-          <p className="text-muted mb-7 text-base">{C.demo_sub}</p>
-          <Link
-            href="/q/demo"
-            target="_blank"
-            className="inline-block bg-saffron hover:bg-saffron-600 text-white font-semibold px-7 py-3 rounded-xl transition-colors text-base"
-          >
-            {C.demo_cta}
-          </Link>
-        </div>
-      </section>
-
       {/* Final CTA */}
       <section className="bg-obsidian px-4 sm:px-6 py-16 sm:py-24 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">{C.final_title}</h2>
         <p className="text-white/40 mb-9 text-base">{C.final_sub}</p>
-        <Link
-          href="/auth/signup"
-          className="inline-block bg-saffron hover:bg-saffron-600 text-white font-bold px-9 py-3.5 rounded-xl transition-colors text-base"
-        >
-          {C.final_cta}
-        </Link>
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          <Link
+            href="/auth/signup"
+            className="inline-block bg-saffron hover:bg-saffron-600 text-white font-bold px-9 py-3.5 rounded-xl transition-colors text-base"
+          >
+            {C.final_cta}
+          </Link>
+          <Link
+            href="/q/demo"
+            target="_blank"
+            className="border border-white/20 hover:border-white/40 text-white/75 hover:text-white font-medium px-7 py-3.5 rounded-xl transition-colors text-base"
+          >
+            {C.cta_demo}
+          </Link>
+        </div>
       </section>
 
       {/* Footer */}
       <footer className="bg-obsidian border-t border-obsidian-700 px-4 sm:px-6 py-5 flex items-center justify-between text-xs text-white/25">
-        <span>© 2025 QuoteDock</span>
+        <span>© 2026 QuoteDock</span>
         <Link href="/faq" className="hover:text-white/50 transition-colors">
           {C.faq}
         </Link>

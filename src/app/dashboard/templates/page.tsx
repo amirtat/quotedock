@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Quote } from '@/lib/types'
 import { duplicateQuote } from '@/app/actions/quote-actions'
-import { LayoutTemplate, Plus, Copy } from 'lucide-react'
+import { LayoutTemplate, Copy, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { t, getLang } from '@/lib/i18n'

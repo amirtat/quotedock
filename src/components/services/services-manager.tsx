@@ -71,11 +71,18 @@ export function ServicesManager({ initialServices, userId, currency }: ServicesM
     setOpen(false)
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm(T.confirm_delete)) return
-    const supabase = createClient()
-    await supabase.from('services').delete().eq('id', id)
-    setServices((prev) => prev.filter((s) => s.id !== id))
+  function handleDelete(id: string) {
+    openConfirm({
+      message: T.confirm_delete,
+      confirmLabel: T.delete,
+      cancelLabel: T.cancel,
+      variant: 'danger',
+      onConfirm: async () => {
+        const supabase = createClient()
+        await supabase.from('services').delete().eq('id', id)
+        setServices((prev) => prev.filter((s) => s.id !== id))
+      },
+    })
   }
 
   const unitLabel = (unit: string) => UNITS.find((u) => u.value === unit)?.label || unit

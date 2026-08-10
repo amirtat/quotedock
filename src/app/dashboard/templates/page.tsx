@@ -21,13 +21,28 @@ export default async function TemplatesPage() {
   const T = t[lang]
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-xl font-bold text-gray-900">{T.templates}</h1>
           <p className="text-sm text-gray-500 mt-0.5">{T.templates_subtitle}</p>
         </div>
       </div>
+
+      {/* Browse pre-built templates CTA */}
+      <Link
+        href="/templates"
+        className="flex items-center gap-4 bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-6 hover:border-indigo-300 hover:bg-indigo-50/80 transition-all group"
+      >
+        <div className="w-10 h-10 rounded-xl bg-saffron/10 flex items-center justify-center shrink-0">
+          <Sparkles className="h-5 w-5 text-saffron" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold text-gray-900 text-sm">{T.browse_ready_templates}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{T.browse_ready_templates_sub}</p>
+        </div>
+        <span className="text-indigo-600 text-sm font-medium group-hover:underline shrink-0">{T.browse_ready_templates_cta} &rarr;</span>
+      </Link>
 
       {allTemplates.length === 0 ? (
         <div className="text-center py-20">

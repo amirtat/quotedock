@@ -268,7 +268,7 @@ export default function DemoQuotePage() {
             </div>
             <div className="flex gap-3">
               <button
-                onClick={() => alert(C.decline_alert)}
+                onClick={() => setStep('declined')}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition-colors text-sm font-medium"
               >
                 <XCircle className="h-4 w-4" />

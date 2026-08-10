@@ -71,17 +71,18 @@ describe('Dashboard page', () => {
 
 describe('Quotes list page', () => {
   const file = src('app/dashboard/quotes/page.tsx')
+  const listFile = src('components/quotes/quotes-list.tsx')
 
   it('has responsive padding', () => {
     expect(file).toMatch(/p-4 sm:p-6/)
   })
 
   it('hides table on mobile (hidden sm:table)', () => {
-    expect(file).toMatch(/hidden sm:table/)
+    expect(listFile).toMatch(/hidden sm:table/)
   })
 
   it('shows mobile card list (sm:hidden)', () => {
-    expect(file).toMatch(/sm:hidden/)
+    expect(listFile).toMatch(/sm:hidden/)
   })
 
   it('filters soft-deleted quotes', () => {

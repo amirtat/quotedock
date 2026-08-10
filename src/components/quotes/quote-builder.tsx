@@ -314,6 +314,7 @@ export function QuoteBuilder({
 
   return (
     <>
+    {confirmDialog}
     {shareData && (
       <ShareDialog
         open={!!shareData}

@@ -22,6 +22,7 @@ const emptyForm = { title: '', content: '' }
 
 export function NoteTemplatesManager({ initialTemplates, userId }: NoteTemplatesManagerProps) {
   const T = useT()
+  const { dialog: confirmDialog, openConfirm } = useConfirm()
   const [templates, setTemplates] = useState(initialTemplates)
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<NoteTemplate | null>(null)

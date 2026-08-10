@@ -229,6 +229,18 @@ describe('Landing page', () => {
   it('mockup card is full width on small screens', () => {
     expect(file).toMatch(/w-full max-w-md/)
   })
+
+  it('features grid is responsive (2 cols tablet, 3 cols desktop)', () => {
+    expect(file).toMatch(/sm:grid-cols-2 lg:grid-cols-3/)
+  })
+
+  it('mockup action buttons are decorative only (cursor-default)', () => {
+    expect(file).toMatch(/cursor-default select-none/)
+  })
+
+  it('footer has correct year', () => {
+    expect(file).toMatch(/© 2026 QuoteDock/)
+  })
 })
 
 // ── FAQ page ─────────────────────────────────────────────────────────────────

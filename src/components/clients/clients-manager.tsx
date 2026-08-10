@@ -61,11 +61,18 @@ export function ClientsManager({ initialClients, userId }: ClientsManagerProps) 
     setOpen(false)
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm(T.confirm_delete)) return
-    const supabase = createClient()
-    await supabase.from('clients').delete().eq('id', id)
-    setClients((prev) => prev.filter((c) => c.id !== id))
+  function handleDelete(id: string) {
+    openConfirm({
+      message: T.confirm_delete,
+      confirmLabel: T.delete,
+      cancelLabel: T.cancel,
+      variant: 'danger',
+      onConfirm: async () => {
+        const supabase = createClient()
+        await supabase.from('clients').delete().eq('id', id)
+        setClients((prev) => prev.filter((c) => c.id !== id))
+      },
+    })
   }
 
   return (

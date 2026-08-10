@@ -640,26 +640,6 @@ export function QuoteBuilder({
                 {T.add_excluded}
               </button>
 
-              {/* Optional items section */}
-              {items.some(i => i.is_optional) && (
-                <div className="mt-5 pt-4 border-t border-dashed border-amber-200">
-                  <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-2">{T.optional_items}</p>
-                  <div className="flex flex-col gap-2">
-                    {items.filter(i => i.is_optional).map((item) => (
-                      <div key={item._key} className="flex gap-2 items-center p-2.5 rounded-lg bg-amber-50/40 border border-amber-100/60">
-                        <div className="flex-1 text-sm font-medium text-gray-700 truncate">{item.name || <span className="text-muted/50">{T.no_name}</span>}</div>
-                        {item.item_type === 'recurring' && item.recurring_interval && (
-                          <span className="text-xs text-amber-600 shrink-0">{intervalLabel(item.recurring_interval, lang)}</span>
-                        )}
-                        <button type="button" onClick={() => updateItem(item._key, 'is_optional', false)} className="text-xs text-amber-500 hover:text-amber-700 shrink-0">{T.remove}</button>
-                        <button type="button" onClick={() => removeItem(item._key)} className="p-1 text-muted/50 hover:text-danger transition-colors shrink-0">
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Payment schedule */}

@@ -91,7 +91,7 @@ export function QuotesList({ quotes: initialQuotes }: QuotesListProps) {
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => toggleOne(quote.id)}
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 shrink-0"
+                    className="h-5 w-5 rounded border-2 border-gray-300 text-indigo-600 focus:ring-indigo-500 shrink-0 cursor-pointer"
                   />
                   <Link href={href} className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 truncate">{quote.title}</p>

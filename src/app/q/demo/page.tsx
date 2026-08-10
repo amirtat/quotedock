@@ -291,6 +291,19 @@ export default function DemoQuotePage() {
           </div>
         )}
 
+        {step === 'declined' && (
+          <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-6 text-center">
+            <p className="font-semibold text-red-700 mb-1">{C.declined_title}</p>
+            <p className="text-sm text-red-500 mb-4">{C.declined_body}</p>
+            <button
+              onClick={() => setStep('idle')}
+              className="text-sm text-red-600 underline hover:text-red-800"
+            >
+              {C.declined_reset}
+            </button>
+          </div>
+        )}
+
         {step === 'signing' && (
           <div className="mt-4 bg-white rounded-2xl border border-indigo-200 p-6" dir={dir}>
             <h3 className="font-semibold text-gray-900 mb-4">{C.sign_title}</h3>

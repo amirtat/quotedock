@@ -24,6 +24,7 @@ const emptyForm = { name: '', description: '', unit_price: 0, unit: 'project' }
 
 export function ServicesManager({ initialServices, userId, currency }: ServicesManagerProps) {
   const T = useT()
+  const { dialog: confirmDialog, openConfirm } = useConfirm()
   const UNITS = [
     { value: 'unit', label: T.unit_unit },
     { value: 'hour', label: T.unit_hour },

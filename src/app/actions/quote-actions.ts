@@ -18,6 +18,19 @@ export async function deleteQuote(quoteId: string) {
   redirect('/dashboard')
 }
 
+export async function bulkDeleteQuotes(quoteIds: string[]) {
+  if (!quoteIds.length) return
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Unauthorized')
+
+  await supabase
+    .from('quotes')
+    .update({ deleted_at: new Date().toISOString() })
+    .in('id', quoteIds)
+    .eq('user_id', user.id)
+}
+
 export async function duplicateQuote(quoteId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

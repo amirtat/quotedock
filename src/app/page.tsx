@@ -104,6 +104,9 @@ export default async function Home() {
         </div>
         <div className="flex items-center gap-4">
           <LandingLangToggle lang={lang} />
+          <Link href="/templates" className="text-white/50 hover:text-white text-sm transition-colors hidden sm:inline">
+            {C.templates_nav}
+          </Link>
           <Link href="/auth/login" className="text-white/50 hover:text-white text-sm transition-colors">
             {C.login}
           </Link>

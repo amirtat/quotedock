@@ -499,7 +499,7 @@ export function QuoteBuilder({
                     {items.filter(i => i.item_type !== 'excluded').map((item) => (
                       <SortableItemRow key={item._key} id={item._key}>
                         {(dragHandle) => (
-                          <div className="flex flex-col sm:flex-row gap-2 p-3 rounded-lg bg-surface/60 border border-border/60">
+                          <div className={`flex flex-col sm:flex-row gap-2 p-3 rounded-lg bg-surface/60 border ${item.is_optional ? 'border-amber-200 bg-amber-50/30' : 'border-border/60'}`}>
                             {/* Top row: drag + name + delete (mobile) / drag + name (desktop) */}
                             <div className="flex gap-2 items-start flex-1 min-w-0">
                               {dragHandle}

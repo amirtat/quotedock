@@ -103,6 +103,7 @@ export function QuoteBuilder({
   const T = useT()
   const lang = useLang()
   const router = useRouter()
+  const { dialog: confirmDialog, openConfirm } = useConfirm()
   const [deleting, startDelete] = useTransition()
   const [saving, setSaving] = useState(false)
   const isDraft = !initialData?.status || initialData.status === 'draft'

@@ -161,6 +161,11 @@ export const t = {
     browse_ready_templates: 'רוצה להתחיל מתבנית מוכנה?',
     browse_ready_templates_sub: '5 תבניות לענפים שונים - מנדל"ן ועד שיפוצים',
     browse_ready_templates_cta: 'לתבניות המוכנות',
+    my_templates: 'התבניות שלי',
+    ready_made_templates: 'תבניות מוכנות',
+    use_template: 'השתמש בתבנית',
+    items_label: 'פריטים',
+    from_label: 'החל מ',
     // Public quote page
     quote_from: 'הצעת מחיר מ',
     quote_for: 'הצעה עבור',
@@ -493,6 +498,11 @@ export const t = {
     browse_ready_templates: 'Want to start from a ready-made template?',
     browse_ready_templates_sub: '5 templates for different industries - real estate to renovation',
     browse_ready_templates_cta: 'Browse ready-made templates',
+    my_templates: 'My Templates',
+    ready_made_templates: 'Ready-made Templates',
+    use_template: 'Use Template',
+    items_label: 'items',
+    from_label: 'From',
     // Public quote page
     quote_from: 'Quote from',
     quote_for: 'Quote for',

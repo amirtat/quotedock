@@ -87,6 +87,7 @@ export function NoteTemplatesManager({ initialTemplates, userId }: NoteTemplates
 
   return (
     <div>
+      {confirmDialog}
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="text-sm font-medium text-gray-900">{T.note_templates_subtitle}</p>

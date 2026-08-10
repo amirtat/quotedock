@@ -494,9 +494,9 @@ export function QuoteBuilder({
               </div>
 
               <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                <SortableContext items={items.filter(i => !i.is_optional && i.item_type !== 'excluded').map(i => i._key)} strategy={verticalListSortingStrategy}>
+                <SortableContext items={items.filter(i => i.item_type !== 'excluded').map(i => i._key)} strategy={verticalListSortingStrategy}>
                   <div className="flex flex-col gap-2">
-                    {items.filter(i => !i.is_optional && i.item_type !== 'excluded').map((item) => (
+                    {items.filter(i => i.item_type !== 'excluded').map((item) => (
                       <SortableItemRow key={item._key} id={item._key}>
                         {(dragHandle) => (
                           <div className="flex flex-col sm:flex-row gap-2 p-3 rounded-lg bg-surface/60 border border-border/60">

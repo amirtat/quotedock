@@ -71,11 +71,18 @@ export function NoteTemplatesManager({ initialTemplates, userId }: NoteTemplates
     setOpen(false)
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm(T.confirm_delete)) return
-    const supabase = createClient()
-    await supabase.from('note_templates').delete().eq('id', id)
-    setTemplates(prev => prev.filter(t => t.id !== id))
+  function handleDelete(id: string) {
+    openConfirm({
+      message: T.confirm_delete,
+      confirmLabel: T.delete,
+      cancelLabel: T.cancel,
+      variant: 'danger',
+      onConfirm: async () => {
+        const supabase = createClient()
+        await supabase.from('note_templates').delete().eq('id', id)
+        setTemplates(prev => prev.filter(t => t.id !== id))
+      },
+    })
   }
 
   return (

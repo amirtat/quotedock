@@ -372,10 +372,14 @@ export function QuoteBuilder({
           )}
           {quoteId && (
             <button
-              onClick={() => {
-                if (!confirm(T.confirm_delete_quote)) return
-                startDelete(() => deleteQuote(quoteId))
-              }}
+              onClick={() => openConfirm({
+                title: T.delete_quote_btn,
+                message: T.confirm_delete_quote,
+                confirmLabel: T.delete_quote_btn,
+                cancelLabel: T.cancel,
+                variant: 'danger',
+                onConfirm: () => startDelete(() => deleteQuote(quoteId)),
+              })}
               disabled={deleting}
               className="flex items-center gap-1 text-sm text-muted hover:text-danger transition-colors disabled:opacity-50 px-2 py-1"
             >

@@ -199,21 +199,26 @@ export default async function Home() {
         <h2 className="text-2xl font-bold text-center text-ink mb-12">{C.features_title}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {[
-            { Icon: Link2, title: C.f1_title, body: C.f1_body },
-            { Icon: BellRing, title: C.f2_title, body: C.f2_body },
-            { Icon: Globe, title: C.f3_title, body: C.f3_body },
-            { Icon: Package, title: C.f4_title, body: C.f4_body },
-            { Icon: BarChart2, title: C.f5_title, body: C.f5_body },
-            { Icon: LayoutTemplate, title: C.f6_title, body: C.f6_body },
-          ].map(({ Icon, title, body }) => (
-            <div key={title} className="bg-white rounded-2xl border border-border p-6">
-              <div className="w-10 h-10 rounded-xl bg-saffron-50 flex items-center justify-center mb-4">
-                <Icon className="h-5 w-5 text-saffron" />
+            { Icon: Link2, title: C.f1_title, body: C.f1_body, href: null },
+            { Icon: BellRing, title: C.f2_title, body: C.f2_body, href: null },
+            { Icon: Globe, title: C.f3_title, body: C.f3_body, href: null },
+            { Icon: Package, title: C.f4_title, body: C.f4_body, href: null },
+            { Icon: BarChart2, title: C.f5_title, body: C.f5_body, href: null },
+            { Icon: LayoutTemplate, title: C.f6_title, body: C.f6_body, href: '/templates' },
+          ].map(({ Icon, title, body, href }) => {
+            const card = (
+              <div className={`bg-white rounded-2xl border border-border p-6 h-full${href ? ' hover:border-saffron/40 hover:shadow-sm transition-all' : ''}`}>
+                <div className="w-10 h-10 rounded-xl bg-saffron-50 flex items-center justify-center mb-4">
+                  <Icon className="h-5 w-5 text-saffron" />
+                </div>
+                <h3 className="font-semibold text-ink mb-1.5">{title}</h3>
+                <p className="text-sm text-muted leading-relaxed">{body}</p>
               </div>
-              <h3 className="font-semibold text-ink mb-1.5">{title}</h3>
-              <p className="text-sm text-muted leading-relaxed">{body}</p>
-            </div>
-          ))}
+            )
+            return href
+              ? <Link key={title} href={href}>{card}</Link>
+              : <div key={title}>{card}</div>
+          })}
         </div>
       </section>
 

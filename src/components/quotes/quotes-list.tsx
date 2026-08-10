@@ -87,12 +87,14 @@ export function QuotesList({ quotes: initialQuotes }: QuotesListProps) {
               const isSelected = selected.has(quote.id)
               return (
                 <div key={quote.id} className={`flex items-center gap-3 px-4 py-3 ${isSelected ? 'bg-indigo-50/60' : ''}`}>
-                  <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => toggleOne(quote.id)}
-                    className="h-5 w-5 rounded border-2 border-gray-300 text-indigo-600 focus:ring-indigo-500 shrink-0 cursor-pointer"
-                  />
+                  <label className="flex items-center shrink-0 cursor-pointer p-1 -m-1">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleOne(quote.id)}
+                      className="h-5 w-5 rounded border-2 border-gray-400 accent-indigo-600 shrink-0 cursor-pointer"
+                    />
+                  </label>
                   <Link href={href} className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 truncate">{quote.title}</p>
                     <p className="text-xs text-gray-500 mt-0.5 truncate">

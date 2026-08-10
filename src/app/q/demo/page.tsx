@@ -119,7 +119,7 @@ export default function DemoQuotePage() {
   const vat = Math.round(subtotal * 0.18)
   const total = subtotal + vat
 
-  const [step, setStep] = useState<'idle' | 'signing' | 'done'>('idle')
+  const [step, setStep] = useState<'idle' | 'signing' | 'done' | 'declined'>('idle')
   const [signerName, setSignerName] = useState('')
   const [error, setError] = useState('')
 

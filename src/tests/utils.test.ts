@@ -58,7 +58,7 @@ describe('calcTotal', () => {
     expect(result.total).toBe(0)
   })
 
-  it('vatRate 0 (עוסק זעיר) — no VAT even when include_vat is true', () => {
+  it('vatRate 0 (עוסק זעיר) - no VAT even when include_vat is true', () => {
     const result = calcTotal([makeItem(1, 1000)], 0, 0, true)
     expect(result.vatAmount).toBe(0)
     expect(result.total).toBe(1000)
@@ -73,9 +73,9 @@ describe('calcTotal', () => {
   it('vatRate 0 should default includeVat to false (עוסק זעיר logic)', () => {
     // Mirrors: useState(initialData?.include_vat ?? (vatRate > 0))
     const defaultIncludeVat = (vatRate: number) => vatRate > 0
-    expect(defaultIncludeVat(0)).toBe(false)   // עוסק זעיר — VAT off by default
-    expect(defaultIncludeVat(18)).toBe(true)   // רגיל — VAT on by default
-    expect(defaultIncludeVat(17)).toBe(true)   // ערך ישן — VAT on by default
+    expect(defaultIncludeVat(0)).toBe(false)   // עוסק זעיר - VAT off by default
+    expect(defaultIncludeVat(18)).toBe(true)   // רגיל - VAT on by default
+    expect(defaultIncludeVat(17)).toBe(true)   // ערך ישן - VAT on by default
   })
 
   it('fixed discount deducts exact amount', () => {

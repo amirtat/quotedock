@@ -58,7 +58,7 @@ describe('share message placeholder replacement', () => {
   })
 })
 
-describe('share message — English placeholders', () => {
+describe('share message - English placeholders', () => {
   const url = 'https://quotedock.vercel.app/q/abc123'
 
   it('replaces {{first_name}} with first name', () => {

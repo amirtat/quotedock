@@ -1,7 +1,7 @@
 /**
  * Tests for:
- *   1. Payment milestones — percent validation, presets, amount calculation
- *   2. Attachments — file type/size validation, size formatting
+ *   1. Payment milestones - percent validation, presets, amount calculation
+ *   2. Attachments - file type/size validation, size formatting
  */
 import { describe, it, expect } from 'vitest'
 
@@ -27,8 +27,8 @@ const MAX_SIZE = 5 * 1024 * 1024
 const ALLOWED = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp']
 
 function validateFile(type: string, size: number): string | null {
-  if (!ALLOWED.includes(type)) return 'קובץ לא נתמך — PDF ותמונות בלבד'
-  if (size > MAX_SIZE) return 'קובץ גדול מדי — עד 5MB'
+  if (!ALLOWED.includes(type)) return 'קובץ לא נתמך - PDF ותמונות בלבד'
+  if (size > MAX_SIZE) return 'קובץ גדול מדי - עד 5MB'
   return null
 }
 
@@ -48,7 +48,7 @@ function extractStoragePath(fileUrl: string): string | null {
 
 // ─── 1. Payment milestones ────────────────────────────────────────────────────
 
-describe('Payment milestones — presets', () => {
+describe('Payment milestones - presets', () => {
   it('50/50 preset produces two rows summing to 100', () => {
     const ms = applyPreset([50, 50], ['מקדמה בחתימה', 'יתרה במסירה'])
     expect(ms).toHaveLength(2)
@@ -76,7 +76,7 @@ describe('Payment milestones — presets', () => {
   })
 })
 
-describe('Payment milestones — percent validation', () => {
+describe('Payment milestones - percent validation', () => {
   it('valid: milestones summing to 100 pass', () => {
     expect(totalPercent(applyPreset([50, 50], ['א', 'ב']))).toBe(100)
     expect(totalPercent(applyPreset([40, 30, 30], ['א', 'ב', 'ג']))).toBe(100)
@@ -94,7 +94,7 @@ describe('Payment milestones — percent validation', () => {
   })
 })
 
-describe('Payment milestones — amount calculation', () => {
+describe('Payment milestones - amount calculation', () => {
   it('calculates correct amount from total and percent', () => {
     expect(milestoneAmount(10000, 50)).toBe(5000)
     expect(milestoneAmount(10000, 40)).toBe(4000)
@@ -116,7 +116,7 @@ describe('Payment milestones — amount calculation', () => {
 
 // ─── 2. Attachments ───────────────────────────────────────────────────────────
 
-describe('Attachment file validation — type', () => {
+describe('Attachment file validation - type', () => {
   it('allows PDF', () => {
     expect(validateFile('application/pdf', 1000)).toBeNull()
   })
@@ -136,7 +136,7 @@ describe('Attachment file validation — type', () => {
   })
 })
 
-describe('Attachment file validation — size', () => {
+describe('Attachment file validation - size', () => {
   const MB = 1024 * 1024
 
   it('allows files under 5MB', () => {

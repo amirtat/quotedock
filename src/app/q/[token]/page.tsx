@@ -19,7 +19,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
 
   if (!quote) notFound()
 
-  // Mark as viewed if first time — skip if the owner is viewing
+  // Mark as viewed if first time - skip if the owner is viewing
   const { data: { user } } = await supabase.auth.getUser()
   const isOwner = user?.id === quote.user_id
   if (!isOwner && quote.status === 'sent' && !quote.viewed_at) {
@@ -138,7 +138,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
             <h2 className="text-base font-semibold text-gray-800 mb-4 -mt-2">{profile.quote_items_header}</h2>
           )}
 
-          {/* Items — mobile: cards, desktop: table */}
+          {/* Items - mobile: cards, desktop: table */}
           <div className="sm:hidden flex flex-col divide-y divide-gray-100 mb-6">
             {oneTimeItems.map((item: any, i: number) => (
               <div key={i} className="py-3.5 flex justify-between items-start gap-3">
@@ -195,7 +195,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
               {quote.discount > 0 && (
                 <div className="flex justify-between text-red-500">
                   <span>
-                    {(quote as any).discount_reason ? `${T.discount} — ${(quote as any).discount_reason}` : T.discount}
+                    {(quote as any).discount_reason ? `${T.discount} - ${(quote as any).discount_reason}` : T.discount}
                     {(quote as any).discount_type !== 'fixed' && ` (${quote.discount}%)`}
                   </span>
                   <span>-{formatCurrency(discountAmount, currency)}</span>
@@ -305,7 +305,7 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
                     <span className="text-gray-300 mt-0.5 shrink-0">·</span>
                     <div>
                       <span className="font-medium text-gray-700">{item.name}</span>
-                      {item.description && <span className="text-gray-400"> — {item.description}</span>}
+                      {item.description && <span className="text-gray-400"> - {item.description}</span>}
                     </div>
                   </div>
                 ))}

@@ -36,7 +36,7 @@ function normalisePreamble(value: string | null | undefined): string | null {
 
 // ─── 1. show_quantity initialisation ─────────────────────────────────────────
 
-describe('show_quantity — initialisation', () => {
+describe('show_quantity - initialisation', () => {
   it('uses false as ultimate fallback when both are absent', () => {
     expect(resolveShowQuantity(undefined, undefined)).toBe(false)
     expect(resolveShowQuantity(null, null)).toBe(false)
@@ -70,7 +70,7 @@ describe('show_quantity — initialisation', () => {
 
 // ─── 2. Mobile item label ─────────────────────────────────────────────────────
 
-describe('Mobile item label — unit price line', () => {
+describe('Mobile item label - unit price line', () => {
   it('shows only unit price when show_quantity is false', () => {
     const label = mobileItemLabel(false, 3, 1000)
     expect(label).not.toContain('×')

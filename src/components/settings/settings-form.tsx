@@ -291,7 +291,7 @@ export function SettingsForm({ profile, userId }: SettingsFormProps) {
                   >
                     {logoUrl ? T.replace_logo : T.upload_logo}
                   </Button>
-                  <p className="text-xs text-gray-400">PNG, JPG, SVG — max 2MB</p>
+                  <p className="text-xs text-gray-400">PNG, JPG, SVG - max 2MB</p>
                   {logoError && <p className="text-xs text-red-500">{logoError}</p>}
                 </div>
               </div>

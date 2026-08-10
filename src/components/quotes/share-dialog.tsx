@@ -71,7 +71,7 @@ export default function ShareDialog({ open, quoteId, quoteUrl, quoteTitle, clien
   }
 
   function handleEmail() {
-    const subject = encodeURIComponent(`${T.email_subject_quote} — ${quoteTitle}`)
+    const subject = encodeURIComponent(`${T.email_subject_quote} - ${quoteTitle}`)
     const body = encodeURIComponent(message)
     const to = clientEmail || ''
     window.open(`mailto:${to}?subject=${subject}&body=${body}`, '_blank')

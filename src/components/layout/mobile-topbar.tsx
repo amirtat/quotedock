@@ -68,7 +68,7 @@ export function MobileTopbar({ businessName, email, logoUrl }: MobileTopbarProps
 
   return (
     <>
-      {/* Top bar — mobile only */}
+      {/* Top bar - mobile only */}
       <div className="md:hidden fixed top-0 inset-x-0 z-40 bg-obsidian flex items-center justify-between px-4 h-14 no-print" dir="ltr">
         <div className="flex items-center gap-2">
           <img src="/brand/mark-primary-inverse.svg" alt="" width={24} height={24} />

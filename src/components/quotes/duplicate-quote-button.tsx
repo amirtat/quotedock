@@ -21,7 +21,7 @@ export default function DuplicateQuoteButton({ quoteId }: DuplicateQuoteButtonPr
       try {
         await duplicateQuote(quoteId)
       } catch (e: any) {
-        // redirect() throws a special Next.js error — let it through
+        // redirect() throws a special Next.js error - let it through
         if (e?.digest?.startsWith('NEXT_REDIRECT')) throw e
         setError(T.duplicate_error)
       }

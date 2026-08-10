@@ -477,7 +477,7 @@ export function QuoteBuilder({
                 </button>
               </div>
 
-              {/* Column headers — desktop only */}
+              {/* Column headers - desktop only */}
               <div className="hidden sm:flex gap-2 text-xs text-muted mb-2 px-1">
                 <div className="w-5 shrink-0" />
                 <div className="flex-1">{T.name_description}</div>
@@ -550,12 +550,12 @@ export function QuoteBuilder({
                                   </div>
                                 </div>
                               </div>
-                              {/* Delete — visible inline on mobile */}
+                              {/* Delete - visible inline on mobile */}
                               <button type="button" onClick={() => removeItem(item._key)} className="sm:hidden p-1 text-muted/50 hover:text-danger transition-colors shrink-0 mt-1">
                                 <Trash2 className="h-3.5 w-3.5" />
                               </button>
                             </div>
-                            {/* Price + quantity — mobile: full row below, desktop: side columns */}
+                            {/* Price + quantity - mobile: full row below, desktop: side columns */}
                             <div className="flex gap-2 sm:contents">
                               {showQuantity && (
                                 <div className="flex-1 sm:w-20 sm:flex-none sm:shrink-0">
@@ -582,7 +582,7 @@ export function QuoteBuilder({
                                   </>
                                 )}
                               </div>
-                              {/* Delete — desktop only column */}
+                              {/* Delete - desktop only column */}
                               <div className="hidden sm:flex w-7 shrink-0 items-center justify-center pt-1">
                                 <button type="button" onClick={() => removeItem(item._key)} className="p-1 text-muted/50 hover:text-danger transition-colors">
                                   <Trash2 className="h-3.5 w-3.5" />
@@ -773,7 +773,7 @@ export function QuoteBuilder({
           </div>
         </div>
 
-        {/* Total panel — the signature element */}
+        {/* Total panel - the signature element */}
         <div className="w-full md:w-64 bg-obsidian flex flex-col shrink-0 md:border-r border-obsidian-800 md:overflow-y-auto">
           <div className="p-5 border-b border-obsidian-700">
             <p className="text-white/30 text-xs uppercase tracking-wider font-medium">{T.summary}</p>
@@ -871,7 +871,7 @@ export function QuoteBuilder({
             )}
           </div>
 
-          {/* Grand total — the cash register moment */}
+          {/* Grand total - the cash register moment */}
           <div className="p-5 border-t border-obsidian-700">
             <p className="text-white/30 text-xs uppercase tracking-widest mb-2">{T.grand_total}</p>
             <p className="font-amount text-saffron font-bold leading-none" style={{ fontSize: total >= 100000 ? '1.5rem' : '2rem' }}>

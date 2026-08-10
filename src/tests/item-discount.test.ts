@@ -1,8 +1,8 @@
 /**
  * Tests for:
- *   1. itemLineTotal — per-item discount_percent calculation
- *   2. calcSubtotal — correctly sums discounted line totals
- *   3. calcTotal — overall totals with per-item discounts
+ *   1. itemLineTotal - per-item discount_percent calculation
+ *   2. calcSubtotal - correctly sums discounted line totals
+ *   3. calcTotal - overall totals with per-item discounts
  *   4. Recurring / one-time item separation
  */
 import { describe, it, expect } from 'vitest'
@@ -29,7 +29,7 @@ function makeItem(overrides: Partial<QuoteItem> = {}): QuoteItem {
 // ─── 1. itemLineTotal ─────────────────────────────────────────────────────────
 
 describe('itemLineTotal', () => {
-  it('no discount — returns quantity × unit_price', () => {
+  it('no discount - returns quantity × unit_price', () => {
     expect(itemLineTotal(makeItem({ quantity: 3, unit_price: 500, discount_percent: 0 }))).toBe(1500)
   })
 
@@ -137,7 +137,7 @@ describe('Three-way item separation: one_time / recurring / excluded', () => {
 
 // ─── 5. Optional items in calcTotal ──────────────────────────────────────────
 
-describe('calcTotal — optional items contribute nothing', () => {
+describe('calcTotal - optional items contribute nothing', () => {
   it('optional one-time item does not add to subtotal', () => {
     const items: QuoteItem[] = [
       makeItem({ unit_price: 1000, item_type: 'one_time' }),
@@ -171,7 +171,7 @@ describe('calcTotal — optional items contribute nothing', () => {
 
 // ─── 6. Excluded items in calcTotal ──────────────────────────────────────────
 
-describe('calcTotal — excluded items contribute nothing', () => {
+describe('calcTotal - excluded items contribute nothing', () => {
   it('excluded item does not add to subtotal', () => {
     const items: QuoteItem[] = [
       makeItem({ unit_price: 1000, item_type: 'one_time' }),

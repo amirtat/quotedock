@@ -56,7 +56,7 @@ function clientDeclines(quote: MockQuote): MockQuote {
 
 // --- Tests ---
 
-describe('Quote flow — e2e simulation', () => {
+describe('Quote flow - e2e simulation', () => {
   let quote: MockQuote
 
   beforeEach(() => {
@@ -75,7 +75,7 @@ describe('Quote flow — e2e simulation', () => {
     }
   })
 
-  // Step 1 — Freelancer builds the quote
+  // Step 1 - Freelancer builds the quote
   describe('Step 1: building the quote', () => {
     it('calculates subtotal correctly', () => {
       const { subtotal } = calcTotal(quote.items, 0, 18, true)
@@ -114,7 +114,7 @@ describe('Quote flow — e2e simulation', () => {
     })
   })
 
-  // Step 2 — Freelancer sends the quote
+  // Step 2 - Freelancer sends the quote
   describe('Step 2: sending the quote', () => {
     it('status changes from draft → sent', () => {
       quote = sendQuote(quote)
@@ -137,7 +137,7 @@ describe('Quote flow — e2e simulation', () => {
     })
   })
 
-  // Step 3 — Client opens the link
+  // Step 3 - Client opens the link
   describe('Step 3: client views the quote', () => {
     beforeEach(() => { quote = sendQuote(quote) })
 
@@ -163,7 +163,7 @@ describe('Quote flow — e2e simulation', () => {
     })
   })
 
-  // Step 4a — Client accepts
+  // Step 4a - Client accepts
   describe('Step 4a: client accepts the quote', () => {
     beforeEach(() => {
       quote = sendQuote(quote)
@@ -196,7 +196,7 @@ describe('Quote flow — e2e simulation', () => {
     })
   })
 
-  // Step 4b — Client declines
+  // Step 4b - Client declines
   describe('Step 4b: client declines the quote', () => {
     beforeEach(() => {
       quote = sendQuote(quote)

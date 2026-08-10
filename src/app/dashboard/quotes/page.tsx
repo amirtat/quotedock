@@ -64,7 +64,7 @@ export default async function QuotesPage() {
                     <Link href={href} className="flex-1 min-w-0">
                       <p className="font-medium text-gray-900 truncate">{quote.title}</p>
                       <p className="text-xs text-gray-500 mt-0.5 truncate">
-                        {(quote as any).client?.name || '—'} · {format(new Date(quote.created_at), 'dd/MM/yy')}
+                        {(quote as any).client?.name || '-'} · {format(new Date(quote.created_at), 'dd/MM/yy')}
                       </p>
                     </Link>
                     <div className="flex items-center gap-2 shrink-0">
@@ -101,7 +101,7 @@ export default async function QuotesPage() {
                         <Link href={href} className="block py-3.5 font-medium text-gray-900">{quote.title}</Link>
                       </td>
                       <td className="px-5 py-0">
-                        <Link href={href} className="block py-3.5 text-gray-600">{(quote as any).client?.name || '—'}</Link>
+                        <Link href={href} className="block py-3.5 text-gray-600">{(quote as any).client?.name || '-'}</Link>
                       </td>
                       <td className="px-5 py-0">
                         <Link href={href} className="block py-3.5 text-gray-500 font-mono text-xs">{quote.number}</Link>

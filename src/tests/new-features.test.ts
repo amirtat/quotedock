@@ -3,7 +3,7 @@
  *   1. app_config: quote_number_prefix + default_quote_validity_days
  *   2. Fixed amount discount + discount_reason
  *   3. Quote duplication logic
- *   4. PDF print (no runtime logic to test — covered by CSS presence)
+ *   4. PDF print (no runtime logic to test - covered by CSS presence)
  */
 import { describe, it, expect } from 'vitest'
 import { calcTotal, intervalLabel } from '@/lib/utils'
@@ -29,7 +29,7 @@ function calcDefaultValidUntil(validityDays: number, from = new Date('2025-01-01
 
 // Mirrors the discount row label logic in preview/page.tsx and q/[token]/page.tsx
 function discountLabel(discountType: 'percent' | 'fixed', discount: number, reason?: string | null): string {
-  const base = reason ? `הנחה — ${reason}` : 'הנחה'
+  const base = reason ? `הנחה - ${reason}` : 'הנחה'
   const suffix = discountType !== 'fixed' ? ` (${discount}%)` : ''
   return `${base}${suffix}`
 }
@@ -91,7 +91,7 @@ describe('Quote number prefix (app_config)', () => {
   })
 
   it('count beyond 999 is not truncated', () => {
-    // padStart(3) does not truncate — 1000 stays as 1000
+    // padStart(3) does not truncate - 1000 stays as 1000
     expect(buildQuoteNumber('QD', 1000, 2025)).toBe('QD-2025-1000')
   })
 })
@@ -170,11 +170,11 @@ describe('Discount label display', () => {
   })
 
   it('reason is prepended to label', () => {
-    expect(discountLabel('percent', 10, 'לקוח קבוע')).toBe('הנחה — לקוח קבוע (10%)')
+    expect(discountLabel('percent', 10, 'לקוח קבוע')).toBe('הנחה - לקוח קבוע (10%)')
   })
 
-  it('reason on fixed discount — no percentage suffix', () => {
-    expect(discountLabel('fixed', 200, 'הנחת אחים')).toBe('הנחה — הנחת אחים')
+  it('reason on fixed discount - no percentage suffix', () => {
+    expect(discountLabel('fixed', 200, 'הנחת אחים')).toBe('הנחה - הנחת אחים')
   })
 
   it('null reason is treated as no reason', () => {

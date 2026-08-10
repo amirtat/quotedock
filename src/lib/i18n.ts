@@ -158,6 +158,9 @@ export const t = {
     no_templates_desc2: 'ולחץ על "שמור כתבנית" בתצוגה המקדימה',
     go_to_quotes: 'עבור להצעות',
     template_base: 'בסיס:',
+    browse_ready_templates: 'רוצה להתחיל מתבנית מוכנה?',
+    browse_ready_templates_sub: '5 תבניות לענפים שונים - מנדל"ן ועד שיפוצים',
+    browse_ready_templates_cta: 'לתבניות המוכנות',
     // Public quote page
     quote_from: 'הצעת מחיר מ',
     quote_for: 'הצעה עבור',
@@ -487,6 +490,9 @@ export const t = {
     no_templates_desc2: 'and click "Save as Template" in the preview',
     go_to_quotes: 'Go to Quotes',
     template_base: 'Base:',
+    browse_ready_templates: 'Want to start from a ready-made template?',
+    browse_ready_templates_sub: '5 templates for different industries - real estate to renovation',
+    browse_ready_templates_cta: 'Browse ready-made templates',
     // Public quote page
     quote_from: 'Quote from',
     quote_for: 'Quote for',

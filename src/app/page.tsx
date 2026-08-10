@@ -48,6 +48,7 @@ const copy = {
   en: {
     login: 'Sign in',
     signup: 'Sign up',
+    templates_nav: 'Templates',
     hero_title: 'From quote to signature, in one link',
     hero_sub: 'For agencies, consultants, contractors and studios. First quote in five minutes.',
     cta_start: 'Start for free',

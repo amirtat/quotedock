@@ -123,7 +123,7 @@ export function QuotesList({ quotes: initialQuotes }: QuotesListProps) {
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleAll}
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    className="h-4 w-4 rounded border-gray-300 accent-indigo-600"
                   />
                 </th>
                 <th className="text-right px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">{T.quote_title}</th>
@@ -147,7 +147,7 @@ export function QuotesList({ quotes: initialQuotes }: QuotesListProps) {
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => toggleOne(quote.id)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          className="h-4 w-4 rounded border-gray-300 accent-indigo-600"
                         />
                       </div>
                     </td>

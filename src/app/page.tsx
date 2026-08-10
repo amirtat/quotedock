@@ -11,31 +11,31 @@ const copy = {
     login: 'כניסה',
     signup: 'הרשמה',
     hero_title: 'מהצעה לחתימה, בלינק אחד',
-    hero_sub: 'שלח לינק — הלקוח פותח, קורא, ומאשר עם חתימה דיגיטלית. ללא הרשמה.',
+    hero_sub: 'לסוכנויות, יועצים, קבלנים וסטודיו. הצעה ראשונה תוך חמש דקות.',
     cta_start: 'התחל בחינם',
     cta_demo: 'ראה דמו חי',
     features_title: 'כל מה שעסק צריך כדי לסגור',
     f1_title: 'הלקוח לא צריך להירשם',
-    f1_body: 'לינק אחד בווטסאפ — נפתח בכל מכשיר, בלי הרשמה.',
-    f2_title: 'תדע ברגע שנחתם',
-    f2_body: 'התראה מיידית ברגע שהלקוח אישר — בלי לרדוף אחרי תשובה.',
+    f1_body: 'לינק אחד בווטסאפ - נפתח בכל מכשיר, בלי הרשמה.',
+    f2_title: 'תדע בדיוק מתי הלקוח אישר',
+    f2_body: 'עדכון מיידי ברגע שהלקוח לוחץ אישור - ללא צורך לשאול ולהמתין.',
     f3_title: 'בנוי לישראל',
-    f3_body: 'עברית, שקלים, מע"מ ועוסק פטור — בלי מאבק.',
+    f3_body: 'עברית, שקלים, מע"מ ועוסק פטור - בלי מאבק.',
     f4_title: 'קטלוג שירותים',
-    f4_body: 'שמור את השירותים והמחירים שלך — הוסף לכל הצעה בלחיצה.',
+    f4_body: 'שמור את השירותים והמחירים שלך - הוסף לכל הצעה בלחיצה.',
     f5_title: 'עקוב אחרי כל הצעה',
-    f5_body: 'טיוטה, נשלחה, נצפתה, נחתמה — הכל בדשבורד אחד.',
+    f5_body: 'טיוטה, נשלחה, נצפתה, נחתמה - הכל בדשבורד אחד.',
     f6_title: 'תבניות לחיסכון בזמן',
-    f6_body: 'בנה הצעה פעם אחת, שמור כתבנית — שלח שוב בשניות.',
+    f6_body: 'בנה הצעה פעם אחת, שמור כתבנית - שלח שוב בשניות.',
     final_title: 'מוכן לשלוח הצעה ראשונה?',
-    final_sub: 'חינמי לגמרי. ללא כרטיס אשראי.',
+    final_sub: 'חינם בשלב זה. ללא כרטיס אשראי.',
     final_cta: 'צור חשבון בחינם',
     faq: 'שאלות נפוצות',
     mockup_title: 'פיתוח אפליקציית מובייל',
     mockup_client: 'עבור: מיקאל כהן, StartupXYZ',
     mockup_items: [
       { name: 'אפיון UX ומסעות משתמש', price: '₪4,500' },
-      { name: 'עיצוב UI — מסכים מלאים', price: '₪6,000' },
+      { name: 'עיצוב UI - מסכים מלאים', price: '₪6,000' },
       { name: 'פיתוח React Native', price: '₪18,000' },
     ],
     mockup_subtotal_label: 'סכום ביניים',
@@ -48,31 +48,31 @@ const copy = {
     login: 'Sign in',
     signup: 'Sign up',
     hero_title: 'From quote to signature, in one link',
-    hero_sub: 'Send a link — the client opens it, reads it, and signs digitally. No registration required.',
+    hero_sub: 'For agencies, consultants, contractors and studios. First quote in five minutes.',
     cta_start: 'Start for free',
     cta_demo: 'See live demo',
     features_title: 'Everything a business needs to close',
     f1_title: 'No client sign-up needed',
-    f1_body: 'One link on WhatsApp — opens on any device, no registration.',
-    f2_title: 'Know the moment it\'s signed',
-    f2_body: 'Instant notification when your client approves — no chasing needed.',
+    f1_body: 'One link on WhatsApp - opens on any device, no registration.',
+    f2_title: 'Know exactly when your client approves',
+    f2_body: 'Instant update the moment they click approve - no waiting, no follow-ups.',
     f3_title: 'Built for Israel',
-    f3_body: 'Hebrew, Shekels, VAT and VAT-exempt — no configuration needed.',
+    f3_body: 'Hebrew, Shekels, VAT and VAT-exempt - no configuration needed.',
     f4_title: 'Services catalog',
-    f4_body: 'Save your services and prices — add to any quote in one click.',
+    f4_body: 'Save your services and prices - add to any quote in one click.',
     f5_title: 'Track every quote',
-    f5_body: 'Draft, sent, viewed, signed — all in one dashboard.',
+    f5_body: 'Draft, sent, viewed, signed - all in one dashboard.',
     f6_title: 'Time-saving templates',
-    f6_body: 'Build a quote once, save as template — send again in seconds.',
+    f6_body: 'Build a quote once, save as template - send again in seconds.',
     final_title: 'Ready to send your first quote?',
-    final_sub: 'Completely free. No credit card required.',
+    final_sub: 'Free for now. No credit card required.',
     final_cta: 'Create free account',
     faq: 'FAQ',
     mockup_title: 'Mobile App Development',
     mockup_client: 'For: Michal Cohen, StartupXYZ',
     mockup_items: [
       { name: 'UX Research & User Journeys', price: '₪4,500' },
-      { name: 'UI Design — Full Screens', price: '₪6,000' },
+      { name: 'UI Design - Full Screens', price: '₪6,000' },
       { name: 'React Native Development', price: '₪18,000' },
     ],
     mockup_subtotal_label: 'Subtotal',
@@ -178,7 +178,7 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Actions — decorative only, not clickable */}
+          {/* Actions - decorative only, not clickable */}
           <div className="px-4 sm:px-6 py-4 flex gap-2">
             <div className="flex-1 bg-green-600/40 text-white text-sm font-semibold py-2.5 rounded-xl flex items-center justify-center gap-1.5 cursor-default select-none">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -216,21 +216,12 @@ export default async function Home() {
       <section className="bg-obsidian px-4 sm:px-6 py-16 sm:py-24 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">{C.final_title}</h2>
         <p className="text-white/40 mb-9 text-base">{C.final_sub}</p>
-        <div className="flex items-center justify-center gap-3 flex-wrap">
-          <Link
-            href="/auth/signup"
-            className="inline-block bg-saffron hover:bg-saffron-600 text-white font-bold px-9 py-3.5 rounded-xl transition-colors text-base"
-          >
-            {C.final_cta}
-          </Link>
-          <Link
-            href="/q/demo"
-            target="_blank"
-            className="border border-white/20 hover:border-white/40 text-white/75 hover:text-white font-medium px-7 py-3.5 rounded-xl transition-colors text-base"
-          >
-            {C.cta_demo}
-          </Link>
-        </div>
+        <Link
+          href="/auth/signup"
+          className="inline-block bg-saffron hover:bg-saffron-600 text-white font-bold px-9 py-3.5 rounded-xl transition-colors text-base"
+        >
+          {C.final_cta}
+        </Link>
       </section>
 
       {/* Footer */}

@@ -21,6 +21,7 @@ const emptyForm = { name: '', email: '', phone: '', company: '', address: '' }
 
 export function ClientsManager({ initialClients, userId }: ClientsManagerProps) {
   const T = useT()
+  const { dialog: confirmDialog, openConfirm } = useConfirm()
   const [clients, setClients] = useState(initialClients)
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<Client | null>(null)

@@ -43,7 +43,7 @@ export function Sidebar({ businessName, email, logoUrl }: SidebarProps) {
   const navItems = [
     { href: '/dashboard', label: T.dashboard, icon: LayoutDashboard, exact: true },
     { href: '/dashboard/quotes', label: T.quotes, icon: FileText },
-    { href: '/dashboard/templates', label: T.templates, icon: LayoutTemplate },
+    { href: '/templates', label: T.templates, icon: LayoutTemplate },
     { href: '/dashboard/clients', label: T.clients, icon: Users },
     { href: '/dashboard/services', label: T.services, icon: Briefcase },
     { href: '/dashboard/settings', label: T.settings, icon: Settings },

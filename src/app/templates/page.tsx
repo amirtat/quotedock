@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { templates, calcTemplateSubtotal } from '@/lib/templates'
+import { createClient } from '@/lib/supabase/server'
 import type { Lang } from '@/lib/i18n'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 const copy = {
   he: {
-    back: 'חזרה לדף הבית',
+    back_guest: 'חזרה לדף הבית',
+    back_user: 'התבניות שלי',
     title: 'תבניות מוכנות',
     subtitle: 'בחר תבנית לתעשייה שלך, הוסף את הפרטים שלך, ושלח. ניתן לשנות הכל.',
     items_label: 'פריטים',
@@ -15,7 +17,8 @@ const copy = {
     arrow: ArrowLeft,
   },
   en: {
-    back: 'Back to homepage',
+    back_guest: 'Back to homepage',
+    back_user: 'My templates',
     title: 'Ready-made templates',
     subtitle: 'Pick a template for your industry, add your details, and send. Everything is editable.',
     items_label: 'items',
@@ -36,6 +39,11 @@ export default async function TemplatesPage() {
   const dir = lang === 'he' ? 'rtl' : 'ltr'
   const Arrow = C.arrow
 
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const backHref = user ? '/dashboard/templates' : '/'
+  const backLabel = user ? C.back_user : C.back_guest
+
   return (
     <div className="min-h-screen bg-gray-50" dir={dir}>
       {/* Nav */}
@@ -44,9 +52,9 @@ export default async function TemplatesPage() {
           <img src="/brand/mark-primary-inverse.svg" alt="" width={28} height={28} />
           <span className="text-white font-bold text-[15px] tracking-tight">QuoteDock</span>
         </div>
-        <Link href="/" className="flex items-center gap-1.5 text-white/50 hover:text-white text-sm transition-colors">
+        <Link href={backHref} className="flex items-center gap-1.5 text-white/50 hover:text-white text-sm transition-colors">
           <Arrow className="h-3.5 w-3.5" />
-          {C.back}
+          {backLabel}
         </Link>
       </nav>
 

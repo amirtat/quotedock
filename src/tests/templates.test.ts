@@ -123,8 +123,9 @@ describe('Templates listing page', () => {
     expect(file).toMatch(/text-saffron/)
   })
 
-  it('has nav back link to homepage', () => {
-    expect(file).toMatch(/href="\/"\s*|href=\{`\/`\}|href="\/"/m)
+  it('has dynamic nav back link (homepage for guests, dashboard/templates for users)', () => {
+    expect(file).toMatch(/backHref/)
+    expect(file).toMatch(/dashboard\/templates/)
   })
 
   it('has no hardcoded user-facing Hebrew without bilingual object', () => {

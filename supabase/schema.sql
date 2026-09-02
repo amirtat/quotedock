@@ -252,6 +252,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS freelancer_signature TEXT;
 -- ALTER TABLE quote_items ADD COLUMN IF NOT EXISTS discount_percent DECIMAL(5,2) DEFAULT 0;
 
+-- Migration: widen discount column to support fixed amounts > 999 (run if upgrading from earlier schema)
+-- ALTER TABLE quotes ALTER COLUMN discount TYPE DECIMAL(10,2);
+
 -- Migration: quote templates (run if upgrading from earlier schema)
 -- ALTER TABLE quotes ADD COLUMN IF NOT EXISTS is_template BOOLEAN DEFAULT false;
 

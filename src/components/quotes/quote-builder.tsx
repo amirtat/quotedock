@@ -246,8 +246,9 @@ export function QuoteBuilder({
         if (error) throw error
       }
 
-      await supabase.from('quote_items').delete().eq('quote_id', currentQuoteId)
-      await supabase.from('quote_items').insert(
+      const { error: deleteItemsErr } = await supabase.from('quote_items').delete().eq('quote_id', currentQuoteId)
+      if (deleteItemsErr) throw deleteItemsErr
+      const { error: insertItemsErr } = await supabase.from('quote_items').insert(
         items.map((item, i) => ({
           quote_id: currentQuoteId, service_id: item.service_id || null,
           name: item.name, description: item.description || null,
@@ -260,6 +261,7 @@ export function QuoteBuilder({
           is_optional: item.is_optional || false,
         }))
       )
+      if (insertItemsErr) throw insertItemsErr
 
       await supabase.from('payment_milestones').delete().eq('quote_id', currentQuoteId!)
       if (milestones.length > 0) {

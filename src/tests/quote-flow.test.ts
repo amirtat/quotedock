@@ -231,3 +231,26 @@ describe('Quote flow - e2e simulation', () => {
     })
   })
 })
+
+// Implementation-level checks for the public quote page
+// These catch infrastructure bugs (e.g. RLS blocking anon updates) that logic tests miss
+describe('Public quote page - viewed status implementation', () => {
+  it('uses admin client to update viewed status (bypasses RLS for anon users)', () => {
+    expect(publicPageSrc).toMatch(/createAdminClient/)
+    expect(publicPageSrc).toMatch(/admin.*from\('quotes'\)|admin\s*\n.*from\('quotes'\)/)
+  })
+
+  it('skips update when viewer is the owner (isOwner guard)', () => {
+    expect(publicPageSrc).toMatch(/isOwner/)
+    expect(publicPageSrc).toMatch(/!isOwner/)
+  })
+
+  it('only updates when status is sent (not already viewed/accepted/declined)', () => {
+    expect(publicPageSrc).toMatch(/status.*===.*'sent'|'sent'.*===.*status/)
+  })
+
+  it('only updates when viewed_at is null (not re-viewed)', () => {
+    expect(publicPageSrc).toMatch(/viewed_at/)
+    expect(publicPageSrc).toMatch(/!quote\.viewed_at/)
+  })
+})

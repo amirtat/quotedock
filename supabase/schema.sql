@@ -262,6 +262,24 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON note_templates TO authenticated;
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS share_message_template TEXT;
 -- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS quote_items_header TEXT;
 
+-- Helper: mark a quote as viewed by an anonymous client (SECURITY DEFINER bypasses RLS)
+CREATE OR REPLACE FUNCTION mark_quote_viewed(p_quote_id UUID)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  UPDATE quotes
+  SET status = 'viewed', viewed_at = NOW()
+  WHERE id = p_quote_id
+    AND status = 'sent'
+    AND viewed_at IS NULL;
+END;
+$$;
+GRANT EXECUTE ON FUNCTION mark_quote_viewed TO anon;
+GRANT EXECUTE ON FUNCTION mark_quote_viewed TO authenticated;
+
 -- Helper: get next quote number for a user
 CREATE OR REPLACE FUNCTION get_next_quote_number(p_user_id UUID)
 RETURNS TEXT AS $$

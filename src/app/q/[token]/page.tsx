@@ -24,7 +24,9 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   const { data: { user } } = await supabase.auth.getUser()
   const isOwner = user?.id === quote.user_id
   if (!isOwner && quote.status === 'sent' && !quote.viewed_at) {
-    await supabase
+    // Use admin client to bypass RLS - anon users can't update quotes directly
+    const admin = createAdminClient()
+    await admin
       .from('quotes')
       .update({ status: 'viewed', viewed_at: new Date().toISOString() })
       .eq('id', quote.id)

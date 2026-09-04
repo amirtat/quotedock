@@ -235,9 +235,8 @@ describe('Quote flow - e2e simulation', () => {
 // Implementation-level checks for the public quote page
 // These catch infrastructure bugs (e.g. RLS blocking anon updates) that logic tests miss
 describe('Public quote page - viewed status implementation', () => {
-  it('uses admin client to update viewed status (bypasses RLS for anon users)', () => {
-    expect(publicPageSrc).toMatch(/createAdminClient/)
-    expect(publicPageSrc).toMatch(/admin.*from\('quotes'\)|admin\s*\n.*from\('quotes'\)/)
+  it('uses SECURITY DEFINER rpc to update viewed status (bypasses RLS for anon users)', () => {
+    expect(publicPageSrc).toMatch(/rpc\('mark_quote_viewed'/)
   })
 
   it('skips update when viewer is the owner (isOwner guard)', () => {

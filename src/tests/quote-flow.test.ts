@@ -5,8 +5,15 @@
  *   Freelancer builds quote → sends → client views → client accepts/declines
  */
 import { describe, it, expect, beforeEach } from 'vitest'
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
 import { calcTotal, STATUS_LABELS, formatCurrency } from '@/lib/utils'
 import type { QuoteItem, QuoteStatus } from '@/lib/types'
+
+const publicPageSrc = readFileSync(
+  resolve(__dirname, '../app/q/[token]/page.tsx'),
+  'utf-8'
+)
 
 // --- Helpers that mirror the app's runtime logic ---
 

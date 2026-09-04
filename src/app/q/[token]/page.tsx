@@ -25,11 +25,18 @@ export default async function PublicQuotePage({ params }: PageProps<'/q/[token]'
   const isOwner = user?.id === quote.user_id
   if (!isOwner && quote.status === 'sent' && !quote.viewed_at) {
     // Use admin client to bypass RLS - anon users can't update quotes directly
-    const admin = createAdminClient()
-    await admin
-      .from('quotes')
-      .update({ status: 'viewed', viewed_at: new Date().toISOString() })
-      .eq('id', quote.id)
+    try {
+      const admin = createAdminClient()
+      const { error } = await admin
+        .from('quotes')
+        .update({ status: 'viewed', viewed_at: new Date().toISOString() })
+        .eq('id', quote.id)
+      if (error) console.error('[viewed] update failed:', error.message)
+    } catch (e: any) {
+      console.error('[viewed] admin client error:', e?.message)
+    }
+  } else {
+    console.log('[viewed] skipped - isOwner:', isOwner, 'status:', quote.status, 'viewed_at:', quote.viewed_at)
   }
 
   // Get items and profile

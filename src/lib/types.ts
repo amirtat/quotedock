@@ -63,6 +63,7 @@ export interface Quote {
   sent_at: string | null
   created_at: string
   updated_at: string
+  archived_at: string | null
   client?: Client
   items?: QuoteItem[]
 }

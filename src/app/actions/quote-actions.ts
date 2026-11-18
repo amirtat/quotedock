@@ -31,6 +31,32 @@ export async function bulkDeleteQuotes(quoteIds: string[]) {
     .eq('user_id', user.id)
 }
 
+export async function bulkArchiveQuotes(quoteIds: string[]) {
+  if (!quoteIds.length) return
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Unauthorized')
+
+  await supabase
+    .from('quotes')
+    .update({ archived_at: new Date().toISOString() })
+    .in('id', quoteIds)
+    .eq('user_id', user.id)
+}
+
+export async function bulkUnarchiveQuotes(quoteIds: string[]) {
+  if (!quoteIds.length) return
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Unauthorized')
+
+  await supabase
+    .from('quotes')
+    .update({ archived_at: null })
+    .in('id', quoteIds)
+    .eq('user_id', user.id)
+}
+
 export async function duplicateQuote(quoteId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

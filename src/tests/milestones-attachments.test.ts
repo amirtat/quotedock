@@ -24,10 +24,10 @@ function milestoneAmount(total: number, percent: number): number {
 // ─── Mirrors attachment validation from attachments-manager.tsx ───────────────
 
 const MAX_SIZE = 5 * 1024 * 1024
-const ALLOWED = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp']
+const ALLOWED = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'text/html']
 
 function validateFile(type: string, size: number): string | null {
-  if (!ALLOWED.includes(type)) return 'קובץ לא נתמך - PDF ותמונות בלבד'
+  if (!ALLOWED.includes(type)) return 'קובץ לא נתמך - PDF, תמונות ו-HTML בלבד'
   if (size > MAX_SIZE) return 'קובץ גדול מדי - עד 5MB'
   return null
 }
@@ -126,6 +126,10 @@ describe('Attachment file validation - type', () => {
     expect(validateFile('image/png', 1000)).toBeNull()
     expect(validateFile('image/gif', 1000)).toBeNull()
     expect(validateFile('image/webp', 1000)).toBeNull()
+  })
+
+  it('allows HTML files', () => {
+    expect(validateFile('text/html', 1000)).toBeNull()
   })
 
   it('rejects unsupported types', () => {

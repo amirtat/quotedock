@@ -14,7 +14,7 @@ interface Attachment {
 }
 
 const MAX_SIZE = 5 * 1024 * 1024
-const ALLOWED = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp']
+const ALLOWED = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'text/html']
 
 function formatSize(bytes: number | null) {
   if (!bytes) return ''
@@ -100,7 +100,7 @@ export default function AttachmentsManager({
           <Paperclip className="h-3.5 w-3.5" />
           {uploading ? T.uploading : T.attach_file}
         </button>
-        <input ref={inputRef} type="file" accept="application/pdf,image/*" className="hidden" onChange={handleUpload} />
+        <input ref={inputRef} type="file" accept="application/pdf,image/*,text/html" className="hidden" onChange={handleUpload} />
       </div>
 
       {error && <p className="text-xs text-danger mb-2">{error}</p>}

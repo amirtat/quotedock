@@ -313,7 +313,7 @@ export const t = {
     attach_file: 'צרף קובץ',
     uploading: 'מעלה...',
     no_attachments: 'אין מסמכים מצורפים',
-    file_not_supported: 'קובץ לא נתמך - PDF ותמונות בלבד',
+    file_not_supported: 'קובץ לא נתמך - PDF, תמונות ו-HTML בלבד',
     file_too_large: 'קובץ גדול מדי - עד 5MB',
     // Small buttons
     template_save_error: 'שגיאה בשמירת תבנית',
@@ -653,7 +653,7 @@ export const t = {
     attach_file: 'Attach File',
     uploading: 'Uploading...',
     no_attachments: 'No attachments',
-    file_not_supported: 'Unsupported file - PDF and images only',
+    file_not_supported: 'Unsupported file - PDF, images and HTML only',
     file_too_large: 'File too large - max 5MB',
     // Small buttons
     template_save_error: 'Error saving template',
